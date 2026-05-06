@@ -55,6 +55,13 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
+        {/* Brand Name */}
+        <div className="mb-8">
+          <span className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
+            Pxl<span className="text-primary">Brief</span>
+          </span>
+        </div>
+
         {/* Main Heading */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground mb-6 text-balance">
           Diagnose. Strategize. Scale.
