@@ -10,32 +10,32 @@ import {
 const services = [
   {
     title: "AI Consulting",
-    description: "Transform your business with cutting-edge AI strategies and implementation roadmaps.",
+    description: "AI adoption frameworks, automation systems and intelligent business workflows.",
     icon: Brain,
   },
   {
     title: "Digital Marketing",
-    description: "Data-driven campaigns that maximize ROI and accelerate your digital presence.",
+    description: "Growth-focused digital ecosystems designed for modern customer acquisition.",
     icon: BarChart3,
   },
   {
     title: "Performance Marketing",
-    description: "Precision-targeted advertising that converts prospects into loyal customers.",
+    description: "Performance-led acquisition systems focused on scalable ROI.",
     icon: Target,
   },
   {
     title: "Creative & Branding",
-    description: "Distinctive brand identities that resonate and leave lasting impressions.",
+    description: "Strategic brand positioning and identity systems built for premium perception.",
     icon: Palette,
   },
   {
     title: "SEO / AEO / GEO",
-    description: "Optimize for search engines, AI engines, and generative experiences.",
+    description: "Search visibility optimization across traditional and AI-driven discovery platforms.",
     icon: Search,
   },
   {
     title: "Go-To-Market Strategy",
-    description: "Launch products and enter markets with strategic precision and impact.",
+    description: "Launch and market-entry systems designed for rapid business scale.",
     icon: Rocket,
   },
 ]
@@ -44,18 +44,8 @@ export function ServicesGrid() {
   return (
     <section className="relative px-4 py-16 md:py-24">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-4">
-            Our Services
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Comprehensive AI-powered solutions to accelerate your business growth
-          </p>
-        </div>
-
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {services.map((service) => (
             <ServiceCard key={service.title} {...service} />
           ))}
@@ -75,18 +65,18 @@ function ServiceCard({
   icon: React.ComponentType<{ className?: string }>
 }) {
   return (
-    <div className="group relative p-6 md:p-8 rounded-2xl bg-card/40 backdrop-blur-sm border border-border/40 hover:border-border/80 hover:bg-card/60 transition-all duration-300 cursor-pointer">
-      {/* Glassmorphism highlight on hover */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="group relative p-6 md:p-8 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/30 hover:bg-card/50 transition-all duration-300 cursor-pointer">
+      {/* Subtle glow on hover */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       <div className="relative z-10">
         {/* Icon */}
-        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/80 text-primary mb-5 group-hover:bg-primary/10 transition-colors duration-300">
-          <Icon className="w-6 h-6" />
+        <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-secondary/60 text-primary mb-5 group-hover:bg-primary/15 transition-colors duration-300">
+          <Icon className="w-5 h-5" />
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-semibold text-foreground mb-3">
+        <h3 className="text-base font-semibold text-foreground mb-2.5">
           {title}
         </h3>
 
