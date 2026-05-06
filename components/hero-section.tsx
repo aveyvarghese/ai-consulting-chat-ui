@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { ArrowRight, X, User, Sparkles } from "lucide-react"
+import { ArrowRight, X, User, Sparkles, AlertCircle } from "lucide-react"
 
 const placeholderPrompts = [
   "Why am I not getting leads?",
@@ -22,12 +22,23 @@ export function HeroSection() {
   const inputRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
 
-  const { messages, sendMessage, status, setMessages } = useChat({
+  const { messages, sendMessage, status, setMessages, error } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
+    onError: (err) => {
+      console.error("[v0] useChat onError:", err)
+    },
   })
 
+  // Only log when something changes
+  useEffect(() => {
+    if (status !== "ready" || messages.length > 0 || error) {
+      console.log("[v0] useChat state changed - status:", status, "messages:", messages.length, "error:", error?.message)
+    }
+  }, [status, messages.length, error])
+
   const isLoading = status === "streaming" || status === "submitted"
-  const hasMessages = messages.length > 0
+  const hasError = status === "error" || !!error
+  const hasMessages = messages.length > 0 || hasError
 
   // Typewriter effect for placeholder
   useEffect(() => {
@@ -71,6 +82,7 @@ export function HeroSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!inputValue.trim() || isLoading) return
+    console.log("[v0] Submitting message:", inputValue)
     sendMessage({ text: inputValue })
     setInputValue("")
   }
@@ -229,6 +241,21 @@ export function HeroSection() {
                       <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                       <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Display */}
+              {error && (
+                <div className="flex gap-4 justify-start">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                    <AlertCircle className="w-4 h-4 text-red-500" />
+                  </div>
+                  <div className="max-w-[80%] px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
+                    <div className="text-sm font-medium mb-1">Error</div>
+                    <div className="text-sm leading-relaxed">
+                      {error.message || "Failed to get a response. Please try again."}
                     </div>
                   </div>
                 </div>
