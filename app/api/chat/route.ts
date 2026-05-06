@@ -1,4 +1,4 @@
-import { generateText } from 'ai'
+import OpenAI from 'openai'
 
 export const maxDuration = 60
 
@@ -60,23 +60,28 @@ interface Message {
   content: string
 }
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
+
 export async function POST(req: Request) {
   try {
     const { messages }: { messages: Message[] } = await req.json()
 
-    // Build conversation history for the model
-    const conversationMessages = messages.map((m) => ({
-      role: m.role as 'user' | 'assistant',
-      content: m.content,
-    }))
-
-    const result = await generateText({
-      model: 'openai/gpt-4.1',
-      system: systemPrompt,
-      messages: conversationMessages,
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...messages.map((m) => ({
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+        })),
+      ],
     })
 
-    return Response.json({ reply: result.text })
+    const reply = response.choices[0]?.message?.content || 'Sorry, I could not generate a response.'
+
+    return Response.json({ reply })
   } catch (error) {
     console.error('[v0] Chat API error:', error)
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred'
