@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
 import { ArrowRight, X, User, Sparkles, AlertCircle } from "lucide-react"
 
 const placeholderPrompts = [
@@ -12,37 +10,30 @@ const placeholderPrompts = [
   "How should I position my brand?",
 ]
 
+interface Message {
+  id: string
+  role: "user" | "assistant"
+  content: string
+}
+
 export function HeroSection() {
   const [inputValue, setInputValue] = useState("")
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
   const [displayedPlaceholder, setDisplayedPlaceholder] = useState("")
   const [isTyping, setIsTyping] = useState(true)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
 
-  const { messages, sendMessage, status, setMessages, error } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
-    onError: (err) => {
-      console.error("[v0] useChat onError:", err)
-    },
-  })
-
-  // Only log when something changes
-  useEffect(() => {
-    if (status !== "ready" || messages.length > 0 || error) {
-      console.log("[v0] useChat state changed - status:", status, "messages:", messages.length, "error:", error?.message)
-    }
-  }, [status, messages.length, error])
-
-  const isLoading = status === "streaming" || status === "submitted"
-  const hasError = status === "error" || !!error
-  const hasMessages = messages.length > 0 || hasError
+  const hasMessages = messages.length > 0 || error !== null
 
   // Typewriter effect for placeholder
   useEffect(() => {
-    if (hasMessages) return // Stop animation when chat is active
+    if (hasMessages) return
     
     const currentPrompt = placeholderPrompts[placeholderIndex]
     
@@ -79,16 +70,60 @@ export function HeroSection() {
     scrollToBottom()
   }, [messages])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!inputValue.trim() || isLoading) return
-    console.log("[v0] Submitting message:", inputValue)
-    sendMessage({ text: inputValue })
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: inputValue.trim(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
     setInputValue("")
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || `Request failed with status ${response.status}`)
+      }
+
+      if (data.reply) {
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: data.reply,
+        }
+        setMessages((prev) => [...prev, assistantMessage])
+      } else {
+        throw new Error("No reply received from the assistant")
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to get a response"
+      setError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleClose = () => {
     setMessages([])
+    setError(null)
   }
 
   return (
@@ -215,12 +250,7 @@ export function HeroSection() {
                     }`}
                   >
                     <div className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-                      {message.parts.map((part, index) => {
-                        if (part.type === "text") {
-                          return <span key={index}>{part.text}</span>
-                        }
-                        return null
-                      })}
+                      {message.content}
                     </div>
                   </div>
                   {message.role === "user" && (
@@ -231,7 +261,8 @@ export function HeroSection() {
                 </div>
               ))}
               
-              {isLoading && messages[messages.length - 1]?.role === "user" && (
+              {/* Loading indicator */}
+              {isLoading && (
                 <div className="flex gap-4 justify-start">
                   <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Sparkles className="w-4 h-4 text-primary" />
@@ -254,9 +285,7 @@ export function HeroSection() {
                   </div>
                   <div className="max-w-[80%] px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
                     <div className="text-sm font-medium mb-1">Error</div>
-                    <div className="text-sm leading-relaxed">
-                      {error.message || "Failed to get a response. Please try again."}
-                    </div>
+                    <div className="text-sm leading-relaxed">{error}</div>
                   </div>
                 </div>
               )}
@@ -274,7 +303,7 @@ export function HeroSection() {
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Continue the conversation..."
                   disabled={isLoading}
-                  className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground/50 text-sm md:text-base outline-none py-2"
+                  className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground/50 text-sm md:text-base outline-none py-2 disabled:opacity-50"
                 />
                 <button
                   type="submit"
