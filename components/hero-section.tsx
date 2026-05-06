@@ -90,10 +90,7 @@ export function HeroSection() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
+          message: userMessage.content,
         }),
       })
 
