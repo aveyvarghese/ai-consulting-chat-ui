@@ -24,6 +24,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Environment variables
+
+Lead enquiry submission uses Resend for email and can also append successful submissions to Google Sheets.
+
+```bash
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+OPENAI_API_KEY=
+GOOGLE_SHEETS_CLIENT_EMAIL=
+GOOGLE_SHEETS_PRIVATE_KEY=
+GOOGLE_SHEETS_SPREADSHEET_ID=
+```
+
+For Google Sheets CRM logging, create a Google Cloud service account, share the target spreadsheet with `GOOGLE_SHEETS_CLIENT_EMAIL`, and store the private key with escaped newlines (for example `-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n`). Rows are appended in this order: submittedAt, visitorType, leadScore, name, company, businessVertical, serviceNeeded, phone / WhatsApp, email, website, instagram, uploadedFileName, conversationSummary.
+
 ## Learn More
 
 To learn more, take a look at the following resources:

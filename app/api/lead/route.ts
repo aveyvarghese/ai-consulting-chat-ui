@@ -12,6 +12,7 @@ import {
   formatStructuredEnquirySection,
   mergeLeadDataIntoConversationSnapshot,
 } from "@/lib/lead-submit"
+import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
 
 export const maxDuration = 60
@@ -82,6 +83,10 @@ function resolveVisitorType(
     return leadData.visitorType
   }
   return null
+}
+
+function firstNonEmpty(...values: string[]): string {
+  return values.map((value) => value.trim()).find(Boolean) ?? ""
 }
 
 export async function POST(req: Request) {
@@ -226,6 +231,40 @@ export async function POST(req: Request) {
       return Response.json(
         { error: error.message || "Failed to send email" },
         { status: 502 }
+      )
+    }
+
+    try {
+      await appendLeadToGoogleSheets({
+        submittedAt,
+        visitorType: intelligence.visitorType,
+        leadScore: intelligence.leadScore,
+        name: firstNonEmpty(ld.name, intelligence.name),
+        company: firstNonEmpty(ld.company, intelligence.company),
+        businessVertical: firstNonEmpty(
+          intelligence.businessVertical,
+          normalized.businessVertical
+        ),
+        serviceNeeded: firstNonEmpty(ld.service, intelligence.servicesInterested),
+        phoneOrWhatsApp: firstNonEmpty(ld.phone, intelligence.whatsApp),
+        email: firstNonEmpty(ld.email, intelligence.email),
+        website: ld.website.trim(),
+        instagram: ld.instagram.trim(),
+        uploadedFileName: firstNonEmpty(
+          attachmentNames.join(", "),
+          intelligence.uploadedFileName
+        ),
+        conversationSummary: firstNonEmpty(
+          profSummary,
+          intelligence.consultantSummary,
+          normalized.conversationSummary,
+          transcript
+        ),
+      })
+    } catch (sheetsError) {
+      console.warn(
+        "Google Sheets CRM logging failed",
+        sheetsError instanceof Error ? sheetsError.message : sheetsError
       )
     }
 
