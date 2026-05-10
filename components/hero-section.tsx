@@ -23,6 +23,7 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
+import { deriveServiceRecommendation } from "@/lib/service-recommendation"
 
 const ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -165,6 +166,11 @@ export function HeroSection() {
     [conversationState, messages.length]
   )
 
+  const recommendedDirection = useMemo(
+    () => deriveServiceRecommendation(conversationState, messages, leadIntel),
+    [conversationState, messages, leadIntel]
+  )
+
   const attachmentUploadLabel = useMemo(() => {
     switch (conversationState.visitorType) {
       case "job_seeker":
@@ -216,7 +222,7 @@ export function HeroSection() {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages, attachedFile])
+  }, [messages, attachedFile, recommendedDirection])
 
   useEffect(() => {
     console.log("Lead Data:", leadData)
@@ -679,6 +685,53 @@ export function HeroSection() {
                   )}
                 </div>
               ))}
+
+              {recommendedDirection && (
+                <div className="flex justify-start gap-3 md:gap-3.5">
+                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.1]">
+                    <Sparkles
+                      className="h-3.5 w-3.5 text-primary"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <div className="w-full max-w-[min(92%,32rem)] overflow-hidden rounded-[1.05rem] border border-primary/20 bg-gradient-to-br from-primary/[0.1] via-muted/[0.34] to-black/[0.18] p-4 text-left shadow-[0_18px_48px_-28px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-md md:p-5">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-primary/90">
+                        Recommended Direction
+                      </p>
+                      <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted-foreground/75">
+                        Strategic fit
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <p className="mb-1 text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                          Primary Recommendation
+                        </p>
+                        <p className="text-base font-semibold tracking-tight text-foreground md:text-lg">
+                          {recommendedDirection.primaryRecommendation}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="mb-1 text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                          Why it matters
+                        </p>
+                        <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-[0.9375rem]">
+                          {recommendedDirection.whyItMatters}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="mb-1 text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                          Suggested next step
+                        </p>
+                        <p className="text-[0.8125rem] leading-relaxed text-foreground/90 md:text-[0.9375rem]">
+                          {recommendedDirection.suggestedNextStep}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {isLoading && (
                 <div className="flex justify-start gap-3 md:gap-3.5">
