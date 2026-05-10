@@ -47,7 +47,7 @@ const brandReasons = [
 const intelligenceMetrics = [
   {
     value: "2.4x",
-    label: "Faster lead qualification",
+    label: "Faster enquiry clarity",
     detail: "AI-assisted intake, routing and next-step clarity before a human call.",
     fill: "82%",
   },
@@ -60,7 +60,7 @@ const intelligenceMetrics = [
   {
     value: "4-layer",
     label: "Automated growth systems",
-    detail: "Strategy, funnel, CRM and reporting designed as one connected loop.",
+    detail: "Strategy, funnel, workflow and reporting designed as one connected loop.",
     fill: "88%",
   },
   {
@@ -73,14 +73,14 @@ const intelligenceMetrics = [
 
 const exampleUseCases = [
   {
-    title: "Luxury real estate AI lead funnels",
+    title: "Luxury real estate AI enquiry funnels",
     detail:
-      "High-intent property enquiries qualified through AI intake, segmentation and advisor handoff logic.",
+      "High-intent property enquiries structured through AI intake, segmentation and advisor handoff logic.",
   },
   {
     title: "AI-powered dealer ecosystems",
     detail:
-      "Dealer onboarding, lead distribution and performance visibility across regional sales networks.",
+      "Dealer onboarding, enquiry distribution and performance visibility across regional networks.",
   },
   {
     title: "AI consultation systems",
@@ -95,7 +95,7 @@ const exampleUseCases = [
   {
     title: "Automated customer engagement",
     detail:
-      "WhatsApp, email and CRM touchpoints that keep prospects moving without manual leakage.",
+      "WhatsApp, email and workflow touchpoints that keep prospects moving without manual leakage.",
   },
   {
     title: "Performance intelligence dashboards",
@@ -269,7 +269,7 @@ export function ResultsSection() {
           </h2>
           <p className="mt-5 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg md:leading-relaxed">
             The output is not another campaign calendar. It is an intelligence
-            layer for qualification, workflow, growth systems and conversion.
+            layer for enquiry clarity, workflow, growth systems and conversion.
           </p>
         </header>
 

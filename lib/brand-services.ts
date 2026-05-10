@@ -5,9 +5,9 @@ export const brandServices = [
       "Workflow automation, agentic assistants and operational systems that remove repetitive drag from sales, service and delivery.",
   },
   {
-    title: "AI Sales Systems",
+    title: "AI Advisory Systems",
     description:
-      "Lead capture, qualification and follow-up infrastructure designed to turn demand into cleaner commercial conversations.",
+      "Intelligent intake, routing and follow-up infrastructure designed to turn demand into cleaner commercial conversations.",
   },
   {
     title: "Brand Intelligence",
@@ -27,7 +27,7 @@ export const brandServices = [
   {
     title: "Website & Funnel Systems",
     description:
-      "High-converting websites, landing pages and funnel architecture connected to analytics, CRM and automation.",
+      "High-converting websites, landing pages and funnel architecture connected to analytics, workflows and automation.",
   },
 ] as const
 

@@ -155,7 +155,7 @@ function detectBottleneck(state: ConversationStatePayload, corpus: string): stri
   if (state.currentChallenge.trim()) return state.currentChallenge.trim()
   const lower = corpus.toLowerCase()
   if (/lead|inquir|pipeline|booking|callback/.test(lower))
-    return "Lead capture and qualification"
+    return "Enquiry capture and routing"
   if (/conversion|checkout|cart|landing|funnel|traffic/.test(lower))
     return "Conversion and funnel performance"
   if (/brand|position|identity|premium|differentiat/.test(lower))
@@ -189,7 +189,7 @@ function detectUrgency(
 function industrySystems(industry: string, serviceFit: string): string[] {
   const lower = industry.toLowerCase()
   if (/real\s+estate/.test(lower)) {
-    return ["Lead automation", "CRM routing", "WhatsApp follow-up"]
+    return ["Enquiry automation", "Client routing", "WhatsApp follow-up"]
   }
   if (/d2c|ecommerce|fashion|apparel/.test(lower)) {
     return ["Performance engine", "Retention flows", "Funnel analytics"]
@@ -204,7 +204,7 @@ function industrySystems(industry: string, serviceFit: string): string[] {
     return ["AI workflows", "Dealer / team dashboards", "Process automation"]
   }
   if (serviceFit === "AI Automation") {
-    return ["AI workflow map", "CRM automation", "Lead qualification logic"]
+    return ["AI workflow map", "Workflow automation", "Enquiry routing logic"]
   }
   if (serviceFit === "Website Systems") {
     return ["Conversion site map", "Landing page system", "Analytics layer"]
@@ -214,7 +214,7 @@ function industrySystems(industry: string, serviceFit: string): string[] {
 
 function directionFor(industry: string, serviceFit: string): string {
   const lower = industry.toLowerCase()
-  if (/real\s+estate/.test(lower)) return "Lead automation + CRM architecture"
+  if (/real\s+estate/.test(lower)) return "Enquiry automation + client routing architecture"
   if (/d2c|ecommerce|fashion|apparel/.test(lower))
     return "Performance growth + retention infrastructure"
   if (/luxury/.test(lower)) return "Brand intelligence + premium funnel systems"
@@ -227,7 +227,7 @@ function revenueLeaks(corpus: string, bottleneck: string): string[] {
   const lower = corpus.toLowerCase()
   const leaks = [
     /lead|inquir|pipeline|callback/.test(lower) &&
-      "Unqualified enquiries may be reaching the team without routing logic.",
+      "Unstructured enquiries may be reaching the team without routing logic.",
     /follow[-\s]?up|whatsapp|phone|call|crm/.test(lower) &&
       "Follow-up timing could be leaking warm prospects between channels.",
     /website|landing|checkout|funnel|conversion/.test(lower) &&
@@ -429,7 +429,7 @@ function meaningfulContextDepth(
 function blockersFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
   const lower = corpus.toLowerCase()
   const blockers = [
-    /lead|inquir|pipeline/.test(lower) && "Lead quality is not yet structured into a reliable qualification path.",
+    /lead|inquir|pipeline/.test(lower) && "Enquiry quality is not yet structured into a reliable routing path.",
     /conversion|funnel|website|landing/.test(lower) && "Conversion architecture may be too weak to turn interest into action.",
     /brand|position|luxury|premium/.test(lower) && "The market may not have a sharp enough reason to trust or choose the brand.",
     /ads|paid|performance|traffic/.test(lower) && "Acquisition spend may be operating ahead of funnel and message clarity.",
@@ -460,7 +460,7 @@ function inefficienciesFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
   const lower = corpus.toLowerCase()
   const inefficiencies = [
     /manual|process|ops|team/.test(lower) && "Repeated internal tasks may still depend on people instead of workflows.",
-    /lead|crm|whatsapp|follow/.test(lower) && "Lead data may not be centralised enough for timely decision-making.",
+    /lead|crm|whatsapp|follow/.test(lower) && "Enquiry context may not be centralised enough for timely decision-making.",
     /content|creative|campaign/.test(lower) && "Creative production may not be supported by a repeatable intelligence system.",
     /report|dashboard|analytics|data/.test(lower) && "Performance signals may be reviewed too late to guide action.",
   ].filter(Boolean) as string[]
@@ -501,7 +501,7 @@ function observedSignals(
         : "Operational gaps are not explicit yet; watch for manual handoffs.",
     customerAcquisitionWeaknesses:
       /lead|traffic|seo|ads|funnel|conversion|pipeline/.test(lower)
-        ? "Acquisition likely needs cleaner qualification, proof and conversion structure."
+        ? "Acquisition likely needs cleaner routing, proof and conversion structure."
         : "Acquisition weakness is still emerging from the conversation.",
   }
 }
@@ -509,23 +509,23 @@ function observedSignals(
 function likelyActions(diagnosis: AiDiagnosis, corpus: string): string[] {
   const lower = corpus.toLowerCase()
   const actions = [
-    /lead|crm|whatsapp|follow|real\s+estate/.test(lower) && "Build AI sales workflows",
+    /lead|crm|whatsapp|follow|real\s+estate/.test(lower) && "Build AI intake workflows",
     /retention|repeat|ltv|d2c|shopify/.test(lower) && "Improve retention systems",
     /brand|position|luxury|premium|identity/.test(lower) && "Reposition brand",
     /website|landing|funnel|conversion|checkout/.test(lower) && "Improve funnel conversion",
     /seo|organic|search|local/.test(lower) && "Create SEO authority",
-    /manual|workflow|automation|ops|enterprise/.test(lower) && "Implement CRM automation",
+    /manual|workflow|automation|ops|enterprise/.test(lower) && "Implement workflow automation",
   ].filter(Boolean) as string[]
 
   return [
     ...new Set([
       ...actions,
-      diagnosis.serviceFit === "AI Automation" && "Implement CRM automation",
+      diagnosis.serviceFit === "AI Automation" && "Implement workflow automation",
       diagnosis.serviceFit === "Performance Marketing" && "Improve funnel conversion",
       diagnosis.serviceFit === "Branding" && "Reposition brand",
       diagnosis.serviceFit === "SEO" && "Create SEO authority",
       diagnosis.serviceFit === "Website Systems" && "Improve funnel conversion",
-      "Build AI sales workflows",
+      "Build AI intake workflows",
     ].filter(Boolean) as string[]),
   ].slice(0, 4)
 }
@@ -576,7 +576,7 @@ function acquisitionGaps(diagnosis: AiDiagnosis, corpus: string): string[] {
     /ads|paid|meta|google|performance/.test(lower) &&
       "Paid acquisition may need tighter offer, creative and landing-page alignment.",
     /lead|inquir|pipeline|callback/.test(lower) &&
-      "Lead capture likely needs clearer qualification and routing.",
+      "Enquiry capture likely needs clearer structure and routing.",
     /instagram|social|content/.test(lower) &&
       "Social attention may not be connected to a measurable conversion path.",
   ].filter(Boolean) as string[]
@@ -593,7 +593,7 @@ function funnelWeaknesses(diagnosis: AiDiagnosis, corpus: string): string[] {
     /website|landing|funnel|checkout|conversion/.test(lower) &&
       "The digital journey may not move visitors from interest to action with enough clarity.",
     /whatsapp|phone|crm|follow/.test(lower) &&
-      "Follow-up and CRM handoffs may be too manual or inconsistent.",
+      "Follow-up and workflow handoffs may be too manual or inconsistent.",
     /proof|trust|case|testimonial|premium/.test(lower) &&
       "Proof architecture may need to work harder for higher-value decisions.",
   ].filter(Boolean) as string[]
@@ -617,7 +617,7 @@ function priorityFor(
 function impactAreas(diagnosis: AiDiagnosis, corpus: string): string[] {
   const lower = corpus.toLowerCase()
   const areas = [
-    /lead|pipeline|inquir|real\s+estate/.test(lower) && "lead generation",
+    /lead|pipeline|inquir|real\s+estate/.test(lower) && "demand generation",
     /retention|repeat|ltv|d2c|shopify/.test(lower) && "retention",
     /automation|manual|workflow|crm|ops/.test(lower) && "automation",
     /conversion|funnel|website|landing|checkout/.test(lower) && "conversion",
@@ -628,7 +628,7 @@ function impactAreas(diagnosis: AiDiagnosis, corpus: string): string[] {
   return [
     ...new Set([
       ...areas,
-      diagnosis.serviceFit === "SEO" && "lead generation",
+      diagnosis.serviceFit === "SEO" && "demand generation",
       diagnosis.serviceFit === "Branding" && "positioning",
       diagnosis.serviceFit === "AI Automation" && "automation",
       "conversion",
@@ -679,12 +679,12 @@ function engagementOptionsFor(
         "1-2 weeks",
         "Enterprise teams with active process complexity",
         "The diagnosis points to systems and workflow clarity as the highest-leverage first move.",
-        ["automation savings", "operational clarity", "lead efficiency"],
+        ["automation savings", "operational clarity", "enquiry efficiency"],
         "Best suited for teams actively scaling operational capacity."
       ),
       option(
         "Automation Consulting",
-        "Design automation logic for CRM, routing, follow-up and internal execution layers.",
+        "Design automation logic for routing, follow-up and internal execution layers.",
         "3-6 weeks",
         "Growth teams with repeatable manual processes",
         "Automation potential appears meaningful once the first system architecture is defined.",
@@ -693,7 +693,7 @@ function engagementOptionsFor(
       ),
       option(
         "Strategic Systems Architecture",
-        "Map the AI, CRM, funnel and reporting architecture needed for scalable decision-making.",
+        "Map the AI, funnel, workflow and reporting architecture needed for scalable decision-making.",
         "4-8 weeks",
         "Multi-team businesses preparing to scale systems",
         "The recommended direction requires connected infrastructure rather than isolated tactics.",
@@ -711,12 +711,12 @@ function engagementOptionsFor(
         "2-4 weeks",
         "Operating brands ready to improve acquisition quality",
         "The brief suggests performance, funnel and commercial capture need a cleaner growth thesis.",
-        ["revenue growth", "lead efficiency", "conversion improvement"],
+        ["revenue growth", "enquiry efficiency", "conversion improvement"],
         "Best suited for teams actively scaling paid or organic acquisition."
       ),
       option(
         "Retention System Design",
-        "Build repeat-purchase, CRM and lifecycle workflows around customer behaviour.",
+        "Build repeat-purchase and lifecycle workflows around customer behaviour.",
         "3-5 weeks",
         "D2C brands with early traction or repeat-purchase potential",
         "Retention can protect growth efficiency once acquisition paths start improving.",
@@ -752,7 +752,7 @@ function engagementOptionsFor(
         "3-6 weeks",
         "Early brands preparing to enter market",
         "The diagnosis points to clarity and conversion foundations as important before scale.",
-        ["positioning", "conversion improvement", "lead efficiency"],
+        ["positioning", "conversion improvement", "enquiry efficiency"],
         "Best suited before a brand starts investing heavily in acquisition."
       ),
       option(
@@ -776,7 +776,7 @@ function engagementOptionsFor(
         ? "Scaling businesses"
         : "Founder-led or growth-transition businesses",
       "The brief indicates a focused growth system would create more leverage than scattered tactics.",
-      ["revenue growth", "lead efficiency", "operational clarity"],
+      ["revenue growth", "enquiry efficiency", "operational clarity"],
       "Best suited for teams actively moving from exploration to execution."
     ),
     option(
@@ -790,11 +790,11 @@ function engagementOptionsFor(
     ),
     option(
       "Automation Consulting",
-      "Design CRM, workflow and AI-assisted follow-up systems around the customer journey.",
+      "Design workflow and AI-assisted follow-up systems around the customer journey.",
       "3-6 weeks",
       "Teams with repeatable sales or service workflows",
       "Automation opportunities are visible in the recommended service stack and system diagnosis.",
-      ["automation savings", "operational clarity", "lead efficiency"],
+      ["automation savings", "operational clarity", "enquiry efficiency"],
       "High-leverage for teams where manual handoffs slow growth."
     ),
   ]

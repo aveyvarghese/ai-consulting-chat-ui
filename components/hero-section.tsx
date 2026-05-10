@@ -124,7 +124,7 @@ function shouldAutoPrepareLeadIntel(
 }
 
 const placeholderPrompts = [
-  "Why am I not getting leads?",
+  "Why is growth slowing down?",
   "How can AI improve my business?",
   "Audit my marketing strategy",
   "How should I position my brand?",
@@ -132,7 +132,7 @@ const placeholderPrompts = [
 
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
-  { label: "Why no leads?", prompt: "Why am I not getting leads?" },
+  { label: "Growth bottleneck", prompt: "Why is growth slowing down?" },
   { label: "AI for my business", prompt: "How can AI improve my business?" },
   { label: "Marketing audit", prompt: "Audit my marketing strategy" },
   { label: "Brand positioning", prompt: "How should I position my brand?" },
@@ -1174,10 +1174,6 @@ export function HeroSection() {
   ])
 
   useEffect(() => {
-    console.log("Lead Data:", leadData)
-  }, [leadData])
-
-  useEffect(() => {
     if (!hasMessages || !conversationReadyForLeadPrep) return
 
     const fingerprint = [
@@ -1600,7 +1596,7 @@ export function HeroSection() {
           }`}
         >
           {hasMessages
-            ? "Strategic diagnosis, lead intelligence and advisory workflow in one live command center."
+            ? "Strategic diagnosis, active intelligence and advisory workflow in one live command center."
             : "We design AI automation, brand systems, growth infrastructure, performance marketing loops and AI workflows for brands that need sharper decisions and cleaner execution."}
         </p>
 
