@@ -15,6 +15,20 @@ export interface LeadSummaryContext {
   potentialClientStage: number
 }
 
+export interface PremiumSalesIntake {
+  fullName: string
+  companyName: string
+  email: string
+  phoneNumber: string
+  websiteInstagram: string
+  budgetRange: string
+  preferredService: string
+  additionalNotes: string
+  aiSummary: string
+  recommendedService: string
+  opportunityLevel: string
+}
+
 function dash(s: string): string {
   const t = s.trim()
   return t || "—"
@@ -71,6 +85,32 @@ export function formatProfessionalSummarySection(
     `AI-GENERATED CONVERSATION SUMMARY (concise)`,
     ``,
     professionalSummary.trim() || "—",
+  ].join("\n")
+}
+
+export function formatPremiumIntakeSection(
+  intake: PremiumSalesIntake | null
+): string {
+  if (!intake) return ""
+
+  return [
+    `PREMIUM AI SALES INTAKE`,
+    ``,
+    `Full name: ${dash(intake.fullName)}`,
+    `Company name: ${dash(intake.companyName)}`,
+    `Email: ${dash(intake.email)}`,
+    `Phone number: ${dash(intake.phoneNumber)}`,
+    `Website / Instagram: ${dash(intake.websiteInstagram)}`,
+    `Budget range: ${dash(intake.budgetRange)}`,
+    `Preferred service: ${dash(intake.preferredService)}`,
+    `Recommended service: ${dash(intake.recommendedService)}`,
+    `Estimated opportunity level: ${dash(intake.opportunityLevel)}`,
+    ``,
+    `AI summary:`,
+    dash(intake.aiSummary),
+    ``,
+    `Additional notes:`,
+    dash(intake.additionalNotes),
   ].join("\n")
 }
 
@@ -207,6 +247,101 @@ export async function generateProfessionalLeadSummary(
     return text.slice(0, 2500)
   } catch {
     return fallbackProfessionalSummary(leadData, ctx)
+  }
+}
+
+function fallbackSalesIntakeSummary(
+  leadData: LeadData,
+  ctx: LeadSummaryContext,
+  recommendedService: string
+): string {
+  const subject =
+    leadData.company.trim() ||
+    leadData.name.trim() ||
+    ctx.businessVertical.trim() ||
+    "Lead"
+  const need =
+    recommendedService.trim() ||
+    leadData.service.trim() ||
+    "growth strategy"
+  const context = [
+    ctx.businessVertical.trim(),
+    ctx.businessStage.trim(),
+    leadData.website.trim() || leadData.instagram.trim(),
+  ]
+    .filter(Boolean)
+    .join(" · ")
+  return `${subject} seeking ${need} support${
+    context ? ` for ${context}` : ""
+  }.`.slice(0, 240)
+}
+
+export async function generateSalesIntakeSummary(
+  messages: { role: string; content: string }[],
+  leadData: LeadData,
+  ctx: LeadSummaryContext,
+  recommendedService: string
+): Promise<string> {
+  const apiKey = process.env.OPENAI_API_KEY
+  const transcript = messages
+    .map((m) =>
+      m.role === "user" ? `Visitor: ${m.content}` : `Assistant: ${m.content}`
+    )
+    .join("\n")
+    .slice(0, 10000)
+
+  if (!apiKey) {
+    return fallbackSalesIntakeSummary(leadData, ctx, recommendedService)
+  }
+
+  const system = `You write one-line sales intake summaries for PxlBrief. Output one premium, concrete sentence under 160 characters. No bullets. No labels. Do not invent facts. Example: "Fashion startup seeking SEO + Instagram growth support for low Shopify traffic."`
+  const userPayload = {
+    structured: {
+      visitorType: leadData.visitorType,
+      name: leadData.name,
+      company: leadData.company,
+      service: leadData.service,
+      recommendedService,
+      website: leadData.website,
+      instagram: leadData.instagram,
+      businessVertical: ctx.businessVertical,
+      businessStage: ctx.businessStage,
+      notes: leadData.notes,
+    },
+    conversationExcerpt: transcript,
+  }
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-mini",
+        messages: [
+          { role: "system", content: system },
+          {
+            role: "user",
+            content: `Summarise this enquiry in one sentence:\n${JSON.stringify(userPayload)}`,
+          },
+        ],
+        temperature: 0.2,
+        max_tokens: 80,
+      }),
+    })
+    if (!res.ok) {
+      return fallbackSalesIntakeSummary(leadData, ctx, recommendedService)
+    }
+    const data = await res.json()
+    const text = data.choices?.[0]?.message?.content?.trim()
+    if (!text) {
+      return fallbackSalesIntakeSummary(leadData, ctx, recommendedService)
+    }
+    return text.replace(/^["']|["']$/g, "").slice(0, 240)
+  } catch {
+    return fallbackSalesIntakeSummary(leadData, ctx, recommendedService)
   }
 }
 

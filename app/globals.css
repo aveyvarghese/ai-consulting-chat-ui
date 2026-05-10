@@ -120,8 +120,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground antialiased;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1,
+      "ss01" 1;
+  }
+  ::selection {
+    background: oklch(0.75 0.12 180 / 0.22);
+    color: var(--foreground);
   }
 }
 

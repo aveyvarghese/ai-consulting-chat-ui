@@ -1,33 +1,33 @@
 export const brandServices = [
   {
-    title: "AI Consulting",
+    title: "AI Automation",
     description:
-      "Executive-grade AI roadmaps, governance and adoption — so intelligence compounds, not confuses.",
+      "Workflow automation, agentic assistants and operational systems that remove repetitive drag from sales, service and delivery.",
   },
   {
-    title: "Branding",
+    title: "AI Advisory Systems",
     description:
-      "Distinct positioning, narrative systems and visual language engineered for premium markets.",
+      "Intelligent intake, routing and follow-up infrastructure designed to turn demand into cleaner commercial conversations.",
   },
   {
-    title: "Growth Strategy",
+    title: "Brand Intelligence",
     description:
-      "Revenue architecture, channel mix and sequencing designed for durable expansion, not spikes.",
+      "Positioning, narrative and decision systems that help premium brands sound sharper and act with strategic consistency.",
   },
   {
     title: "Performance Marketing",
     description:
-      "Attribution-aware acquisition loops, creative testing and budget efficiency at scale.",
+      "Acquisition loops, creative testing and funnel economics built for efficient scale rather than noisy campaign activity.",
   },
   {
-    title: "AI Automation",
+    title: "AI Content Engines",
     description:
-      "Workflow orchestration and agentic systems that remove drag from sales, ops and support.",
+      "Content workflows, research systems and creative pipelines that turn expertise into consistent market presence.",
   },
   {
-    title: "Website Systems",
+    title: "Website & Funnel Systems",
     description:
-      "High-converting digital estates — performance, content and integrations built as one system.",
+      "High-converting websites, landing pages and funnel architecture connected to analytics, workflows and automation.",
   },
 ] as const
 

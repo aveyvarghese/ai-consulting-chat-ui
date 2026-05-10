@@ -8,16 +8,19 @@ import { normalizeConversationPayload } from "@/lib/conversation-state"
 import type { LeadData } from "@/lib/lead-data"
 import {
   formatIntelligenceTail,
+  formatPremiumIntakeSection,
   formatProfessionalSummarySection,
   formatStructuredEnquirySection,
   mergeLeadDataIntoConversationSnapshot,
+  type PremiumSalesIntake,
 } from "@/lib/lead-submit"
-import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
 
 export const maxDuration = 60
 
 const LEAD_TO_EMAIL = "info@pxlbrief.com"
+const SUBMISSION_ERROR_MESSAGE =
+  "Something went wrong. Please try again or email info@pxlbrief.com."
 
 const chatMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
@@ -42,12 +45,27 @@ const attachmentSchema = z.object({
   base64: z.string().max(6_000_000),
 })
 
+const intakeSchema = z.object({
+  fullName: z.string().max(500).optional().default(""),
+  companyName: z.string().max(500).optional().default(""),
+  email: z.string().max(320).optional().default(""),
+  phoneNumber: z.string().max(120).optional().default(""),
+  websiteInstagram: z.string().max(2000).optional().default(""),
+  budgetRange: z.string().max(120).optional().default(""),
+  preferredService: z.string().max(1000).optional().default(""),
+  additionalNotes: z.string().max(4000).optional().default(""),
+  aiSummary: z.string().max(1000).optional().default(""),
+  recommendedService: z.string().max(1000).optional().default(""),
+  opportunityLevel: z.string().max(120).optional().default(""),
+})
+
 const submitBodySchema = z.object({
   messages: z.array(chatMessageSchema).max(250).optional().default([]),
   snapshot: z.record(z.unknown()),
   leadData: leadDataSchema.optional(),
   professionalSummary: z.string().max(4000).optional().default(""),
   attachment: attachmentSchema.optional(),
+  intake: intakeSchema.optional(),
 })
 
 function transcriptFromMessages(
@@ -89,26 +107,52 @@ function firstNonEmpty(...values: string[]): string {
   return values.map((value) => value.trim()).find(Boolean) ?? ""
 }
 
+function normalizeIntake(
+  intake: z.infer<typeof intakeSchema> | undefined,
+  summaryFallback: string,
+  serviceFallback: string
+): PremiumSalesIntake | null {
+  if (!intake) return null
+  return {
+    fullName: intake.fullName.trim(),
+    companyName: intake.companyName.trim(),
+    email: intake.email.trim(),
+    phoneNumber: intake.phoneNumber.trim(),
+    websiteInstagram: intake.websiteInstagram.trim(),
+    budgetRange: intake.budgetRange.trim(),
+    preferredService: intake.preferredService.trim(),
+    additionalNotes: intake.additionalNotes.trim(),
+    aiSummary: firstNonEmpty(intake.aiSummary, summaryFallback),
+    recommendedService: firstNonEmpty(
+      intake.recommendedService,
+      intake.preferredService,
+      serviceFallback
+    ),
+    opportunityLevel: intake.opportunityLevel.trim(),
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {
       return Response.json(
-        { error: "RESEND_API_KEY is not configured" },
+        { error: SUBMISSION_ERROR_MESSAGE },
         { status: 500 }
       )
     }
 
-    const from = process.env.RESEND_FROM_EMAIL?.trim()
+    const from =
+      process.env.RESEND_FROM_EMAIL?.trim() ||
+      process.env.LEAD_EMAIL?.trim() ||
+      LEAD_TO_EMAIL
     if (!from) {
       return Response.json(
-        {
-          error:
-            "RESEND_FROM_EMAIL is not configured (verified sender address required)",
-        },
+        { error: SUBMISSION_ERROR_MESSAGE },
         { status: 500 }
       )
     }
+    const to = process.env.LEAD_EMAIL?.trim() || LEAD_TO_EMAIL
 
     const raw = submitBodySchema.safeParse(await req.json())
     if (!raw.success) {
@@ -161,6 +205,8 @@ export async function POST(req: Request) {
       potentialClientStage: normalized.potentialClientStage,
     }
 
+    const intakeRaw = raw.data.intake
+
     const ld: LeadData = leadData
       ? { ...leadData, visitorType: effectiveVisitor }
       : {
@@ -174,6 +220,40 @@ export async function POST(req: Request) {
           phone: normalized.whatsapp,
           notes: "",
         }
+
+    const preferredService = firstNonEmpty(
+      intakeRaw?.preferredService ?? "",
+      ld.service,
+      intelligence.servicesInterested
+    )
+    const aiSummary = firstNonEmpty(
+      intakeRaw?.aiSummary ?? "",
+      profSummary,
+      intelligence.consultantSummary
+    )
+    const intake = normalizeIntake(
+      intakeRaw,
+      aiSummary,
+      preferredService
+    )
+    const emailLeadData: LeadData = {
+      ...ld,
+      name: firstNonEmpty(intake?.fullName ?? "", ld.name, intelligence.name),
+      company: firstNonEmpty(
+        intake?.companyName ?? "",
+        ld.company,
+        intelligence.company
+      ),
+      email: firstNonEmpty(intake?.email ?? "", ld.email, intelligence.email),
+      phone: firstNonEmpty(
+        intake?.phoneNumber ?? "",
+        ld.phone,
+        intelligence.whatsApp
+      ),
+      website: firstNonEmpty(intake?.websiteInstagram ?? "", ld.website),
+      service: preferredService,
+      notes: firstNonEmpty(intake?.additionalNotes ?? "", ld.notes),
+    }
 
     const attachmentNames: string[] = []
     if (normalized.uploadedFileName.trim()) {
@@ -193,15 +273,14 @@ export async function POST(req: Request) {
     )
 
     const textBody = [
-      formatStructuredEnquirySection(ld, ctx),
-      "",
-      "ATTACHMENTS",
-      filesLine,
-      "",
-      formatProfessionalSummarySection(profSummary),
-      "",
+      formatStructuredEnquirySection(emailLeadData, ctx),
+      formatPremiumIntakeSection(intake),
+      ["ATTACHMENTS", filesLine].join("\n"),
+      formatProfessionalSummarySection(aiSummary),
       formatIntelligenceTail(intelligence, submittedAt),
-    ].join("\n")
+    ]
+      .filter((section) => section !== "")
+      .join("\n\n")
 
     const attachments: { filename: string; content: Buffer }[] = []
     if (raw.data.attachment?.base64 && raw.data.attachment.filename) {
@@ -221,51 +300,18 @@ export async function POST(req: Request) {
     const resend = new Resend(apiKey)
     const { error } = await resend.emails.send({
       from,
-      to: LEAD_TO_EMAIL,
+      to,
       subject,
       text: textBody,
       ...(attachments.length ? { attachments } : {}),
     })
 
     if (error) {
-      return Response.json(
-        { error: error.message || "Failed to send email" },
-        { status: 502 }
-      )
-    }
-
-    try {
-      await appendLeadToGoogleSheets({
-        submittedAt,
-        visitorType: intelligence.visitorType,
-        leadScore: intelligence.leadScore,
-        name: firstNonEmpty(ld.name, intelligence.name),
-        company: firstNonEmpty(ld.company, intelligence.company),
-        businessVertical: firstNonEmpty(
-          intelligence.businessVertical,
-          normalized.businessVertical
-        ),
-        serviceNeeded: firstNonEmpty(ld.service, intelligence.servicesInterested),
-        phoneOrWhatsApp: firstNonEmpty(ld.phone, intelligence.whatsApp),
-        email: firstNonEmpty(ld.email, intelligence.email),
-        website: ld.website.trim(),
-        instagram: ld.instagram.trim(),
-        uploadedFileName: firstNonEmpty(
-          attachmentNames.join(", "),
-          intelligence.uploadedFileName
-        ),
-        conversationSummary: firstNonEmpty(
-          profSummary,
-          intelligence.consultantSummary,
-          normalized.conversationSummary,
-          transcript
-        ),
-      })
-    } catch (sheetsError) {
       console.warn(
-        "Google Sheets CRM logging failed",
-        sheetsError instanceof Error ? sheetsError.message : sheetsError
+        "Resend lead submission failed",
+        error.message || "Unknown Resend error"
       )
+      return Response.json({ error: SUBMISSION_ERROR_MESSAGE }, { status: 502 })
     }
 
     return Response.json({
@@ -274,7 +320,7 @@ export async function POST(req: Request) {
       subjectAccent: intelligence.subjectAccent,
     })
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Unexpected error"
-    return Response.json({ error: message }, { status: 500 })
+    console.warn("Lead submission failed", e)
+    return Response.json({ error: SUBMISSION_ERROR_MESSAGE }, { status: 500 })
   }
 }
