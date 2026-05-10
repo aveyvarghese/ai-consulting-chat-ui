@@ -28,6 +28,8 @@ import {
   trackAnalyticsEvent,
 } from "@/lib/analytics-events"
 import { ExecutiveIntelligencePanel } from "@/components/executive-intelligence-panel"
+import { ExecutiveSignalsPanel } from "@/components/executive-signals-panel"
+import type { ExecutiveSignalItem } from "@/lib/executive-signals-types"
 import { ServiceRecommendationCard } from "@/components/service-recommendation-card"
 import { StrategicBriefCard } from "@/components/strategic-brief-card"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
@@ -150,6 +152,10 @@ export function HeroSection() {
   const [strategicBrief, setStrategicBrief] = useState<StrategicBriefPayload | null>(
     null
   )
+  const [executiveSignals, setExecutiveSignals] = useState<
+    ExecutiveSignalItem[] | null
+  >(null)
+  const [execSignalsBusy, setExecSignalsBusy] = useState(false)
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
@@ -226,6 +232,68 @@ export function HeroSection() {
   useEffect(() => {
     setRoutingCardDismissed(false)
   }, [serviceRecommendation?.directionLabel])
+
+  useEffect(() => {
+    if (!hasMessages || enquirySubmitSuccess) {
+      return
+    }
+    const visitorType = conversationState.visitorType
+    if (visitorType !== "potential_client" && visitorType !== "unknown") {
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
+      return
+    }
+    const userTurns = messages.filter((m) => m.role === "user").length
+    if (userTurns < 2) {
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
+      return
+    }
+
+    let cancelled = false
+    const controller = new AbortController()
+    const timer = setTimeout(async () => {
+      setExecSignalsBusy(true)
+      try {
+        const res = await fetch("/api/chat/executive-signals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({
+            messages: messages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+            visitorType,
+          }),
+        })
+        const data: { signals?: unknown } = await res.json().catch(() => ({}))
+        if (cancelled) return
+        if (!res.ok) {
+          setExecutiveSignals([])
+          return
+        }
+        const list = Array.isArray(data.signals) ? data.signals : []
+        setExecutiveSignals(list as ExecutiveSignalItem[])
+      } catch {
+        if (cancelled || controller.signal.aborted) return
+        setExecutiveSignals([])
+      } finally {
+        if (!cancelled) setExecSignalsBusy(false)
+      }
+    }, 650)
+
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+      controller.abort()
+    }
+  }, [
+    hasMessages,
+    enquirySubmitSuccess,
+    messages,
+    conversationState.visitorType,
+  ])
 
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
@@ -328,6 +396,8 @@ export function HeroSection() {
     setEnquirySubmitSuccess(false)
     setRoutingCardDismissed(false)
     setStrategicBrief(null)
+    setExecutiveSignals(null)
+    setExecSignalsBusy(false)
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -425,6 +495,8 @@ export function HeroSection() {
         setStrategicBrief({ complete: false })
       }
       setEnquirySubmitSuccess(true)
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
       setLeadSubmitMessage(null)
       trackAnalyticsEvent(AnalyticsEvent.SUBMIT_ENQUIRY, { success: true })
     } catch (err) {
@@ -746,6 +818,13 @@ export function HeroSection() {
 
               <div ref={messagesEndRef} />
             </div>
+
+            {!enquirySubmitSuccess ? (
+              <ExecutiveSignalsPanel
+                signals={executiveSignals}
+                loading={execSignalsBusy}
+              />
+            ) : null}
 
             <form
               onSubmit={handleSubmit}
