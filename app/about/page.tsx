@@ -45,7 +45,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="mt-14 rounded-[1.25rem] border border-white/[0.08] bg-card/[0.35] p-8 backdrop-blur-xl md:p-10">
+        <div className="mt-14 rounded-[1.25rem] border border-hairline bg-card/95 p-8 backdrop-blur-xl dark:bg-card/[0.35] md:p-10">
           <h2 className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary/85">
             Philosophy
           </h2>

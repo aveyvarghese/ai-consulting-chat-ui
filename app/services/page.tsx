@@ -43,7 +43,7 @@ export default function ServicesPage() {
             return (
               <article
                 key={service.title}
-                className="group flex flex-col overflow-hidden rounded-[1.125rem] border border-white/[0.07] bg-card/[0.38] p-6 shadow-[0_1px_0_0_oklch(1_0_0/0.04)_inset] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:p-8 hover:-translate-y-1 hover:border-primary/28 hover:shadow-[0_20px_48px_-28px_rgba(0,0,0,0.55)]"
+                className="group flex flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-6 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.38] md:p-8 hover:-translate-y-1 hover:border-primary/28 hover:shadow-[var(--shadow-card-hover)]"
               >
                 <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[0.625rem] border border-primary/18 bg-primary/[0.09] text-primary transition-colors group-hover:border-primary/35">
                   <Icon className="h-5 w-5" strokeWidth={1.65} />

@@ -1,0 +1,326 @@
+/**
+ * PxlBrief design tokens — premium variants (dark + executive light).
+ * Switch via: html[data-theme="palantir"|"luxury"|"cinematic"|"executive-light"|"executive-sunrise"]
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Palantir Intelligence — cool slate, analytic teal, precision glow         */
+/* -------------------------------------------------------------------------- */
+html[data-theme="palantir"] {
+  color-scheme: dark;
+  --background: oklch(0.09 0.006 260);
+  --foreground: oklch(0.95 0.005 260);
+  --card: oklch(0.13 0.008 260);
+  --card-foreground: oklch(0.95 0.005 260);
+  --popover: oklch(0.11 0.007 260);
+  --popover-foreground: oklch(0.95 0.005 260);
+  --primary: oklch(0.74 0.11 195);
+  --primary-foreground: oklch(0.09 0.01 260);
+  --secondary: oklch(0.18 0.012 260);
+  --secondary-foreground: oklch(0.86 0.008 260);
+  --muted: oklch(0.2 0.012 260);
+  --muted-foreground: oklch(0.58 0.02 260);
+  --accent: oklch(0.74 0.11 195);
+  --accent-foreground: oklch(0.09 0.01 260);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.26 0.015 260);
+  --input: oklch(0.15 0.01 260);
+  --ring: oklch(0.74 0.11 195);
+  --chart-1: oklch(0.74 0.11 195);
+  --chart-2: oklch(0.6 0.1 200);
+  --chart-3: oklch(0.4 0.07 230);
+  --chart-4: oklch(0.82 0.12 85);
+  --chart-5: oklch(0.65 0.15 300);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.11 0.007 260);
+  --sidebar-foreground: oklch(0.95 0.005 260);
+  --sidebar-primary: oklch(0.74 0.11 195);
+  --sidebar-primary-foreground: oklch(0.09 0.01 260);
+  --sidebar-accent: oklch(0.18 0.012 260);
+  --sidebar-accent-foreground: oklch(0.95 0.005 260);
+  --sidebar-border: oklch(0.26 0.015 260);
+  --sidebar-ring: oklch(0.74 0.11 195);
+
+  --hairline: oklch(1 0 0 / 0.07);
+  --surface-glass: oklch(0.14 0.012 260 / 0.45);
+  --surface-elevated: oklch(0.11 0.01 260 / 0.55);
+  --glow-primary: oklch(0.74 0.11 195 / 0.22);
+  --glow-ambient: oklch(0.74 0.11 195 / 0.12);
+  --header-bg: oklch(0.09 0.006 260 / 0.78);
+
+  --ambient-mid: oklch(0.16 0.04 195 / 0.35);
+  --ambient-side: oklch(0.14 0.03 260 / 0.25);
+  --ambient-floor: oklch(0.12 0.025 200 / 0.2);
+  --ambient-orb-a: oklch(0.74 0.11 195 / 0.045);
+  --ambient-orb-b: oklch(0.74 0.11 195 / 0.035);
+
+  --shine-inset: oklch(1 0 0 / 0.04);
+  --shine-track: oklch(1 0 0 / 0.05);
+  --chrome-bar: oklch(0 0 0 / 0.14);
+  --section-tint: oklch(0.082 0.006 260);
+  --panel-deep: oklch(0.078 0.006 260);
+
+  --shadow-chat-depth: 0 24px 64px -32px rgba(0, 0, 0, 0.65);
+  --shadow-card-hover: 0 20px 48px -28px rgba(0, 0, 0, 0.55);
+  --shadow-tier-hover: 0 24px 56px -32px rgba(0, 0, 0, 0.6);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Luxury Executive — warm neutrals, champagne gold, boardroom restraint       */
+/* -------------------------------------------------------------------------- */
+html[data-theme="luxury"] {
+  color-scheme: dark;
+  --background: oklch(0.085 0.012 75);
+  --foreground: oklch(0.96 0.012 75);
+  --card: oklch(0.12 0.014 72);
+  --card-foreground: oklch(0.96 0.012 75);
+  --popover: oklch(0.1 0.012 78);
+  --popover-foreground: oklch(0.96 0.012 75);
+  --primary: oklch(0.78 0.09 78);
+  --primary-foreground: oklch(0.12 0.02 75);
+  --secondary: oklch(0.2 0.018 72);
+  --secondary-foreground: oklch(0.9 0.015 75);
+  --muted: oklch(0.22 0.018 72);
+  --muted-foreground: oklch(0.58 0.03 72);
+  --accent: oklch(0.78 0.09 78);
+  --accent-foreground: oklch(0.12 0.02 75);
+  --destructive: oklch(0.42 0.14 28);
+  --destructive-foreground: oklch(0.62 0.2 28);
+  --border: oklch(0.3 0.02 72);
+  --input: oklch(0.16 0.015 72);
+  --ring: oklch(0.78 0.09 78);
+  --chart-1: oklch(0.78 0.09 78);
+  --chart-2: oklch(0.62 0.06 65);
+  --chart-3: oklch(0.45 0.04 55);
+  --chart-4: oklch(0.72 0.08 95);
+  --chart-5: oklch(0.55 0.1 40);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.1 0.012 75);
+  --sidebar-foreground: oklch(0.96 0.012 75);
+  --sidebar-primary: oklch(0.78 0.09 78);
+  --sidebar-primary-foreground: oklch(0.12 0.02 75);
+  --sidebar-accent: oklch(0.2 0.018 72);
+  --sidebar-accent-foreground: oklch(0.96 0.012 75);
+  --sidebar-border: oklch(0.3 0.02 72);
+  --sidebar-ring: oklch(0.78 0.09 78);
+
+  --hairline: oklch(0.96 0.02 75 / 0.1);
+  --surface-glass: oklch(0.14 0.016 72 / 0.5);
+  --surface-elevated: oklch(0.11 0.014 75 / 0.58);
+  --glow-primary: oklch(0.78 0.09 78 / 0.25);
+  --glow-ambient: oklch(0.78 0.09 78 / 0.14);
+  --header-bg: oklch(0.085 0.012 75 / 0.82);
+
+  --ambient-mid: oklch(0.22 0.05 78 / 0.32);
+  --ambient-side: oklch(0.18 0.04 65 / 0.22);
+  --ambient-floor: oklch(0.16 0.035 85 / 0.18);
+  --ambient-orb-a: oklch(0.78 0.09 78 / 0.05);
+  --ambient-orb-b: oklch(0.72 0.07 65 / 0.04);
+
+  --shine-inset: oklch(0.98 0.015 75 / 0.05);
+  --shine-track: oklch(0.98 0.015 75 / 0.06);
+  --chrome-bar: oklch(0.06 0.02 72 / 0.32);
+  --section-tint: oklch(0.09 0.014 72);
+  --panel-deep: oklch(0.095 0.014 75);
+
+  --shadow-chat-depth: 0 24px 64px -32px rgba(0, 0, 0, 0.65);
+  --shadow-card-hover: 0 20px 48px -28px rgba(0, 0, 0, 0.55);
+  --shadow-tier-hover: 0 24px 56px -32px rgba(0, 0, 0, 0.6);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cinematic AI — deep void, violet–magenta signal, high-contrast drama      */
+/* -------------------------------------------------------------------------- */
+html[data-theme="cinematic"] {
+  color-scheme: dark;
+  --background: oklch(0.065 0.022 285);
+  --foreground: oklch(0.97 0.012 285);
+  --card: oklch(0.1 0.028 285);
+  --card-foreground: oklch(0.97 0.012 285);
+  --popover: oklch(0.08 0.025 285);
+  --popover-foreground: oklch(0.97 0.012 285);
+  --primary: oklch(0.7 0.19 308);
+  --primary-foreground: oklch(0.08 0.02 285);
+  --secondary: oklch(0.16 0.03 285);
+  --secondary-foreground: oklch(0.88 0.02 285);
+  --muted: oklch(0.19 0.03 285);
+  --muted-foreground: oklch(0.56 0.04 285);
+  --accent: oklch(0.7 0.19 308);
+  --accent-foreground: oklch(0.08 0.02 285);
+  --destructive: oklch(0.42 0.14 25);
+  --destructive-foreground: oklch(0.62 0.2 25);
+  --border: oklch(0.28 0.04 285);
+  --input: oklch(0.13 0.028 285);
+  --ring: oklch(0.7 0.19 308);
+  --chart-1: oklch(0.7 0.19 308);
+  --chart-2: oklch(0.58 0.16 280);
+  --chart-3: oklch(0.45 0.12 260);
+  --chart-4: oklch(0.75 0.15 320);
+  --chart-5: oklch(0.62 0.18 295);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.075 0.022 285);
+  --sidebar-foreground: oklch(0.97 0.012 285);
+  --sidebar-primary: oklch(0.7 0.19 308);
+  --sidebar-primary-foreground: oklch(0.08 0.02 285);
+  --sidebar-accent: oklch(0.16 0.03 285);
+  --sidebar-accent-foreground: oklch(0.97 0.012 285);
+  --sidebar-border: oklch(0.28 0.04 285);
+  --sidebar-ring: oklch(0.7 0.19 308);
+
+  --hairline: oklch(0.98 0.02 285 / 0.08);
+  --surface-glass: oklch(0.12 0.03 285 / 0.5);
+  --surface-elevated: oklch(0.09 0.028 285 / 0.6);
+  --glow-primary: oklch(0.7 0.19 308 / 0.28);
+  --glow-ambient: oklch(0.7 0.19 308 / 0.15);
+  --header-bg: oklch(0.065 0.022 285 / 0.8);
+
+  --ambient-mid: oklch(0.22 0.12 300 / 0.38);
+  --ambient-side: oklch(0.18 0.1 285 / 0.28);
+  --ambient-floor: oklch(0.15 0.08 270 / 0.22);
+  --ambient-orb-a: oklch(0.7 0.19 308 / 0.055);
+  --ambient-orb-b: oklch(0.55 0.15 295 / 0.045);
+
+  --shine-inset: oklch(0.96 0.02 285 / 0.06);
+  --shine-track: oklch(0.96 0.02 285 / 0.05);
+  --chrome-bar: oklch(0.02 0.04 285 / 0.42);
+  --section-tint: oklch(0.072 0.024 285);
+  --panel-deep: oklch(0.07 0.026 285);
+
+  --shadow-chat-depth: 0 24px 64px -32px rgba(0, 0, 0, 0.65);
+  --shadow-card-hover: 0 20px 48px -28px rgba(0, 0, 0, 0.55);
+  --shadow-tier-hover: 0 24px 56px -32px rgba(0, 0, 0, 0.6);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Executive Light — platinum editorial, graphite type, muted teal signal    */
+/* Apple × McKinsey × Palantir: enterprise dashboard, not generic SaaS white */
+/* -------------------------------------------------------------------------- */
+html[data-theme="executive-light"] {
+  color-scheme: light;
+  --background: oklch(0.97 0.004 95);
+  --foreground: oklch(0.29 0.022 258);
+  --card: oklch(0.995 0.003 100);
+  --card-foreground: oklch(0.29 0.022 258);
+  --popover: oklch(0.995 0.003 100);
+  --popover-foreground: oklch(0.29 0.022 258);
+  --primary: oklch(0.48 0.072 198);
+  --primary-foreground: oklch(0.99 0.002 100);
+  --secondary: oklch(0.94 0.006 215);
+  --secondary-foreground: oklch(0.32 0.02 258);
+  --muted: oklch(0.935 0.008 210);
+  --muted-foreground: oklch(0.46 0.022 255);
+  --accent: oklch(0.925 0.016 200);
+  --accent-foreground: oklch(0.29 0.022 258);
+  --destructive: oklch(0.5 0.17 27);
+  --destructive-foreground: oklch(0.99 0.002 100);
+  --border: oklch(0.86 0.012 220);
+  --input: oklch(0.965 0.006 210);
+  --ring: oklch(0.52 0.085 198);
+  --chart-1: oklch(0.48 0.072 198);
+  --chart-2: oklch(0.55 0.04 230);
+  --chart-3: oklch(0.62 0.03 260);
+  --chart-4: oklch(0.58 0.06 185);
+  --chart-5: oklch(0.5 0.05 220);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.975 0.004 100);
+  --sidebar-foreground: oklch(0.29 0.022 258);
+  --sidebar-primary: oklch(0.48 0.072 198);
+  --sidebar-primary-foreground: oklch(0.99 0.002 100);
+  --sidebar-accent: oklch(0.93 0.01 215);
+  --sidebar-accent-foreground: oklch(0.29 0.022 258);
+  --sidebar-border: oklch(0.86 0.012 220);
+  --sidebar-ring: oklch(0.52 0.085 198);
+
+  --hairline: oklch(0.38 0.02 258 / 0.14);
+  --surface-glass: oklch(1 0.002 100 / 0.58);
+  --surface-elevated: oklch(0.99 0.004 98 / 0.88);
+  --glow-primary: oklch(0.48 0.072 198 / 0.06);
+  --glow-ambient: oklch(0.48 0.072 198 / 0.035);
+  --header-bg: oklch(0.97 0.004 95 / 0.86);
+
+  --ambient-mid: oklch(0.72 0.035 200 / 0.07);
+  --ambient-side: oklch(0.78 0.025 225 / 0.055);
+  --ambient-floor: oklch(0.7 0.02 210 / 0.045);
+  --ambient-orb-a: oklch(0.48 0.072 198 / 0.035);
+  --ambient-orb-b: oklch(0.55 0.04 215 / 0.028);
+
+  --shine-inset: oklch(0.45 0.02 258 / 0.055);
+  --shine-track: oklch(0.55 0.015 240 / 0.12);
+  --chrome-bar: oklch(0.945 0.006 210 / 0.96);
+  --section-tint: oklch(0.955 0.006 205);
+  --panel-deep: oklch(0.94 0.008 215);
+
+  --shadow-chat-depth: 0 28px 72px -40px oklch(0.4 0.02 260 / 0.09);
+  --shadow-card-hover: 0 22px 48px -32px oklch(0.42 0.018 255 / 0.075);
+  --shadow-tier-hover: 0 26px 56px -36px oklch(0.4 0.02 258 / 0.085);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Executive Sunrise — local visual test: warm white, orange/gold/blue       */
+/* Premium restraint: clean space, consulting clarity, soft glass + shadow   */
+/* -------------------------------------------------------------------------- */
+html[data-theme="executive-sunrise"] {
+  color-scheme: light;
+  --background: oklch(0.99 0.004 85);
+  --foreground: oklch(0.27 0.024 265);
+  --card: oklch(0.998 0.003 95);
+  --card-foreground: oklch(0.27 0.024 265);
+  --popover: oklch(0.998 0.003 95);
+  --popover-foreground: oklch(0.27 0.024 265);
+  /* Primary CTA: deep orange */
+  --primary: oklch(0.5 0.14 48);
+  --primary-foreground: oklch(0.99 0.002 95);
+  /* Secondary surfaces / outline CTA: gold-tinged neutrals */
+  --secondary: oklch(0.965 0.018 82);
+  --secondary-foreground: oklch(0.32 0.03 265);
+  --muted: oklch(0.955 0.012 88);
+  --muted-foreground: oklch(0.44 0.028 265);
+  /* Accent wash + ring: strategic blue (trust / intelligence) */
+  --accent: oklch(0.93 0.035 255);
+  --accent-foreground: oklch(0.27 0.04 265);
+  --destructive: oklch(0.5 0.17 25);
+  --destructive-foreground: oklch(0.99 0.002 95);
+  --border: oklch(0.86 0.035 78);
+  --input: oklch(0.98 0.006 90);
+  --ring: oklch(0.44 0.11 258);
+  --chart-1: oklch(0.5 0.14 48);
+  --chart-2: oklch(0.72 0.09 78);
+  --chart-3: oklch(0.44 0.11 258);
+  --chart-4: oklch(0.58 0.1 55);
+  --chart-5: oklch(0.52 0.08 230);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.99 0.004 90);
+  --sidebar-foreground: oklch(0.27 0.024 265);
+  --sidebar-primary: oklch(0.5 0.14 48);
+  --sidebar-primary-foreground: oklch(0.99 0.002 95);
+  --sidebar-accent: oklch(0.94 0.025 250);
+  --sidebar-accent-foreground: oklch(0.27 0.024 265);
+  --sidebar-border: oklch(0.86 0.035 78);
+  --sidebar-ring: oklch(0.44 0.11 258);
+
+  /* Subtle gold hairline on white glass */
+  --hairline: oklch(0.68 0.045 72 / 0.22);
+  --surface-glass: oklch(1 0.004 95 / 0.62);
+  --surface-elevated: oklch(0.995 0.006 92 / 0.9);
+  /* Hover glow: restrained orange + blue */
+  --glow-primary: oklch(0.52 0.12 48 / 0.11);
+  --glow-ambient: oklch(0.44 0.1 258 / 0.09);
+  --header-bg: oklch(0.99 0.004 85 / 0.88);
+
+  --ambient-mid: oklch(0.94 0.04 72 / 0.14);
+  --ambient-side: oklch(0.9 0.035 255 / 0.09);
+  --ambient-floor: oklch(0.93 0.03 55 / 0.08);
+  --ambient-orb-a: oklch(0.58 0.1 48 / 0.05);
+  --ambient-orb-b: oklch(0.48 0.09 258 / 0.045);
+
+  --shine-inset: oklch(0.55 0.03 75 / 0.07);
+  --shine-track: oklch(0.72 0.04 78 / 0.18);
+  --chrome-bar: oklch(0.97 0.012 88 / 0.96);
+  --section-tint: oklch(0.975 0.008 88);
+  --panel-deep: oklch(0.96 0.014 90);
+
+  --shadow-chat-depth: 0 26px 70px -38px oklch(0.42 0.025 265 / 0.085);
+  --shadow-card-hover: 0 20px 46px -30px oklch(0.45 0.03 265 / 0.07);
+  --shadow-tier-hover: 0 24px 54px -34px oklch(0.42 0.028 265 / 0.078);
+}

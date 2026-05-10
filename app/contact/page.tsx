@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 export const metadata: Metadata = {
   title: "Contact | PxlBrief",
@@ -23,7 +24,7 @@ export default function ContactPage() {
           that captures context, intent and next steps without a long form.
         </p>
 
-        <div className="mx-auto mt-12 max-w-md rounded-[1.25rem] border border-white/[0.08] bg-card/[0.4] p-8 text-left backdrop-blur-xl md:p-10">
+        <div className="mx-auto mt-12 max-w-md rounded-[1.25rem] border border-hairline bg-card/95 p-8 text-left backdrop-blur-xl dark:bg-card/[0.4] md:p-10">
           <h2 className="text-sm font-semibold text-foreground">What to expect</h2>
           <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground/90">
             <li>• Brief, senior-led dialogue — not a ticket queue.</li>
@@ -32,13 +33,26 @@ export default function ContactPage() {
           </ul>
         </div>
 
-        <div className="mt-12">
+        <div className="mx-auto mt-12 flex w-full max-w-md flex-col items-stretch gap-5">
           <Link
             href="/#consulting-chat"
             className="inline-flex min-h-[2.875rem] items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18"
           >
             Start with PxlBrief AI
           </Link>
+          <div className="rounded-[0.875rem] border border-hairline bg-card/92 px-5 py-5 text-center backdrop-blur-sm dark:bg-card/[0.25]">
+            <p className="text-[0.8125rem] text-muted-foreground/85">
+              Prefer to schedule directly?
+            </p>
+            <a
+              href={STRATEGY_CALL_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-2.5 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
+            >
+              Book a Strategy Call
+            </a>
+          </div>
         </div>
 
         <p className="mt-10 text-sm text-muted-foreground/70">
