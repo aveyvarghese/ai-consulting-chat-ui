@@ -137,6 +137,12 @@ const suggestionChips: { label: string; prompt: string }[] = [
 const VISITOR_FRIENDLY_ERROR =
   "Something went wrong. Please try again or email info@pxlbrief.com."
 
+const strategicAnalysisStates = [
+  "Analyzing acquisition bottlenecks...",
+  "Mapping growth inefficiencies...",
+  "Evaluating positioning gaps...",
+] as const
+
 interface Message {
   id: string
   role: "user" | "assistant"
@@ -196,6 +202,33 @@ function splitDigitalPresence(value: string): Pick<LeadData, "website" | "instag
   }
 }
 
+function leadQualityFrom(
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence
+): "Cold" | "Warm" | "Hot" {
+  if (
+    diagnosis.leadScore === "High" ||
+    diagnosis.urgencyLevel === "High" ||
+    intelligence.confidenceLevel >= 78
+  ) {
+    return "Hot"
+  }
+  if (
+    diagnosis.leadScore === "Medium" ||
+    diagnosis.urgencyLevel === "Medium" ||
+    intelligence.confidenceLevel >= 50
+  ) {
+    return "Warm"
+  }
+  return "Cold"
+}
+
+function leadQualityClasses(quality: "Cold" | "Warm" | "Hot"): string {
+  if (quality === "Hot") return "border-emerald-300/30 bg-emerald-300/[0.11] text-emerald-200 shadow-[0_0_38px_-20px_rgba(110,231,183,0.95)]"
+  if (quality === "Warm") return "border-primary/30 bg-primary/[0.1] text-primary shadow-[0_0_34px_-20px_oklch(0.75_0.12_180/0.95)]"
+  return "border-white/[0.09] bg-white/[0.04] text-muted-foreground"
+}
+
 function DiagnosisField({
   label,
   value,
@@ -238,6 +271,54 @@ function DiagnosisList({
           </li>
         ))}
       </ul>
+    </div>
+  )
+}
+
+function StrategicSnapshotCard({
+  diagnosis,
+  intelligence,
+}: {
+  diagnosis: AiDiagnosis
+  intelligence: StrategicIntelligence
+}) {
+  if (!intelligence.isReady) return null
+
+  return (
+    <div className="flex justify-start gap-3 md:gap-3.5">
+      <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/18 bg-primary/[0.1]">
+        <Sparkles className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
+      </div>
+      <article className="w-full max-w-[min(92%,34rem)] overflow-hidden rounded-[1.05rem] border border-primary/18 bg-gradient-to-br from-primary/[0.1] via-card/[0.48] to-black/[0.16] p-4 text-left shadow-[0_20px_56px_-34px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-primary/90">
+            AI Strategic Snapshot
+          </p>
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.045] px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground/78">
+            {intelligence.confidenceLevel}% confidence
+          </span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <DiagnosisField label="Main growth issue" value={diagnosis.mainBottleneck} />
+          <DiagnosisField
+            label="Likely opportunity"
+            value={intelligence.estimatedMissedRevenueAreas[0] ?? diagnosis.recommendedGrowthDirection}
+          />
+          <DiagnosisField
+            label="Solution direction"
+            value={diagnosis.recommendedGrowthDirection}
+          />
+          <DiagnosisField label="Urgency level" value={diagnosis.urgencyLevel} />
+        </div>
+        <div className="mt-3 rounded-[0.85rem] border border-white/[0.07] bg-black/20 p-3">
+          <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/66">
+            Suggested next step
+          </p>
+          <p className="text-[0.8125rem] leading-relaxed text-foreground/90">
+            {diagnosis.recommendedNextActions[0]}
+          </p>
+        </div>
+      </article>
     </div>
   )
 }
@@ -422,71 +503,97 @@ function AiDiagnosisPanel({
   diagnosis,
   intelligence,
   isAnalyzing,
+  analysisLabel,
 }: {
   diagnosis: AiDiagnosis
   intelligence: StrategicIntelligence
   isAnalyzing: boolean
+  analysisLabel: string
 }) {
-  const leadScoreTone =
-    diagnosis.leadScore === "High"
-      ? "text-emerald-300"
-      : diagnosis.leadScore === "Medium"
-        ? "text-primary"
-        : "text-muted-foreground"
+  const leadQuality = leadQualityFrom(diagnosis, intelligence)
+  const opportunityScore =
+    intelligence.scores.find((score) => score.label === "Opportunity Score")
+      ?.value ?? intelligence.confidenceLevel
+  const growthPotential =
+    intelligence.scores.find((score) => score.label === "Growth Readiness Score")
+      ?.value ?? intelligence.confidenceLevel
 
   return (
-    <aside className="relative overflow-hidden rounded-[1.25rem] border border-primary/16 bg-gradient-to-b from-card/[0.64] via-card/[0.44] to-black/[0.22] p-4 text-left shadow-[0_24px_64px_-38px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-2xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:p-5">
-      <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-primary/[0.09] blur-2xl" />
+    <aside className="relative overflow-hidden rounded-[1.25rem] border border-primary/18 bg-gradient-to-b from-card/[0.66] via-card/[0.42] to-black/[0.24] p-4 text-left shadow-[0_28px_72px_-36px_rgba(0,0,0,0.9),0_0_54px_-34px_oklch(0.75_0.12_180/0.9),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-2xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:p-4 xl:p-5">
+      <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-primary/[0.11] blur-2xl" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045),transparent_32%,rgba(255,255,255,0.015))]" />
 
       <div className="relative">
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-3 flex items-center justify-between gap-3">
           <div>
             <p className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
-              AI Diagnosis
+              AI Command Center
             </p>
             <h3 className="text-base font-semibold tracking-[-0.015em] text-foreground">
-              Strategic signal map
+              Strategic intelligence
             </h3>
           </div>
-          <span className="inline-flex items-center rounded-full border border-primary/18 bg-primary/[0.08] px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-primary/90">
-            Live
+          <span className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.12em] ${leadQualityClasses(leadQuality)}`}>
+            {leadQuality}
           </span>
         </div>
 
-        <div className="mb-4 grid grid-cols-2 gap-2">
-          <DiagnosisField label="Industry" value={diagnosis.industry} />
-          <DiagnosisField label="Business type" value={diagnosis.businessType} />
-          <DiagnosisField label="Business stage" value={diagnosis.businessStage} />
-          <DiagnosisField label="Urgency" value={diagnosis.urgencyLevel} />
+        <div className="mb-4 flex items-center gap-2 rounded-[0.9rem] border border-primary/14 bg-primary/[0.055] px-3 py-2">
+          <span
+            className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
+            style={{ animation: "pxl-dot-pulse 1.35s ease-in-out infinite" }}
+          />
+          <p className="truncate text-[0.68rem] font-medium uppercase tracking-[0.12em] text-primary/85">
+            {isAnalyzing ? analysisLabel : "Live intelligence stream"}
+          </p>
         </div>
 
-        <div className="mb-4 rounded-[1rem] border border-white/[0.075] bg-black/20 p-4">
+        <div className="mb-3 grid grid-cols-2 gap-2">
+          <DiagnosisField label="Opportunity Score" value={`${opportunityScore}/100`} />
+          <DiagnosisField label="Growth Potential" value={`${growthPotential}/100`} />
+          <DiagnosisField label="Lead Quality" value={leadQuality} />
+          <DiagnosisField label="Strategic Priority" value={intelligence.suggestedStrategicPriorities[0] ?? diagnosis.serviceFit} />
+        </div>
+
+        <div className="mb-3 grid grid-cols-2 gap-2">
+          <DiagnosisField label="Industry" value={diagnosis.industry} />
+          <DiagnosisField label="Business stage" value={diagnosis.businessStage} />
+          <DiagnosisField label="Revenue Leak Signals" value={`${diagnosis.potentialRevenueLeaks.length} detected`} />
+          <DiagnosisField label="Recommended Systems" value={diagnosis.suggestedSystems.slice(0, 2).join(" + ")} />
+        </div>
+
+        <div className="mb-4 rounded-[1rem] border border-white/[0.075] bg-black/20 p-3">
           <div className="mb-3 flex items-center justify-between gap-3">
             <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/72">
-              Lead score
+              Lead signal
             </p>
-            <span className={`font-mono text-lg font-semibold ${leadScoreTone}`}>
-              {diagnosis.leadScore}
+            <span className={`font-mono text-lg font-semibold ${
+              leadQuality === "Hot"
+                ? "text-emerald-300"
+                : leadQuality === "Warm"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+            }`}>
+              {leadQuality}
             </span>
           </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+          <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
             <div
               className="h-full rounded-full bg-gradient-to-r from-primary/40 via-primary to-emerald-300/70"
               style={{
                 width:
-                  diagnosis.leadScore === "High"
+                  leadQuality === "Hot"
                     ? "92%"
-                    : diagnosis.leadScore === "Medium"
+                    : leadQuality === "Warm"
                       ? "66%"
-                      : "42%",
+                      : "34%",
                 animation: "pxl-shimmer 4.2s ease-in-out infinite",
               }}
             />
           </div>
         </div>
 
-        <div className="mb-4 space-y-3">
+        <div className="mb-4 space-y-2">
           <DiagnosisField
             label="Main bottleneck"
             value={diagnosis.mainBottleneck}
@@ -497,7 +604,7 @@ function AiDiagnosisPanel({
           />
         </div>
 
-        <div className="mb-5">
+        <div className="mb-4">
           <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/82">
             Suggested systems
           </p>
@@ -607,11 +714,10 @@ export function HeroSection() {
     [aiDiagnosis, conversationState, messages, leadIntel]
   )
 
-  const analysisStatusLabel = strategicIntelligence.isReady
-    ? "Synthesising strategy"
-    : messages.length >= 3
-      ? "Reading business signals"
-      : "Thinking"
+  const analysisStatusLabel =
+    messages.length >= 3
+      ? strategicAnalysisStates[messages.length % strategicAnalysisStates.length]
+      : "Initializing advisory terminal..."
 
   const attachmentUploadLabel = useMemo(() => {
     switch (conversationState.visitorType) {
@@ -1057,7 +1163,11 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[88vh] scroll-mt-24 flex-col items-center justify-center px-4 pb-24 pt-16 md:min-h-[92vh] md:pb-32 md:pt-28"
+      className={`relative flex scroll-mt-24 flex-col items-center px-4 ${
+        hasMessages
+          ? "min-h-0 justify-start pb-10 pt-8 md:pb-12 md:pt-10"
+          : "min-h-[88vh] justify-center pb-24 pt-16 md:min-h-[92vh] md:pb-32 md:pt-28"
+      }`}
       aria-label="PxlBrief — AI consulting hero"
     >
       <div className="absolute inset-0 overflow-hidden">
@@ -1080,20 +1190,34 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-5xl text-center animate-in fade-in-0 slide-in-from-bottom-3 duration-700">
-        <div className="mb-7 md:mb-8">
+        <div className={hasMessages ? "mb-3 md:mb-4" : "mb-7 md:mb-8"}>
           <span className="inline-flex items-center rounded-full border border-white/[0.09] bg-white/[0.035] px-4 py-2 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:text-base">
             Pxl<span className="text-primary">Brief</span>
           </span>
         </div>
 
-        <h1 className="mx-auto mb-6 max-w-5xl text-balance text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground md:text-6xl lg:text-[4.8rem]">
-          AI Systems, Creative Intelligence & Growth Infrastructure for Modern Brands.
+        <h1
+          className={`mx-auto text-balance font-semibold leading-[0.98] text-foreground ${
+            hasMessages
+              ? "mb-2 max-w-4xl text-2xl tracking-[-0.035em] md:text-4xl"
+              : "mb-6 max-w-5xl text-[2.7rem] tracking-[-0.055em] md:text-6xl lg:text-[4.8rem]"
+          }`}
+        >
+          {hasMessages
+            ? "PxlBrief AI Operating System"
+            : "AI Systems, Creative Intelligence & Growth Infrastructure for Modern Brands."}
         </h1>
 
-        <p className="mx-auto mb-8 max-w-3xl text-pretty text-[1rem] font-normal leading-[1.75] text-muted-foreground/90 md:text-xl md:leading-relaxed">
-          We design AI automation, brand systems, growth infrastructure,
-          performance marketing loops and AI workflows for brands that need
-          sharper decisions and cleaner execution.
+        <p
+          className={`mx-auto max-w-3xl text-pretty font-normal text-muted-foreground/90 ${
+            hasMessages
+              ? "mb-0 text-[0.8125rem] leading-relaxed md:text-sm"
+              : "mb-8 text-[1rem] leading-[1.75] md:text-xl md:leading-relaxed"
+          }`}
+        >
+          {hasMessages
+            ? "Strategic diagnosis, lead intelligence and advisory workflow in one live command center."
+            : "We design AI automation, brand systems, growth infrastructure, performance marketing loops and AI workflows for brands that need sharper decisions and cleaner execution."}
         </p>
 
         {!hasMessages && (
@@ -1187,9 +1311,9 @@ export function HeroSection() {
       </div>
 
       {hasMessages && (
-        <div className="relative z-10 mt-10 grid w-full max-w-6xl gap-4 px-0 md:mt-12 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-5">
+        <div className="relative z-10 mt-5 grid w-full max-w-[88rem] gap-3 px-0 md:mt-7 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-4 xl:grid-cols-[minmax(0,1fr)_27rem]">
           <div className="relative min-w-0 overflow-hidden rounded-[1.25rem] border border-white/[0.09] bg-card/[0.55] shadow-[0_24px_64px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_oklch(1_0_0/0.05)] backdrop-blur-2xl">
-            <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/[0.15] px-5 py-3.5 md:px-6 md:py-4">
+            <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/[0.15] px-4 py-3 md:px-5">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12]">
                   <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
@@ -1223,7 +1347,7 @@ export function HeroSection() {
               </div>
             )}
 
-            <div className="max-h-[min(52vh,520px)] space-y-7 overflow-y-auto px-5 py-6 md:space-y-8 md:px-6 md:py-7">
+            <div className="max-h-[min(60vh,640px)] space-y-5 overflow-y-auto px-4 py-5 md:space-y-6 md:px-5 md:py-5">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -1260,6 +1384,11 @@ export function HeroSection() {
                   )}
                 </div>
               ))}
+
+              <StrategicSnapshotCard
+                diagnosis={aiDiagnosis}
+                intelligence={strategicIntelligence}
+              />
 
               {isLoading && (
                 <div className="flex justify-start gap-3 md:gap-3.5">
@@ -1347,7 +1476,7 @@ export function HeroSection() {
 
             <form
               onSubmit={handleSubmit}
-              className="border-t border-white/[0.06] bg-black/[0.12] p-4 md:p-5"
+              className="border-t border-white/[0.06] bg-black/[0.12] p-3.5 md:p-4"
             >
               <input
                 ref={chatFileInputRef}
@@ -1425,10 +1554,10 @@ export function HeroSection() {
                     conversationState.visitorType === "unknown"
                   }
                   onClick={handleSubmitEnquiry}
-                  className="flex w-full items-center justify-center gap-2 rounded-[0.875rem] border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
+                  className="flex w-full items-center justify-center gap-2 rounded-[0.95rem] border border-primary/18 bg-gradient-to-r from-primary/[0.13] via-white/[0.045] to-primary/[0.08] px-4 py-3 text-[0.8125rem] font-semibold tracking-tight text-foreground/95 shadow-[0_18px_42px_-30px_oklch(0.75_0.12_180/0.8)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/35 hover:bg-primary/[0.12] hover:shadow-[0_24px_56px_-30px_oklch(0.75_0.12_180/0.95)] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
                 >
                   <Send className="h-4 w-4 shrink-0 text-primary/90" />
-                  {leadSubmitBusy ? "Submitting enquiry…" : "Submit Enquiry"}
+                  {leadSubmitBusy ? "Submitting audit request…" : "Request Strategic Audit"}
                 </button>
               </div>
             </form>
@@ -1437,6 +1566,7 @@ export function HeroSection() {
             diagnosis={aiDiagnosis}
             intelligence={strategicIntelligence}
             isAnalyzing={isLoading || leadPrepBusy}
+            analysisLabel={analysisStatusLabel}
           />
         </div>
       )}
