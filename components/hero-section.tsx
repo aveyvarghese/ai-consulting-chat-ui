@@ -614,7 +614,7 @@ export function HeroSection() {
               </div>
 
               <div
-                className="mx-auto mb-10 flex min-w-0 max-w-2xl flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start md:mb-12 md:gap-2.5"
+                className="mx-auto mb-10 grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2.5 gap-y-2.5 justify-items-stretch md:mb-12 md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
                 role="group"
                 aria-label="Suggested prompts"
               >
@@ -624,7 +624,7 @@ export function HeroSection() {
                     type="button"
                     disabled={isLoading}
                     onClick={() => void submitMessage(prompt)}
-                    className="min-h-11 touch-manipulation rounded-full border border-hairline bg-card/96 px-3.5 py-2.5 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm motion-reduce:transition-colors"
+                    className="flex min-h-[2.5rem] w-full touch-manipulation items-center justify-center rounded-full border border-hairline bg-card/96 px-2.5 py-2 text-center text-[0.8125rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[0_2px_12px_-4px_rgba(40,48,64,0.07)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm md:shadow-sm motion-reduce:transition-colors"
                   >
                     {label}
                   </button>
