@@ -541,7 +541,7 @@ export function HeroSection() {
             </p>
             <div
               className={`relative mx-auto mb-6 w-full max-w-2xl transition-[box-shadow,filter] duration-500 ease-out md:mb-7 ${
-                isFocused ? "drop-shadow-[0_0_28px_oklch(0.75_0.12_180/0.12)]" : ""
+                isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
               }`}
             >
               <div
@@ -555,10 +555,10 @@ export function HeroSection() {
 
               <form onSubmit={handleSubmit}>
                 <div
-                  className={`relative flex items-center rounded-[1.125rem] border bg-card/[0.72] shadow-[inset_0_1px_0_0_oklch(1_0_0/0.04)] backdrop-blur-2xl transition-all duration-300 ease-out ${
+                  className={`relative flex items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-300 ease-out dark:bg-card/[0.72] ${
                     isFocused
                       ? "border-primary/45 shadow-lg shadow-primary/[0.08] ring-1 ring-primary/15"
-                      : "border-white/[0.08] hover:border-primary/25 hover:bg-card/[0.78]"
+                      : "border-hairline hover:border-primary/25 hover:bg-card dark:hover:bg-card/[0.78]"
                   }`}
                 >
                   <input
@@ -593,7 +593,7 @@ export function HeroSection() {
                   type="button"
                   disabled={isLoading}
                   onClick={() => void submitMessage(prompt)}
-                  className="rounded-full border border-white/[0.07] bg-card/[0.35] px-3.5 py-2 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/30 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 md:px-4 md:text-sm"
+                  className="rounded-full border border-hairline bg-card/96 px-3.5 py-2 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/30 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm"
                 >
                   {label}
                 </button>
@@ -610,8 +610,8 @@ export function HeroSection() {
 
       {hasMessages && (
         <div className="relative z-10 mt-10 w-full max-w-3xl px-0 md:mt-12">
-          <div className="relative overflow-hidden rounded-[1.25rem] border border-white/[0.09] bg-card/[0.55] shadow-[0_24px_64px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_oklch(1_0_0/0.05)] backdrop-blur-2xl">
-            <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/[0.15] px-5 py-3.5 md:px-6 md:py-4">
+          <div className="relative overflow-hidden rounded-[1.25rem] border border-hairline bg-card/95 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.55]">
+            <div className="flex items-center justify-between border-b border-hairline bg-chrome-bar px-5 py-3.5 md:px-6 md:py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12]">
                   <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
@@ -627,7 +627,7 @@ export function HeroSection() {
               </div>
               <button
                 onClick={handleClose}
-                className="rounded-[0.5rem] p-2 text-muted-foreground transition-colors duration-200 hover:bg-white/[0.06] hover:text-foreground"
+                className="rounded-[0.5rem] p-2 text-muted-foreground transition-colors duration-200 hover:bg-foreground/[0.06] hover:text-foreground"
                 aria-label="Close chat"
               >
                 <X className="h-4 w-4" strokeWidth={1.5} />
@@ -635,7 +635,7 @@ export function HeroSection() {
             </div>
 
             {isLoading && (
-              <div className="relative h-px w-full overflow-hidden bg-white/[0.05]">
+              <div className="relative h-px w-full overflow-hidden bg-[color:var(--shine-track)]">
                 <div
                   className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
                   style={{
@@ -665,7 +665,7 @@ export function HeroSection() {
                     className={`max-w-[min(85%,28rem)] rounded-[1.05rem] px-4 py-3 md:px-[1.125rem] md:py-3.5 ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground shadow-md shadow-black/10"
-                        : "border border-white/[0.06] bg-muted/[0.35] text-foreground shadow-sm"
+                        : "border border-hairline bg-muted/[0.35] text-foreground shadow-sm"
                     }`}
                   >
                     <div className="whitespace-pre-wrap text-[0.8125rem] leading-[1.62] md:text-[0.9375rem] md:leading-relaxed">
@@ -673,7 +673,7 @@ export function HeroSection() {
                     </div>
                   </div>
                   {message.role === "user" && (
-                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-white/[0.06] bg-white/[0.04]">
+                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-hairline bg-foreground/[0.04]">
                       <User
                         className="h-3.5 w-3.5 text-muted-foreground"
                         strokeWidth={1.5}
@@ -691,7 +691,7 @@ export function HeroSection() {
                       strokeWidth={1.5}
                     />
                   </div>
-                  <div className="rounded-[1.05rem] border border-white/[0.06] bg-muted/[0.35] px-4 py-3.5 shadow-sm md:px-5">
+                  <div className="rounded-[1.05rem] border border-hairline bg-muted/[0.35] px-4 py-3.5 shadow-sm md:px-5">
                     <div className="mb-2 flex items-center gap-2">
                       <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
                         Thinking
@@ -731,7 +731,7 @@ export function HeroSection() {
 
               {attachedFile && (
                 <div className="flex justify-end gap-3 md:gap-3.5">
-                  <div className="flex max-w-[min(85%,28rem)] items-center gap-3 rounded-[1.05rem] border border-white/[0.08] bg-muted/[0.28] px-4 py-2.5 text-left shadow-sm backdrop-blur-sm">
+                  <div className="flex max-w-[min(85%,28rem)] items-center gap-3 rounded-[1.05rem] border border-hairline bg-muted/[0.28] px-4 py-2.5 text-left shadow-sm backdrop-blur-sm">
                     <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.1]">
                       <Paperclip className="h-3.5 w-3.5 text-primary" />
                     </div>
@@ -749,13 +749,13 @@ export function HeroSection() {
                     <button
                       type="button"
                       onClick={removeAttachedFile}
-                      className="flex-shrink-0 rounded-[0.5rem] p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                      className="flex-shrink-0 rounded-[0.5rem] p-1.5 text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
                       aria-label="Remove attachment"
                     >
                       <X className="h-4 w-4" strokeWidth={1.5} />
                     </button>
                   </div>
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-white/[0.06] bg-white/[0.04]">
+                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-hairline bg-foreground/[0.04]">
                     <User className="h-3.5 w-3.5 text-muted-foreground" />
                   </div>
                 </div>
@@ -766,7 +766,7 @@ export function HeroSection() {
 
             <form
               onSubmit={handleSubmit}
-              className="border-t border-white/[0.06] bg-black/[0.12] p-4 md:p-5"
+              className="border-t border-hairline bg-chrome-bar p-4 md:p-5"
             >
               <input
                 ref={chatFileInputRef}
@@ -782,7 +782,7 @@ export function HeroSection() {
                     type="button"
                     disabled={isLoading}
                     onClick={() => chatFileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-[0.625rem] border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
+                    className="inline-flex items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2 text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
                   >
                     <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
                     <span className="text-left leading-snug">
@@ -804,7 +804,7 @@ export function HeroSection() {
               </div>
               {leadSubmitMessage &&
                 (leadSubmitMessage === LEAD_SUBMIT_SUCCESS_MESSAGE ? (
-                  <div className="mb-4 rounded-[0.875rem] border border-white/[0.08] bg-card/[0.35] p-4 shadow-sm backdrop-blur-sm md:p-5">
+                  <div className="mb-4 rounded-[0.875rem] border border-hairline bg-card/96 p-4 shadow-sm backdrop-blur-sm dark:bg-card/[0.35] md:p-5">
                     <p className="text-[0.8125rem] font-medium leading-relaxed text-foreground/95 md:text-sm">
                       {LEAD_SUBMIT_SUCCESS_MESSAGE}
                     </p>
@@ -825,7 +825,7 @@ export function HeroSection() {
                     {leadSubmitMessage}
                   </p>
                 ))}
-              <div className="flex items-center gap-2 rounded-[0.875rem] border border-white/[0.1] bg-black/25 px-3 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 md:gap-3 md:px-4 md:py-2">
+              <div className="flex items-center gap-2 rounded-[0.875rem] border border-hairline bg-card/35 px-3 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 md:gap-3 md:px-4 md:py-2">
                 <input
                   ref={chatInputRef}
                   type="text"
@@ -852,7 +852,7 @@ export function HeroSection() {
                     conversationState.visitorType === "unknown"
                   }
                   onClick={handleSubmitEnquiry}
-                  className="flex w-full items-center justify-center gap-2 rounded-[0.875rem] border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
+                  className="flex w-full items-center justify-center gap-2 rounded-[0.875rem] border border-hairline bg-foreground/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
                 >
                   <Send className="h-4 w-4 shrink-0 text-primary/90" />
                   {leadSubmitBusy ? "Submitting enquiry…" : "Submit Enquiry"}

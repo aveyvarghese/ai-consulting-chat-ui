@@ -60,7 +60,7 @@ function ServiceCard({
   icon: React.ComponentType<{ className?: string }>
 }) {
   return (
-    <article className="group relative cursor-default overflow-hidden rounded-[1.125rem] border border-white/[0.07] bg-card/[0.38] p-6 shadow-[0_1px_0_0_oklch(1_0_0/0.04)_inset] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:p-8 hover:-translate-y-1 hover:border-primary/30 hover:bg-card/[0.52] hover:shadow-[0_20px_48px_-28px_rgba(0,0,0,0.55),0_0_0_1px_oklch(0.75_0.12_180/0.08)]">
+    <article className="group relative cursor-default overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-6 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.38] md:p-8 hover:-translate-y-1 hover:border-primary/30 hover:bg-card dark:hover:bg-card/[0.52] hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)]">
       <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-primary/[0.06] opacity-70 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
       <div className="pointer-events-none absolute inset-0 rounded-[1.125rem] bg-gradient-to-br from-primary/[0.05] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 

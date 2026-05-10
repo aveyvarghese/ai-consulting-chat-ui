@@ -8,7 +8,7 @@ const links = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/[0.06] bg-black/[0.15]">
+    <footer className="border-t border-hairline bg-chrome-bar">
       <div className="mx-auto max-w-6xl px-4 py-12 md:flex md:items-start md:justify-between md:px-6 md:py-16">
         <div className="mb-8 md:mb-0">
           <Link
@@ -42,7 +42,7 @@ export function SiteFooter() {
           </Link>
         </nav>
       </div>
-      <div className="border-t border-white/[0.04] py-4 text-center text-xs text-muted-foreground/60">
+      <div className="border-t border-hairline/50 py-4 text-center text-xs text-muted-foreground/60">
         © {new Date().getFullYear()} PxlBrief. All rights reserved.
       </div>
     </footer>

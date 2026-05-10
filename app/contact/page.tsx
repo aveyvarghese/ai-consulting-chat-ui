@@ -24,7 +24,7 @@ export default function ContactPage() {
           that captures context, intent and next steps without a long form.
         </p>
 
-        <div className="mx-auto mt-12 max-w-md rounded-[1.25rem] border border-white/[0.08] bg-card/[0.4] p-8 text-left backdrop-blur-xl md:p-10">
+        <div className="mx-auto mt-12 max-w-md rounded-[1.25rem] border border-hairline bg-card/95 p-8 text-left backdrop-blur-xl dark:bg-card/[0.4] md:p-10">
           <h2 className="text-sm font-semibold text-foreground">What to expect</h2>
           <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground/90">
             <li>• Brief, senior-led dialogue — not a ticket queue.</li>
@@ -40,7 +40,7 @@ export default function ContactPage() {
           >
             Start with PxlBrief AI
           </Link>
-          <div className="rounded-[0.875rem] border border-white/[0.06] bg-card/[0.25] px-5 py-5 text-center backdrop-blur-sm">
+          <div className="rounded-[0.875rem] border border-hairline bg-card/92 px-5 py-5 text-center backdrop-blur-sm dark:bg-card/[0.25]">
             <p className="text-[0.8125rem] text-muted-foreground/85">
               Prefer to schedule directly?
             </p>

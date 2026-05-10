@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { DEFAULT_THEME, THEME_BOOT_SCRIPT } from '@/lib/theme'
 import { SiteAmbient } from '@/components/site-ambient'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
@@ -38,8 +40,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth bg-background">
+    <html
+      lang="en"
+      className="scroll-smooth bg-background"
+      data-theme={DEFAULT_THEME}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased">
+        <Script id="pxl-theme-boot" strategy="beforeInteractive">
+          {THEME_BOOT_SCRIPT}
+        </Script>
         <SiteAmbient />
         <div className="flex min-h-screen flex-col">
           <SiteHeader />

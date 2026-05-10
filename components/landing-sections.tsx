@@ -43,7 +43,7 @@ const metrics = [
 
 export function HowWeWorkSection() {
   return (
-    <section className="relative border-y border-white/[0.05] bg-[oklch(0.082_0.006_260)] px-4 py-24 md:py-32">
+    <section className="relative border-y border-hairline bg-section-tint px-4 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <header className="mb-14 flex flex-col gap-5 md:mb-16 md:flex-row md:items-end md:justify-between">
           <div>
@@ -90,7 +90,7 @@ export function HowWeWorkSection() {
           {processSteps.map((step, i) => (
             <li
               key={step.key}
-              className="flex gap-4 rounded-[1.125rem] border border-white/[0.07] bg-card/[0.28] p-5 shadow-sm backdrop-blur-md transition-shadow duration-300 hover:shadow-md"
+              className="flex gap-4 rounded-[1.125rem] border border-hairline bg-card/92 p-5 shadow-sm backdrop-blur-md transition-shadow duration-300 hover:shadow-md dark:bg-card/[0.28]"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/28 bg-primary/[0.09] font-mono text-[11px] font-medium text-primary/95 shadow-sm">
                 {String(i + 1).padStart(2, "0")}
@@ -134,7 +134,7 @@ export function IndustriesSection() {
           {industries.map((name) => (
             <span
               key={name}
-              className="inline-flex items-center justify-center rounded-full border border-white/[0.08] bg-card/[0.32] px-4 py-2.5 text-center text-[0.8125rem] font-medium text-foreground/92 shadow-sm backdrop-blur-md transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md md:px-5 md:text-sm"
+              className="inline-flex items-center justify-center rounded-full border border-hairline bg-card/94 px-4 py-2.5 text-center text-[0.8125rem] font-medium text-foreground/92 shadow-sm backdrop-blur-md transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md dark:bg-card/[0.32] md:px-5 md:text-sm"
             >
               {name}
             </span>
@@ -152,7 +152,7 @@ export function ResultsSection() {
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="rounded-[1.125rem] border border-white/[0.07] bg-gradient-to-b from-card/[0.48] to-card/[0.22] p-6 text-center shadow-sm backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/28 hover:shadow-md md:p-8"
+            className="rounded-[1.125rem] border border-hairline bg-gradient-to-b from-card/92 to-card/80 p-6 text-center shadow-sm backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/28 hover:shadow-md dark:from-card/[0.48] dark:to-card/[0.22] md:p-8"
           >
             <div className="font-mono text-2xl font-semibold tracking-tight text-primary/95 md:text-3xl">
               {m.value}
@@ -170,7 +170,7 @@ export function ResultsSection() {
 export function FinalCtaSection() {
   return (
     <section className="relative px-4 pb-20 pt-6 md:pb-28 md:pt-8">
-      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-card/[0.42] px-8 py-14 text-center shadow-[0_24px_64px_-40px_rgba(0,0,0,0.65),inset_0_1px_0_0_oklch(1_0_0/0.04)] backdrop-blur-2xl md:px-14 md:py-16">
+      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] border border-hairline bg-card/94 px-8 py-14 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.42] md:px-14 md:py-16">
         <div className="pointer-events-none absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl" />
         <div className="pointer-events-none absolute -right-16 bottom-0 h-52 w-52 rounded-full bg-primary/[0.05] blur-2xl" />
 
