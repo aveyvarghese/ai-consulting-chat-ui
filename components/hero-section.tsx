@@ -501,7 +501,7 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[78vh] scroll-mt-24 flex-col items-center justify-center px-4 pb-24 pt-16 md:min-h-[80vh] md:pb-28 md:pt-24"
+      className="relative flex min-h-[min(78vh,820px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-20 pt-12 sm:px-4 sm:pb-24 sm:pt-16 md:min-h-[80vh] md:pb-28 md:pt-24"
       aria-label="PxlBrief — strategic intelligence and consulting"
     >
       <div className="absolute inset-0 overflow-hidden">
@@ -518,14 +518,14 @@ export function HeroSection() {
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background/80 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-3xl text-center">
+      <div className="relative z-10 mx-auto w-full min-w-0 max-w-3xl text-center">
         <div className="mb-7 md:mb-8">
           <span className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
             Pxl<span className="text-primary">Brief</span>
           </span>
         </div>
 
-        <h1 className="mx-auto mb-5 max-w-4xl text-balance text-[2.125rem] font-semibold leading-[1.08] tracking-[-0.03em] text-foreground md:mb-6 md:text-5xl md:tracking-[-0.035em] lg:text-[3.25rem]">
+        <h1 className="mx-auto mb-5 max-w-4xl text-balance text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.03em] text-foreground sm:text-[2.125rem] md:mb-6 md:text-5xl md:tracking-[-0.035em] lg:text-[3.25rem]">
           Systems for serious leverage, not experiments.
         </h1>
 
@@ -540,7 +540,7 @@ export function HeroSection() {
               Strategic session
             </p>
             <div
-              className={`relative mx-auto mb-6 w-full max-w-2xl transition-[box-shadow,filter] duration-500 ease-out md:mb-7 ${
+              className={`relative mx-auto mb-6 w-full min-w-0 max-w-2xl transition-[box-shadow,filter] duration-500 ease-out md:mb-7 ${
                 isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
               }`}
             >
@@ -555,7 +555,7 @@ export function HeroSection() {
 
               <form onSubmit={handleSubmit}>
                 <div
-                  className={`relative flex items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-300 ease-out dark:bg-card/[0.72] ${
+                  className={`relative flex min-w-0 items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-300 ease-out dark:bg-card/[0.72] ${
                     isFocused
                       ? "border-primary/45 shadow-lg shadow-primary/[0.08] ring-1 ring-primary/15"
                       : "border-hairline hover:border-primary/25 hover:bg-card dark:hover:bg-card/[0.78]"
@@ -569,12 +569,12 @@ export function HeroSection() {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     placeholder={displayedPlaceholder}
-                    className="min-h-[3.25rem] flex-1 bg-transparent px-5 py-5 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
+                    className="min-h-[3.25rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-4 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
                   />
                   <button
                     type="submit"
                     disabled={isLoading || !inputValue.trim()}
-                    className="mr-2.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md hover:shadow-primary/15 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
+                    className="mr-2 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md hover:shadow-primary/15 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 sm:mr-2.5 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
                   >
                     <ArrowRight className="h-[1.125rem] w-[1.125rem] md:h-5 md:w-5" />
                   </button>
@@ -583,7 +583,7 @@ export function HeroSection() {
             </div>
 
             <div
-              className="mx-auto mb-10 flex max-w-2xl flex-wrap justify-center gap-2 md:gap-2.5"
+              className="mx-auto mb-10 flex min-w-0 max-w-2xl flex-wrap justify-center gap-2 md:gap-2.5"
               role="group"
               aria-label="Suggested prompts"
             >
@@ -593,7 +593,7 @@ export function HeroSection() {
                   type="button"
                   disabled={isLoading}
                   onClick={() => void submitMessage(prompt)}
-                  className="rounded-full border border-hairline bg-card/96 px-3.5 py-2 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/30 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm"
+                  className="min-h-11 touch-manipulation rounded-full border border-hairline bg-card/96 px-3.5 py-2.5 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/30 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm"
                 >
                   {label}
                 </button>
@@ -609,9 +609,9 @@ export function HeroSection() {
       </div>
 
       {hasMessages && (
-        <div className="relative z-10 mt-10 w-full max-w-3xl px-0 md:mt-12">
-          <div className="relative overflow-hidden rounded-[1.25rem] border border-hairline bg-card/95 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.55]">
-            <div className="flex items-center justify-between border-b border-hairline bg-chrome-bar px-5 py-3.5 md:px-6 md:py-4">
+        <div className="relative z-10 mt-8 w-full min-w-0 max-w-3xl px-2 sm:mt-10 sm:px-3 md:mt-12 md:px-0">
+          <div className="relative overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.25rem] dark:bg-card/[0.55]">
+            <div className="flex min-w-0 items-center justify-between gap-2 border-b border-hairline bg-chrome-bar px-4 py-3 sm:px-5 sm:py-3.5 md:px-6 md:py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12]">
                   <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
@@ -627,7 +627,7 @@ export function HeroSection() {
               </div>
               <button
                 onClick={handleClose}
-                className="rounded-[0.5rem] p-2 text-muted-foreground transition-colors duration-200 hover:bg-foreground/[0.06] hover:text-foreground"
+                className="inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors duration-200 hover:bg-foreground/[0.06] hover:text-foreground"
                 aria-label="Close chat"
               >
                 <X className="h-4 w-4" strokeWidth={1.5} />
@@ -645,11 +645,11 @@ export function HeroSection() {
               </div>
             )}
 
-            <div className="max-h-[min(52vh,520px)] space-y-7 overflow-y-auto px-5 py-6 md:space-y-8 md:px-6 md:py-7">
+            <div className="max-h-[min(50vh,480px)] space-y-6 overflow-y-auto overscroll-contain px-4 py-5 sm:max-h-[min(52vh,520px)] sm:space-y-7 sm:px-5 sm:py-6 md:space-y-8 md:px-6 md:py-7">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex gap-3 md:gap-3.5 ${
+                  className={`flex min-w-0 gap-2.5 sm:gap-3 md:gap-3.5 ${
                     message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
@@ -662,13 +662,13 @@ export function HeroSection() {
                     </div>
                   )}
                   <div
-                    className={`max-w-[min(85%,28rem)] rounded-[1.05rem] px-4 py-3 md:px-[1.125rem] md:py-3.5 ${
+                    className={`max-w-[min(calc(100vw-5.5rem),28rem)] rounded-[1.05rem] px-3.5 py-3 sm:max-w-[min(85%,28rem)] sm:px-4 md:px-[1.125rem] md:py-3.5 ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground shadow-md shadow-black/10"
                         : "border border-hairline bg-muted/[0.35] text-foreground shadow-sm"
                     }`}
                   >
-                    <div className="whitespace-pre-wrap text-[0.8125rem] leading-[1.62] md:text-[0.9375rem] md:leading-relaxed">
+                    <div className="break-words whitespace-pre-wrap text-[0.8125rem] leading-[1.62] md:text-[0.9375rem] md:leading-relaxed">
                       {message.content}
                     </div>
                   </div>
@@ -684,7 +684,7 @@ export function HeroSection() {
               ))}
 
               {isLoading && (
-                <div className="flex justify-start gap-3 md:gap-3.5">
+                <div className="flex min-w-0 justify-start gap-2.5 sm:gap-3 md:gap-3.5">
                   <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.08]">
                     <Sparkles
                       className="h-3.5 w-3.5 text-primary"
@@ -717,11 +717,11 @@ export function HeroSection() {
               )}
 
               {error && (
-                <div className="flex justify-start gap-3 md:gap-3.5">
+                <div className="flex min-w-0 justify-start gap-2.5 sm:gap-3 md:gap-3.5">
                   <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-red-500/20 bg-red-500/[0.08]">
                     <AlertCircle className="h-3.5 w-3.5 text-red-400" />
                   </div>
-                  <div className="max-w-[min(85%,28rem)] rounded-[1.05rem] border border-red-500/20 bg-red-500/[0.07] px-4 py-3 text-red-200/90 md:px-[1.125rem] md:py-3.5">
+                  <div className="max-w-[min(calc(100vw-5.5rem),28rem)] rounded-[1.05rem] border border-red-500/20 bg-red-500/[0.07] px-3.5 py-3 text-red-200/90 sm:max-w-[min(85%,28rem)] sm:px-4 md:px-[1.125rem] md:py-3.5">
                     <p className="text-[0.8125rem] leading-relaxed md:text-sm">
                       {error}
                     </p>
@@ -730,8 +730,8 @@ export function HeroSection() {
               )}
 
               {attachedFile && (
-                <div className="flex justify-end gap-3 md:gap-3.5">
-                  <div className="flex max-w-[min(85%,28rem)] items-center gap-3 rounded-[1.05rem] border border-hairline bg-muted/[0.28] px-4 py-2.5 text-left shadow-sm backdrop-blur-sm">
+                <div className="flex min-w-0 justify-end gap-2.5 sm:gap-3 md:gap-3.5">
+                  <div className="flex max-w-[min(calc(100vw-5.5rem),28rem)] items-center gap-2.5 rounded-[1.05rem] border border-hairline bg-muted/[0.28] px-3.5 py-2.5 text-left shadow-sm backdrop-blur-sm sm:max-w-[min(85%,28rem)] sm:gap-3 sm:px-4">
                     <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.1]">
                       <Paperclip className="h-3.5 w-3.5 text-primary" />
                     </div>
@@ -749,7 +749,7 @@ export function HeroSection() {
                     <button
                       type="button"
                       onClick={removeAttachedFile}
-                      className="flex-shrink-0 rounded-[0.5rem] p-1.5 text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+                      className="inline-flex size-10 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
                       aria-label="Remove attachment"
                     >
                       <X className="h-4 w-4" strokeWidth={1.5} />
@@ -766,7 +766,7 @@ export function HeroSection() {
 
             <form
               onSubmit={handleSubmit}
-              className="border-t border-hairline bg-chrome-bar p-4 md:p-5"
+              className="border-t border-hairline bg-chrome-bar p-3.5 sm:p-4 md:p-5"
             >
               <input
                 ref={chatFileInputRef}
@@ -776,13 +776,13 @@ export function HeroSection() {
                 onChange={handleChatFileChange}
                 aria-label="Attach PDF or document"
               />
-              <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex justify-start">
+              <div className="mb-3 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 justify-start">
                   <button
                     type="button"
                     disabled={isLoading}
                     onClick={() => chatFileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2 text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
+                    className="inline-flex min-h-11 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2.5 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
                   >
                     <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
                     <span className="text-left leading-snug">
@@ -815,7 +815,7 @@ export function HeroSection() {
                       href={STRATEGY_CALL_BOOKING_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-2.5 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
+                      className="mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-3 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
                     >
                       Schedule working session
                     </a>
@@ -825,7 +825,7 @@ export function HeroSection() {
                     {leadSubmitMessage}
                   </p>
                 ))}
-              <div className="flex items-center gap-2 rounded-[0.875rem] border border-hairline bg-card/35 px-3 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 md:gap-3 md:px-4 md:py-2">
+              <div className="flex min-w-0 items-center gap-2 rounded-[0.875rem] border border-hairline bg-card/35 px-2.5 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 sm:px-3 md:gap-3 md:px-4 md:py-2">
                 <input
                   ref={chatInputRef}
                   type="text"
@@ -833,12 +833,12 @@ export function HeroSection() {
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Add detail or your next move…"
                   disabled={isLoading}
-                  className="min-h-[2.75rem] flex-1 bg-transparent py-2 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:text-[0.9375rem]"
+                  className="min-h-11 min-w-0 flex-1 touch-manipulation bg-transparent py-2 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:text-[0.9375rem]"
                 />
                 <button
                   type="submit"
                   disabled={isLoading || !inputValue.trim()}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none md:h-10 md:w-10"
+                  className="flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
                 >
                   <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
                 </button>
@@ -852,7 +852,7 @@ export function HeroSection() {
                     conversationState.visitorType === "unknown"
                   }
                   onClick={handleSubmitEnquiry}
-                  className="flex w-full items-center justify-center gap-2 rounded-[0.875rem] border border-hairline bg-foreground/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
+                  className="flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.875rem] border border-hairline bg-foreground/[0.04] px-4 py-3.5 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
                 >
                   <Send className="h-4 w-4 shrink-0 text-primary/90" />
                   {leadSubmitBusy ? "Sending…" : "Send brief"}

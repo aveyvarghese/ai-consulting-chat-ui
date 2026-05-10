@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="relative overflow-x-hidden px-4 pb-24 pt-10 md:pb-32 md:pt-14">
+    <main className="relative overflow-x-hidden px-3 pb-20 pt-8 sm:px-4 sm:pb-24 sm:pt-10 md:pb-32 md:pt-14">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-primary/[0.05] to-transparent" />
       <div className="relative mx-auto max-w-3xl">
         <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
           About
         </p>
-        <h1 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.5rem]">
+        <h1 className="text-balance text-[1.625rem] font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-3xl md:text-[2.5rem]">
           AI-native consultancy, built like a product studio.
         </h1>
 
@@ -45,7 +45,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="mt-14 rounded-[1.25rem] border border-hairline bg-card/95 p-8 backdrop-blur-xl dark:bg-card/[0.35] md:p-10">
+        <div className="mt-10 rounded-[1.125rem] border border-hairline bg-card/95 p-5 backdrop-blur-xl sm:mt-14 sm:rounded-[1.25rem] sm:p-8 dark:bg-card/[0.35] md:p-10">
           <h2 className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-primary/85">
             Philosophy
           </h2>
@@ -67,7 +67,7 @@ export default function AboutPage() {
         <div className="mt-12 text-center">
           <Link
             href="/#consulting-chat"
-            className="inline-flex min-h-[2.875rem] items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18"
+            className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18 sm:w-auto sm:min-h-[2.875rem] sm:px-8"
           >
             Start with PxlBrief AI
           </Link>

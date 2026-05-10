@@ -72,7 +72,7 @@ const systems = [
 
 export function StrategicSystemsSection() {
   return (
-    <section className="relative px-4 py-24 md:py-32">
+    <section className="relative px-3 py-16 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       <div className="pointer-events-none absolute left-1/2 top-[20%] h-[min(70vw,420px)] w-[min(90vw,720px)] -translate-x-1/2 rounded-full bg-primary/[0.04] blur-[100px]" />
 
@@ -90,11 +90,11 @@ export function StrategicSystemsSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
           {systems.map((item) => (
             <article
               key={item.title}
-              className="group relative overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-6 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.35] md:p-7 hover:-translate-y-1 hover:border-primary/35 hover:bg-card dark:hover:bg-card/[0.48] hover:shadow-[0_0_0_1px_var(--glow-ambient),var(--shadow-tier-hover),0_0_48px_-20px_var(--glow-primary)]"
+              className="group relative min-w-0 overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.35] sm:p-6 md:p-7 hover:-translate-y-1 hover:border-primary/35 hover:bg-card dark:hover:bg-card/[0.48] hover:shadow-[0_0_0_1px_var(--glow-ambient),var(--shadow-tier-hover),0_0_48px_-20px_var(--glow-primary)]"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/[0.08] opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -113,19 +113,25 @@ export function StrategicSystemsSection() {
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
                       Constraint
                     </dt>
-                    <dd className="text-muted-foreground/90">{item.challenge}</dd>
+                    <dd className="break-words text-muted-foreground/90">
+                      {item.challenge}
+                    </dd>
                   </div>
                   <div>
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-primary/80">
                       Move
                     </dt>
-                    <dd className="text-foreground/88">{item.approach}</dd>
+                    <dd className="break-words text-foreground/88">
+                      {item.approach}
+                    </dd>
                   </div>
                   <div>
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
                       Outcome
                     </dt>
-                    <dd className="text-muted-foreground/90">{item.impact}</dd>
+                    <dd className="break-words text-muted-foreground/90">
+                      {item.impact}
+                    </dd>
                   </div>
                 </dl>
               </div>

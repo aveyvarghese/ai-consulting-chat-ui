@@ -9,7 +9,7 @@ const links = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-hairline bg-chrome-bar">
-      <div className="mx-auto max-w-6xl px-4 py-12 md:flex md:items-start md:justify-between md:px-6 md:py-16">
+      <div className="mx-auto max-w-6xl px-3 py-10 sm:px-4 md:flex md:items-start md:justify-between md:px-6 md:py-16">
         <div className="mb-8 md:mb-0">
           <Link
             href="/"
@@ -29,14 +29,14 @@ export function SiteFooter() {
             <Link
               key={href}
               href={href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex min-h-11 touch-manipulation items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {label}
             </Link>
           ))}
           <Link
             href="/#consulting-chat"
-            className="text-sm font-medium text-primary transition-colors hover:text-primary/90"
+            className="inline-flex min-h-11 touch-manipulation items-center text-sm font-medium text-primary transition-colors hover:text-primary/90"
           >
             PxlBrief AI
           </Link>

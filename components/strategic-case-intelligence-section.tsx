@@ -229,7 +229,7 @@ export function StrategicCaseIntelligenceSection() {
     <section
       id="strategic-case-intelligence"
       data-pxl-section="strategic-case-intelligence"
-      className="relative scroll-mt-24 border-y border-hairline/60 bg-gradient-to-b from-section-tint/35 via-background to-background px-4 py-24 md:py-32"
+      className="relative scroll-mt-24 border-y border-hairline/60 bg-gradient-to-b from-section-tint/35 via-background to-background px-3 py-16 sm:px-4 sm:py-24 md:py-32"
       aria-labelledby="strategic-case-intelligence-heading"
     >
       <div
@@ -243,7 +243,7 @@ export function StrategicCaseIntelligenceSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-ring/22 to-transparent" />
 
       <div className="relative mx-auto max-w-6xl">
-        <header className="mx-auto mb-16 max-w-3xl md:mb-20 md:text-left">
+        <header className="mx-auto mb-12 max-w-3xl md:mb-20 md:text-left">
           <div className="flex flex-col gap-5 text-center md:flex-row md:items-end md:justify-between md:gap-12 md:text-left">
             <div className="md:max-w-xl">
               <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
@@ -264,14 +264,14 @@ export function StrategicCaseIntelligenceSection() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 gap-7 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-10">
+        <div className="grid grid-cols-1 gap-5 sm:gap-7 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-10">
           {cases.map((c) => {
             const panelId = `${baseId}-${c.id}-breakdown`
             const open = expandedId === c.id
             return (
               <article
                 key={c.id}
-                className="group relative overflow-hidden rounded-[1.125rem] border border-hairline bg-card/96 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.36] motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
+                className="group relative min-w-0 overflow-hidden rounded-[1.125rem] border border-hairline bg-card/96 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.36] motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
               >
                 <div
                   className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:opacity-0"
@@ -282,8 +282,8 @@ export function StrategicCaseIntelligenceSection() {
                   }}
                 />
 
-                <div className="relative border-b border-hairline/60 bg-gradient-to-r from-transparent via-primary/[0.045] to-transparent px-6 py-4 md:px-8">
-                  <div className="flex items-start justify-between gap-4">
+                <div className="relative border-b border-hairline/60 bg-gradient-to-r from-transparent via-primary/[0.045] to-transparent px-4 py-4 sm:px-6 md:px-8">
+                  <div className="flex min-w-0 items-start justify-between gap-3 sm:gap-4">
                     <div className="min-w-0 text-left">
                       <p className="text-[0.65rem] font-medium uppercase tracking-[0.18em] text-muted-foreground/80">
                         {c.industry}
@@ -305,13 +305,13 @@ export function StrategicCaseIntelligenceSection() {
                   </div>
                 </div>
 
-                <div className="relative space-y-5 px-6 pb-6 pt-5 md:px-8 md:pb-7 md:pt-6">
+                <div className="relative space-y-5 px-4 pb-5 pt-4 break-words sm:px-6 sm:pb-6 sm:pt-5 md:px-8 md:pb-7 md:pt-6">
                   <dl className="space-y-5">
                     <div>
                       <dt className="mb-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/75">
                         Core bottleneck
                       </dt>
-                      <dd className="text-[0.8125rem] leading-relaxed text-foreground/90 md:text-sm">
+                      <dd className="break-words text-[0.8125rem] leading-relaxed text-foreground/90 md:text-sm">
                         {c.bottleneck}
                       </dd>
                     </div>
@@ -319,7 +319,7 @@ export function StrategicCaseIntelligenceSection() {
                       <dt className="mb-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
                         Strategic approach
                       </dt>
-                      <dd className="text-[0.8125rem] leading-relaxed text-foreground/90 md:text-sm">
+                      <dd className="break-words text-[0.8125rem] leading-relaxed text-foreground/90 md:text-sm">
                         {c.approach}
                       </dd>
                     </div>
@@ -329,7 +329,7 @@ export function StrategicCaseIntelligenceSection() {
                     <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
                       Systems implemented
                     </p>
-                    <p className="mt-2 text-[0.8125rem] leading-relaxed text-foreground/92 md:text-sm">
+                    <p className="mt-2 break-words text-[0.8125rem] leading-relaxed text-foreground/92 md:text-sm">
                       {c.systemsImplemented}
                     </p>
                   </div>
@@ -338,7 +338,7 @@ export function StrategicCaseIntelligenceSection() {
                     <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/75">
                       Expected operational impact
                     </p>
-                    <p className="mt-2 text-[0.8125rem] font-medium leading-relaxed text-foreground md:text-sm">
+                    <p className="mt-2 break-words text-[0.8125rem] font-medium leading-relaxed text-foreground md:text-sm">
                       {c.expectedImpact}
                     </p>
                   </div>
@@ -363,7 +363,7 @@ export function StrategicCaseIntelligenceSection() {
                       onClick={() =>
                         setExpandedId((prev) => (prev === c.id ? null : c.id))
                       }
-                      className="flex w-full items-center justify-between gap-3 rounded-lg border border-hairline/80 bg-background/50 px-3.5 py-3 text-left text-[0.8125rem] font-semibold tracking-tight text-foreground transition-[border-color,background-color,box-shadow] duration-300 hover:border-primary/28 hover:bg-background/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 md:text-sm"
+                      className="flex min-h-12 w-full touch-manipulation items-center justify-between gap-3 rounded-lg border border-hairline/80 bg-background/50 px-3.5 py-3.5 text-left text-[0.8125rem] font-semibold tracking-tight text-foreground transition-[border-color,background-color,box-shadow] duration-300 hover:border-primary/28 hover:bg-background/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/35 md:text-sm"
                     >
                       Strategic Breakdown
                       <ChevronDown
@@ -428,9 +428,9 @@ export function StrategicCaseIntelligenceSection() {
         </div>
 
         {/* How PxlBrief Thinks */}
-        <div className="relative mt-20 md:mt-24">
+        <div className="relative mt-14 sm:mt-20 md:mt-24">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-px bg-gradient-to-r from-transparent via-hairline to-transparent md:-top-12" />
-          <div className="rounded-[1.25rem] border border-hairline bg-panel-deep/85 p-7 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl md:p-10">
+          <div className="rounded-[1.125rem] border border-hairline bg-panel-deep/85 p-5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:rounded-[1.25rem] sm:p-7 md:p-10">
             <p className="text-center text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80 md:text-left">
               Operating doctrine
             </p>

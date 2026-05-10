@@ -43,7 +43,7 @@ const metrics = [
 
 export function HowWeWorkSection() {
   return (
-    <section className="relative border-y border-hairline bg-section-tint px-4 py-24 md:py-32">
+    <section className="relative border-y border-hairline bg-section-tint px-3 py-16 sm:px-4 sm:py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <header className="mb-14 flex flex-col gap-5 md:mb-16 md:flex-row md:items-end md:justify-between">
           <div>
@@ -118,7 +118,7 @@ export function HowWeWorkSection() {
 
 export function IndustriesSection() {
   return (
-    <section className="relative px-4 py-24 md:py-32">
+    <section className="relative px-3 py-16 sm:px-4 sm:py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <header className="mb-12 md:mb-14">
           <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
@@ -129,11 +129,11 @@ export function IndustriesSection() {
           </h2>
         </header>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-3.5">
+        <div className="grid min-w-0 grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-3.5">
           {industries.map((name) => (
             <span
               key={name}
-              className="inline-flex items-center justify-center rounded-full border border-hairline bg-card/94 px-4 py-2.5 text-center text-[0.8125rem] font-medium text-foreground/92 shadow-sm backdrop-blur-md transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md dark:bg-card/[0.32] md:px-5 md:text-sm"
+              className="inline-flex min-h-11 min-w-0 touch-manipulation items-center justify-center rounded-full border border-hairline bg-card/94 px-3 py-2.5 text-center text-[0.8125rem] font-medium leading-snug text-foreground/92 shadow-sm backdrop-blur-md transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md dark:bg-card/[0.32] md:px-5 md:text-sm"
             >
               {name}
             </span>
@@ -146,12 +146,12 @@ export function IndustriesSection() {
 
 export function ResultsSection() {
   return (
-    <section className="relative px-4 pb-24 pt-6 md:pb-32 md:pt-10">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
+    <section className="relative px-3 pb-20 pt-6 sm:px-4 sm:pb-24 md:pb-32 md:pt-10">
+      <div className="mx-auto grid min-w-0 max-w-6xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="rounded-[1.125rem] border border-hairline bg-gradient-to-b from-card/92 to-card/80 p-6 text-center shadow-sm backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/28 hover:shadow-md dark:from-card/[0.48] dark:to-card/[0.22] md:p-8"
+            className="min-w-0 rounded-[1.125rem] border border-hairline bg-gradient-to-b from-card/92 to-card/80 p-4 text-center shadow-sm backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/28 hover:shadow-md dark:from-card/[0.48] dark:to-card/[0.22] sm:p-6 md:p-8"
           >
             <div className="font-mono text-2xl font-semibold tracking-tight text-primary/95 md:text-3xl">
               {m.value}
@@ -168,8 +168,8 @@ export function ResultsSection() {
 
 export function FinalCtaSection() {
   return (
-    <section className="relative px-4 pb-20 pt-6 md:pb-28 md:pt-8">
-      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] border border-hairline bg-card/94 px-8 py-14 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.42] md:px-14 md:py-16">
+    <section className="relative px-3 pb-16 pt-6 sm:px-4 sm:pb-20 md:pb-28 md:pt-8">
+      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.25rem] border border-hairline bg-card/94 px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-8 sm:py-14 dark:bg-card/[0.42] md:px-14 md:py-16">
         <div className="pointer-events-none absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl" />
         <div className="pointer-events-none absolute -right-16 bottom-0 h-52 w-52 rounded-full bg-primary/[0.05] blur-2xl" />
 
@@ -183,7 +183,7 @@ export function FinalCtaSection() {
           </p>
           <a
             href="#consulting-chat"
-            className="mt-10 inline-flex min-h-[2.875rem] items-center justify-center rounded-[0.875rem] bg-primary px-9 py-3 text-[0.8125rem] font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18 active:scale-[0.99] md:text-sm"
+            className="mt-8 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18 active:scale-[0.99] sm:mt-10 sm:w-auto sm:min-h-[2.875rem] sm:px-9"
           >
             Start a session
           </a>

@@ -43,11 +43,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="scroll-smooth bg-background"
+      className="scroll-smooth overflow-x-hidden bg-background"
       data-theme={DEFAULT_THEME}
       suppressHydrationWarning
     >
-      <body className="font-sans antialiased">
+      <body className="min-w-0 overflow-x-hidden font-sans antialiased">
         <Script id="pxl-theme-boot" strategy="beforeInteractive">
           {THEME_BOOT_SCRIPT}
         </Script>

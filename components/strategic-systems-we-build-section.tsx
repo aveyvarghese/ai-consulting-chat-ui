@@ -93,7 +93,7 @@ const systems: readonly SystemCard[] = [
 export function StrategicSystemsWeBuildSection() {
   return (
     <section
-      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-4 py-24 md:py-32"
+      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-3 py-16 sm:px-4 sm:py-24 md:py-32"
       aria-labelledby="strategic-systems-we-build-heading"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
@@ -107,7 +107,7 @@ export function StrategicSystemsWeBuildSection() {
       />
 
       <div className="relative mx-auto max-w-6xl">
-        <header className="mx-auto mb-16 max-w-3xl text-center md:mb-20 md:text-left">
+        <header className="mx-auto mb-12 max-w-3xl text-center md:mb-20 md:text-left">
           <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
             Infrastructure
           </p>
@@ -124,11 +124,11 @@ export function StrategicSystemsWeBuildSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
           {systems.map((item) => (
             <article
               key={item.title}
-              className="group relative flex flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-7 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
+              className="group relative flex min-w-0 flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-7 dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
             >
               <div
                 className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-gradient-to-br from-primary/[0.12] via-primary/[0.04] to-ring/[0.08] opacity-0 blur-3xl transition-opacity duration-700 ease-out group-hover:opacity-100"
