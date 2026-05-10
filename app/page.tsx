@@ -1,10 +1,13 @@
 import { HeroSection } from "@/components/hero-section"
 import { ServicesGrid } from "@/components/services-grid"
 import {
+  AfterEnquireSection,
+  ExampleUseCasesSection,
   HowWeWorkSection,
-  WhyBrandsChooseUsSection,
   ResultsSection,
   FinalCtaSection,
+  TrustLayerSection,
+  WhyBrandsChooseUsSection,
 } from "@/components/landing-sections"
 
 export default function Home() {
@@ -12,9 +15,12 @@ export default function Home() {
     <main className="relative min-h-screen overflow-x-hidden">
       <HeroSection />
       <ServicesGrid />
-      <HowWeWorkSection />
-      <WhyBrandsChooseUsSection />
       <ResultsSection />
+      <HowWeWorkSection />
+      <ExampleUseCasesSection />
+      <AfterEnquireSection />
+      <WhyBrandsChooseUsSection />
+      <TrustLayerSection />
       <FinalCtaSection />
     </main>
   )
