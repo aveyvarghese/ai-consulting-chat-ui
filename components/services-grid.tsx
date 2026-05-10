@@ -24,17 +24,17 @@ const services = brandServices.map((s, i) => ({
 
 export function ServicesGrid() {
   return (
-    <section className="relative px-3 pb-20 pt-6 sm:px-4 sm:pb-24 md:pb-32 md:pt-10">
+    <section className="relative px-3 pb-24 pt-10 sm:px-4 sm:pb-28 md:pb-36 md:pt-14">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-primary/[0.04] to-transparent" />
       <div className="relative mx-auto max-w-6xl">
-        <header className="mb-14 max-w-2xl md:mb-16">
-          <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
+        <header className="mb-16 max-w-2xl md:mb-20">
+          <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
             Scope
           </p>
-          <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
+          <h2 className="text-[1.875rem] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground sm:text-3xl md:text-[2.375rem] md:tracking-[-0.03em]">
             What we build with you
           </h2>
-          <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg md:leading-relaxed">
+          <p className="mt-6 text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:mt-7 md:text-lg md:leading-relaxed">
             From founder intelligence to field execution—one architecture, not
             a patchwork of vendors.
           </p>

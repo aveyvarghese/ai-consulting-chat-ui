@@ -116,3 +116,182 @@
     transform: translateX(350%);
   }
 }
+
+/* Executive intelligence — data grid, ambient motion (respect reduced motion) */
+.pxl-data-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--foreground) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--foreground) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 28px 28px;
+}
+
+@keyframes pxl-grid-shift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 28px 28px;
+  }
+}
+
+.pxl-data-grid-shift {
+  animation: pxl-grid-shift 48s linear infinite;
+}
+
+@keyframes pxl-ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate3d(-3%, 2.5%, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes pxl-ambient-drift-rev {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate3d(4%, -2%, 0);
+    opacity: 0.95;
+  }
+}
+
+.pxl-ambient-glow-drift {
+  animation: pxl-ambient-drift 22s ease-in-out infinite;
+}
+
+.pxl-ambient-glow-drift-reverse {
+  animation: pxl-ambient-drift-rev 26s ease-in-out infinite 1s;
+}
+
+@keyframes pxl-hero-parallax {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.02);
+  }
+}
+
+.pxl-hero-orb-drift {
+  animation: pxl-hero-parallax 18s ease-in-out infinite;
+}
+
+@keyframes pxl-credibility-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.pxl-credibility-marquee {
+  animation: pxl-credibility-marquee 52s linear infinite;
+}
+
+@keyframes pxl-intel-drag {
+  0%,
+  100% {
+    transform: scaleX(0.54);
+  }
+  50% {
+    transform: scaleX(0.68);
+  }
+}
+
+@keyframes pxl-intel-auto {
+  0%,
+  100% {
+    transform: scaleX(0.74);
+  }
+  50% {
+    transform: scaleX(0.86);
+  }
+}
+
+@keyframes pxl-intel-growth {
+  0%,
+  100% {
+    transform: scaleX(0.42);
+  }
+  50% {
+    transform: scaleX(0.58);
+  }
+}
+
+@keyframes pxl-intel-leverage {
+  0%,
+  100% {
+    transform: scaleX(0.66);
+  }
+  50% {
+    transform: scaleX(0.78);
+  }
+}
+
+.pxl-intel-bar {
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.pxl-intel-bar--drag {
+  animation: pxl-intel-drag 9s ease-in-out infinite;
+}
+
+.pxl-intel-bar--auto {
+  animation: pxl-intel-auto 11s ease-in-out infinite 0.4s;
+}
+
+.pxl-intel-bar--growth {
+  animation: pxl-intel-growth 10s ease-in-out infinite 0.2s;
+}
+
+.pxl-intel-bar--leverage {
+  animation: pxl-intel-leverage 8.5s ease-in-out infinite 0.6s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pxl-data-grid-shift,
+  .pxl-ambient-glow-drift,
+  .pxl-ambient-glow-drift-reverse,
+  .pxl-hero-orb-drift,
+  .pxl-credibility-marquee,
+  .pxl-intel-bar--drag,
+  .pxl-intel-bar--auto,
+  .pxl-intel-bar--growth,
+  .pxl-intel-bar--leverage {
+    animation: none !important;
+  }
+
+  .pxl-intel-bar--drag {
+    transform: scaleX(0.62);
+  }
+
+  .pxl-intel-bar--auto {
+    transform: scaleX(0.8);
+  }
+
+  .pxl-intel-bar--growth {
+    transform: scaleX(0.5);
+  }
+
+  .pxl-intel-bar--leverage {
+    transform: scaleX(0.72);
+  }
+}

@@ -22,6 +22,10 @@ export function SiteAmbient() {
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background opacity-90" />
+      <div
+        className="absolute inset-0 opacity-[0.35] mix-blend-multiply dark:mix-blend-normal dark:opacity-[0.2] pxl-data-grid pxl-data-grid-shift"
+        aria-hidden
+      />
     </div>
   )
 }
