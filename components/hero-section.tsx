@@ -31,6 +31,7 @@ import {
   deriveRecommendedService,
   estimateOpportunityLevel,
 } from "@/lib/intake-recommendation"
+import { deriveAiDiagnosis, type AiDiagnosis } from "@/lib/ai-diagnosis"
 
 const ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -189,6 +190,154 @@ function splitDigitalPresence(value: string): Pick<LeadData, "website" | "instag
   }
 }
 
+function DiagnosisField({
+  label,
+  value,
+}: {
+  label: string
+  value: string
+}) {
+  return (
+    <div className="rounded-[0.85rem] border border-white/[0.07] bg-white/[0.035] p-3 transition-colors duration-300 hover:border-primary/22 hover:bg-primary/[0.045]">
+      <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/66">
+        {label}
+      </p>
+      <p className="text-[0.8125rem] font-medium leading-snug text-foreground/92">
+        {value}
+      </p>
+    </div>
+  )
+}
+
+function DiagnosisList({
+  title,
+  items,
+}: {
+  title: string
+  items: string[]
+}) {
+  return (
+    <div>
+      <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/82">
+        {title}
+      </p>
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li
+            key={item}
+            className="flex gap-2 text-[0.75rem] leading-relaxed text-muted-foreground/88"
+          >
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary/75 shadow-[0_0_12px_0_oklch(0.75_0.12_180/0.65)]" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function AiDiagnosisPanel({ diagnosis }: { diagnosis: AiDiagnosis }) {
+  const leadScoreTone =
+    diagnosis.leadScore === "High"
+      ? "text-emerald-300"
+      : diagnosis.leadScore === "Medium"
+        ? "text-primary"
+        : "text-muted-foreground"
+
+  return (
+    <aside className="relative overflow-hidden rounded-[1.25rem] border border-primary/16 bg-gradient-to-b from-card/[0.64] via-card/[0.44] to-black/[0.22] p-4 text-left shadow-[0_24px_64px_-38px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-2xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:p-5">
+      <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-primary/[0.09] blur-2xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.045),transparent_32%,rgba(255,255,255,0.015))]" />
+
+      <div className="relative">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
+              AI Diagnosis
+            </p>
+            <h3 className="text-base font-semibold tracking-[-0.015em] text-foreground">
+              Strategic signal map
+            </h3>
+          </div>
+          <span className="inline-flex items-center rounded-full border border-primary/18 bg-primary/[0.08] px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-primary/90">
+            Live
+          </span>
+        </div>
+
+        <div className="mb-4 grid grid-cols-2 gap-2">
+          <DiagnosisField label="Industry" value={diagnosis.industry} />
+          <DiagnosisField label="Business type" value={diagnosis.businessType} />
+          <DiagnosisField label="Business stage" value={diagnosis.businessStage} />
+          <DiagnosisField label="Urgency" value={diagnosis.urgencyLevel} />
+        </div>
+
+        <div className="mb-4 rounded-[1rem] border border-white/[0.075] bg-black/20 p-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/72">
+              Lead score
+            </p>
+            <span className={`font-mono text-lg font-semibold ${leadScoreTone}`}>
+              {diagnosis.leadScore}
+            </span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-primary/40 via-primary to-emerald-300/70"
+              style={{
+                width:
+                  diagnosis.leadScore === "High"
+                    ? "92%"
+                    : diagnosis.leadScore === "Medium"
+                      ? "66%"
+                      : "42%",
+                animation: "pxl-shimmer 4.2s ease-in-out infinite",
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="mb-4 space-y-3">
+          <DiagnosisField
+            label="Main bottleneck"
+            value={diagnosis.mainBottleneck}
+          />
+          <DiagnosisField
+            label="Recommended growth direction"
+            value={diagnosis.recommendedGrowthDirection}
+          />
+        </div>
+
+        <div className="mb-5">
+          <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/82">
+            Suggested systems
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {diagnosis.suggestedSystems.map((system) => (
+              <span
+                key={system}
+                className="rounded-full border border-white/[0.08] bg-white/[0.045] px-2.5 py-1 text-[0.7rem] font-medium text-foreground/88"
+              >
+                {system}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-1">
+          <DiagnosisList
+            title="Potential Revenue Leaks"
+            items={diagnosis.potentialRevenueLeaks}
+          />
+          <DiagnosisList
+            title="Recommended Next Actions"
+            items={diagnosis.recommendedNextActions}
+          />
+        </div>
+      </div>
+    </aside>
+  )
+}
+
 export function HeroSection() {
   const [inputValue, setInputValue] = useState("")
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -245,6 +394,11 @@ export function HeroSection() {
         conversationState
       ),
     [conversationState, intakeForm.budgetRange, intakeLeadScore, leadIntel]
+  )
+
+  const aiDiagnosis = useMemo(
+    () => deriveAiDiagnosis(conversationState, messages, leadIntel),
+    [conversationState, messages, leadIntel]
   )
 
   const attachmentUploadLabel = useMemo(() => {
@@ -821,8 +975,8 @@ export function HeroSection() {
       </div>
 
       {hasMessages && (
-        <div className="relative z-10 mt-10 w-full max-w-3xl px-0 md:mt-12">
-          <div className="relative overflow-hidden rounded-[1.25rem] border border-white/[0.09] bg-card/[0.55] shadow-[0_24px_64px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_oklch(1_0_0/0.05)] backdrop-blur-2xl">
+        <div className="relative z-10 mt-10 grid w-full max-w-6xl gap-4 px-0 md:mt-12 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-5">
+          <div className="relative min-w-0 overflow-hidden rounded-[1.25rem] border border-white/[0.09] bg-card/[0.55] shadow-[0_24px_64px_-32px_rgba(0,0,0,0.65),inset_0_1px_0_0_oklch(1_0_0/0.05)] backdrop-blur-2xl">
             <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/[0.15] px-5 py-3.5 md:px-6 md:py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12]">
@@ -1067,6 +1221,7 @@ export function HeroSection() {
               </div>
             </form>
           </div>
+          <AiDiagnosisPanel diagnosis={aiDiagnosis} />
         </div>
       )}
 
