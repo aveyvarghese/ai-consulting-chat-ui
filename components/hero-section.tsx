@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Paperclip,
   Send,
+  CheckCircle2,
 } from "lucide-react"
 import {
   createInitialConversationState,
@@ -23,10 +24,7 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
-import {
-  LEAD_SUBMIT_SUCCESS_MESSAGE,
-  STRATEGY_CALL_BOOKING_URL,
-} from "@/lib/booking"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 import {
   AnalyticsEvent,
   trackAnalyticsEvent,
@@ -169,6 +167,7 @@ export function HeroSection() {
   const [leadSubmitMessage, setLeadSubmitMessage] = useState<string | null>(
     null
   )
+  const [enquirySubmitSuccess, setEnquirySubmitSuccess] = useState(false)
   const leadPrepFingerprintRef = useRef<string>("")
   const chatOpenedTrackedRef = useRef(false)
 
@@ -396,6 +395,7 @@ export function HeroSection() {
     setAttachedFile(null)
     setLeadIntel(null)
     setLeadSubmitMessage(null)
+    setEnquirySubmitSuccess(false)
     setLeadPrepBusy(false)
     leadPrepFingerprintRef.current = ""
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
@@ -424,6 +424,7 @@ export function HeroSection() {
     if (conversationState.visitorType === "unknown") return
     setLeadSubmitBusy(true)
     setLeadSubmitMessage(null)
+    setEnquirySubmitSuccess(false)
     try {
       const synced = deriveLeadData(leadData, messages, conversationState)
       setLeadData(synced)
@@ -472,16 +473,19 @@ export function HeroSection() {
           leadData: synced,
           professionalSummary,
           attachment,
+          submitSource: "Homepage · PxlBrief AI",
         }),
       })
       const data = await res.json()
       if (!res.ok) {
         throw new Error(data.error || `Request failed (${res.status})`)
       }
-      setLeadSubmitMessage(LEAD_SUBMIT_SUCCESS_MESSAGE)
+      setEnquirySubmitSuccess(true)
+      setLeadSubmitMessage(null)
       trackAnalyticsEvent(AnalyticsEvent.SUBMIT_ENQUIRY, { success: true })
     } catch (err) {
       const raw = err instanceof Error ? err.message : "Failed to submit enquiry"
+      setEnquirySubmitSuccess(false)
       setLeadSubmitMessage(sanitizeEnquirySubmitErrorMessage(raw))
     } finally {
       setLeadSubmitBusy(false)
@@ -823,28 +827,48 @@ export function HeroSection() {
                     )}
                 </div>
               </div>
-              {leadSubmitMessage &&
-                (leadSubmitMessage === LEAD_SUBMIT_SUCCESS_MESSAGE ? (
-                  <div className="mb-4 rounded-[0.875rem] border border-hairline bg-card/96 p-4 shadow-sm backdrop-blur-sm dark:bg-card/[0.35] md:p-5">
-                    <p className="text-[0.8125rem] font-medium leading-relaxed text-foreground/95 md:text-sm">
-                      {LEAD_SUBMIT_SUCCESS_MESSAGE}
-                    </p>
-                    <p className="mt-3 text-[0.75rem] leading-relaxed text-muted-foreground/80 md:text-[0.8125rem]">
-                      Prefer a calendar hold?
-                    </p>
-                    <StrategicSessionBookingLink
-                      href={STRATEGY_CALL_BOOKING_URL}
-                      source="hero_success"
-                      className="mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-3 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
-                    >
-                      Schedule working session
-                    </StrategicSessionBookingLink>
+              {enquirySubmitSuccess ? (
+                <div
+                  className="mb-4 rounded-[0.875rem] border border-primary/20 bg-gradient-to-b from-primary/[0.06] to-card/96 p-5 shadow-sm backdrop-blur-sm dark:from-primary/[0.08] dark:to-card/[0.35] md:p-6"
+                  role="status"
+                >
+                  <div className="flex items-start gap-3 text-left">
+                    <CheckCircle2
+                      className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
+                    <div className="min-w-0 flex-1 space-y-3">
+                      <div>
+                        <p className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-foreground md:text-base">
+                          Thank you — your brief is in.
+                        </p>
+                        <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
+                          A principal will review your thread and context map, then
+                          follow up personally. Most replies land within one to two
+                          business days.
+                        </p>
+                      </div>
+                      <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/85 md:text-sm">
+                        If the matter is time-sensitive, hold a strategy session so
+                        we can align on cadence and ownership before the week moves
+                        on.
+                      </p>
+                      <StrategicSessionBookingLink
+                        href={STRATEGY_CALL_BOOKING_URL}
+                        source="hero_enquiry_success"
+                        className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-md hover:shadow-primary/15"
+                      >
+                        Book strategy session
+                      </StrategicSessionBookingLink>
+                    </div>
                   </div>
-                ) : (
-                  <p className="mb-3 text-[0.8125rem] leading-relaxed text-red-400/95 md:text-sm">
-                    {leadSubmitMessage}
-                  </p>
-                ))}
+                </div>
+              ) : leadSubmitMessage ? (
+                <p className="mb-3 text-[0.8125rem] leading-relaxed text-muted-foreground md:text-sm">
+                  {leadSubmitMessage}
+                </p>
+              ) : null}
               <div className="flex min-w-0 items-center gap-2 rounded-[0.875rem] border border-hairline bg-card/35 px-2.5 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 sm:px-3 md:gap-3 md:px-4 md:py-2">
                 <input
                   ref={chatInputRef}

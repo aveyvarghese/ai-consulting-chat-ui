@@ -7,11 +7,13 @@ import {
 import { normalizeConversationPayload } from "@/lib/conversation-state"
 import type { LeadData } from "@/lib/lead-data"
 import {
-  formatIntelligenceTail,
-  formatProfessionalSummarySection,
-  formatStructuredEnquirySection,
   mergeLeadDataIntoConversationSnapshot,
 } from "@/lib/lead-submit"
+import {
+  buildLeadEnquiryEmailHtml,
+  buildLeadEnquiryEmailText,
+} from "@/lib/lead-email-html"
+import { PUBLIC_SUPPORT_EMAIL_MESSAGE } from "@/lib/public-errors"
 import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
 
@@ -48,6 +50,8 @@ const submitBodySchema = z.object({
   leadData: leadDataSchema.optional(),
   professionalSummary: z.string().max(4000).optional().default(""),
   attachment: attachmentSchema.optional(),
+  /** Client-provided label, e.g. "Homepage · PxlBrief AI" */
+  submitSource: z.string().max(200).optional(),
 })
 
 function transcriptFromMessages(
@@ -87,6 +91,22 @@ function resolveVisitorType(
 
 function firstNonEmpty(...values: string[]): string {
   return values.map((value) => value.trim()).find(Boolean) ?? ""
+}
+
+function resolveSubmittedSource(
+  bodySource: string | undefined,
+  referer: string | null
+): string {
+  const fromBody = bodySource?.trim()
+  if (fromBody) return fromBody.slice(0, 200)
+  if (!referer?.trim()) return "PxlBrief (direct session)"
+  try {
+    const u = new URL(referer)
+    const path = `${u.pathname}${u.search || ""}`.trim()
+    return (path || u.hostname).slice(0, 200)
+  } catch {
+    return "PxlBrief (referrer)"
+  }
 }
 
 export async function POST(req: Request) {
@@ -154,13 +174,6 @@ export async function POST(req: Request) {
     const profSummary =
       raw.data.professionalSummary?.trim() || intelligence.consultantSummary
 
-    const ctx = {
-      businessVertical: normalized.businessVertical,
-      businessStage: normalized.businessStage,
-      conversationStage: normalized.conversationStage,
-      potentialClientStage: normalized.potentialClientStage,
-    }
-
     const ld: LeadData = leadData
       ? { ...leadData, visitorType: effectiveVisitor }
       : {
@@ -186,22 +199,34 @@ export async function POST(req: Request) {
     const filesLine =
       attachmentNames.length > 0 ? attachmentNames.join(", ") : "None"
 
-    const submittedAt = new Date().toISOString()
+    const submittedAtDate = new Date()
+    const submittedAt = submittedAtDate.toISOString()
     const subject = buildLeadEmailSubject(
       intelligence.visitorType,
       intelligence.subjectAccent
     )
 
-    const textBody = [
-      formatStructuredEnquirySection(ld, ctx),
-      "",
-      "ATTACHMENTS",
-      filesLine,
-      "",
-      formatProfessionalSummarySection(profSummary),
-      "",
-      formatIntelligenceTail(intelligence, submittedAt),
-    ].join("\n")
+    const submittedSource = resolveSubmittedSource(
+      raw.data.submitSource,
+      req.headers.get("referer")
+    )
+
+    const transcriptExcerpt = transcript.slice(0, 4500)
+
+    const emailInput = {
+      intelligence,
+      leadData: ld,
+      professionalSummary: profSummary,
+      transcriptExcerpt,
+      businessVertical: normalized.businessVertical,
+      businessStage: normalized.businessStage,
+      submittedSource,
+      submittedAt: submittedAtDate,
+      attachmentsLine: filesLine,
+    }
+
+    const htmlBody = buildLeadEnquiryEmailHtml(emailInput)
+    const textBody = buildLeadEnquiryEmailText(emailInput)
 
     const attachments: { filename: string; content: Buffer }[] = []
     if (raw.data.attachment?.base64 && raw.data.attachment.filename) {
@@ -219,17 +244,24 @@ export async function POST(req: Request) {
     }
 
     const resend = new Resend(apiKey)
-    const { error } = await resend.emails.send({
+    const replyTo = firstNonEmpty(ld.email, intelligence.email)
+    const sendPayload: Parameters<Resend["emails"]["send"]>[0] = {
       from,
       to: LEAD_TO_EMAIL,
       subject,
+      html: htmlBody,
       text: textBody,
       ...(attachments.length ? { attachments } : {}),
-    })
+    }
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(replyTo)) {
+      sendPayload.replyTo = replyTo
+    }
+
+    const { error } = await resend.emails.send(sendPayload)
 
     if (error) {
       return Response.json(
-        { error: error.message || "Failed to send email" },
+        { error: PUBLIC_SUPPORT_EMAIL_MESSAGE },
         { status: 502 }
       )
     }
