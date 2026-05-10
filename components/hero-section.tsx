@@ -31,7 +31,13 @@ import {
   deriveRecommendedService,
   estimateOpportunityLevel,
 } from "@/lib/intake-recommendation"
-import { deriveAiDiagnosis, type AiDiagnosis } from "@/lib/ai-diagnosis"
+import {
+  deriveAiDiagnosis,
+  deriveStrategicIntelligence,
+  type AiDiagnosis,
+  type StrategicIntelligence,
+  type StrategicScore,
+} from "@/lib/ai-diagnosis"
 
 const ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -236,7 +242,191 @@ function DiagnosisList({
   )
 }
 
-function AiDiagnosisPanel({ diagnosis }: { diagnosis: AiDiagnosis }) {
+function StrategicScoreCard({ score }: { score: StrategicScore }) {
+  return (
+    <div className="rounded-[0.9rem] border border-white/[0.075] bg-black/20 p-3">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+          {score.label}
+        </p>
+        <span className="font-mono text-sm font-semibold text-primary">
+          {score.value}
+        </span>
+      </div>
+      <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-primary/35 via-primary to-emerald-300/60"
+          style={{
+            width: `${score.value}%`,
+            animation: "pxl-shimmer 5s ease-in-out infinite",
+          }}
+        />
+      </div>
+      <p className="text-[0.7rem] leading-relaxed text-muted-foreground/78">
+        {score.detail}
+      </p>
+    </div>
+  )
+}
+
+function ObservedSignalGrid({
+  signals,
+}: {
+  signals: StrategicIntelligence["observedSignals"]
+}) {
+  const rows = [
+    ["Founder mindset", signals.founderMindset],
+    ["Business maturity", signals.businessMaturity],
+    ["Marketing gaps", signals.marketingGaps],
+    ["Operational gaps", signals.operationalGaps],
+    ["Acquisition weakness", signals.customerAcquisitionWeaknesses],
+  ] as const
+
+  return (
+    <div>
+      <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/82">
+        Observed Signals
+      </p>
+      <div className="space-y-2">
+        {rows.map(([label, value]) => (
+          <div
+            key={label}
+            className="rounded-[0.85rem] border border-white/[0.07] bg-white/[0.035] p-3"
+          >
+            <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/66">
+              {label}
+            </p>
+            <p className="text-[0.75rem] leading-relaxed text-foreground/86">
+              {value}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function StrategicIntelligenceDashboard({
+  intelligence,
+  isAnalyzing,
+}: {
+  intelligence: StrategicIntelligence
+  isAnalyzing: boolean
+}) {
+  return (
+    <div className="mt-6 border-t border-white/[0.07] pt-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
+            Strategic Intelligence Layer
+          </p>
+          <h4 className="text-sm font-semibold tracking-[-0.01em] text-foreground">
+            Founder advisory model
+          </h4>
+        </div>
+        <div className="text-right">
+          <p className="text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground/65">
+            Confidence
+          </p>
+          <p className="font-mono text-sm font-semibold text-primary">
+            {intelligence.confidenceLevel}%
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-4 rounded-[1rem] border border-primary/14 bg-primary/[0.055] p-3">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <span className="text-[0.7rem] font-medium text-foreground/88">
+            {intelligence.confidenceLabel}
+          </span>
+          <span className="flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.13em] text-primary/80">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-primary"
+              style={{ animation: "pxl-dot-pulse 1.4s ease-in-out infinite" }}
+            />
+            {isAnalyzing || !intelligence.isReady
+              ? "Analyzing strategically"
+              : "Signal locked"}
+          </span>
+        </div>
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-primary/45 via-primary to-emerald-300/70"
+            style={{
+              width: `${intelligence.confidenceLevel}%`,
+              animation: "pxl-shimmer 4.4s ease-in-out infinite",
+            }}
+          />
+        </div>
+      </div>
+
+      {!intelligence.isReady ? (
+        <div className="rounded-[1rem] border border-white/[0.075] bg-black/20 p-4">
+          <p className="text-sm font-medium text-foreground/90">
+            Building strategic context...
+          </p>
+          <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground/78">
+            The intelligence layer unlocks after a few meaningful business
+            signals, so recommendations stay strategic rather than generic.
+          </p>
+          <div className="mt-4 grid grid-cols-4 gap-2">
+            {[0, 1, 2, 3].map((index) => (
+              <span
+                key={index}
+                className="h-1.5 rounded-full bg-primary/35"
+                style={{
+                  animation: `pxl-dot-pulse 1.35s ease-in-out ${index * 120}ms infinite`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="mb-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+            {intelligence.scores.map((score) => (
+              <StrategicScoreCard key={score.label} score={score} />
+            ))}
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-1">
+            <DiagnosisList
+              title="Estimated Growth Blockers"
+              items={intelligence.estimatedGrowthBlockers}
+            />
+            <DiagnosisList
+              title="Estimated Missed Revenue Areas"
+              items={intelligence.estimatedMissedRevenueAreas}
+            />
+            <DiagnosisList
+              title="Estimated Operational Inefficiencies"
+              items={intelligence.estimatedOperationalInefficiencies}
+            />
+            <DiagnosisList
+              title="Suggested Strategic Priorities"
+              items={intelligence.suggestedStrategicPriorities}
+            />
+            <ObservedSignalGrid signals={intelligence.observedSignals} />
+            <DiagnosisList
+              title="What PxlBrief Would Likely Do"
+              items={intelligence.likelyPxlBriefActions}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function AiDiagnosisPanel({
+  diagnosis,
+  intelligence,
+  isAnalyzing,
+}: {
+  diagnosis: AiDiagnosis
+  intelligence: StrategicIntelligence
+  isAnalyzing: boolean
+}) {
   const leadScoreTone =
     diagnosis.leadScore === "High"
       ? "text-emerald-300"
@@ -333,6 +523,11 @@ function AiDiagnosisPanel({ diagnosis }: { diagnosis: AiDiagnosis }) {
             items={diagnosis.recommendedNextActions}
           />
         </div>
+
+        <StrategicIntelligenceDashboard
+          intelligence={intelligence}
+          isAnalyzing={isAnalyzing}
+        />
       </div>
     </aside>
   )
@@ -400,6 +595,23 @@ export function HeroSection() {
     () => deriveAiDiagnosis(conversationState, messages, leadIntel),
     [conversationState, messages, leadIntel]
   )
+
+  const strategicIntelligence = useMemo(
+    () =>
+      deriveStrategicIntelligence(
+        conversationState,
+        messages,
+        aiDiagnosis,
+        leadIntel
+      ),
+    [aiDiagnosis, conversationState, messages, leadIntel]
+  )
+
+  const analysisStatusLabel = strategicIntelligence.isReady
+    ? "Synthesising strategy"
+    : messages.length >= 3
+      ? "Reading business signals"
+      : "Thinking"
 
   const attachmentUploadLabel = useMemo(() => {
     switch (conversationState.visitorType) {
@@ -1060,7 +1272,7 @@ export function HeroSection() {
                   <div className="rounded-[1.05rem] border border-white/[0.06] bg-muted/[0.35] px-4 py-3.5 shadow-sm md:px-5">
                     <div className="mb-2 flex items-center gap-2">
                       <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
-                        Thinking
+                        {analysisStatusLabel}
                       </span>
                     </div>
                     <div
@@ -1221,7 +1433,11 @@ export function HeroSection() {
               </div>
             </form>
           </div>
-          <AiDiagnosisPanel diagnosis={aiDiagnosis} />
+          <AiDiagnosisPanel
+            diagnosis={aiDiagnosis}
+            intelligence={strategicIntelligence}
+            isAnalyzing={isLoading || leadPrepBusy}
+          />
         </div>
       )}
 

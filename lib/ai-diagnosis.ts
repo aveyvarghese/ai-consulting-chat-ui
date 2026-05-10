@@ -21,6 +21,33 @@ export interface AiDiagnosis {
   leadScore: string
 }
 
+export interface StrategicScore {
+  label: string
+  value: number
+  detail: string
+}
+
+export interface ObservedSignals {
+  founderMindset: string
+  businessMaturity: string
+  marketingGaps: string
+  operationalGaps: string
+  customerAcquisitionWeaknesses: string
+}
+
+export interface StrategicIntelligence {
+  isReady: boolean
+  confidenceLevel: number
+  confidenceLabel: string
+  scores: StrategicScore[]
+  estimatedGrowthBlockers: string[]
+  estimatedMissedRevenueAreas: string[]
+  estimatedOperationalInefficiencies: string[]
+  suggestedStrategicPriorities: string[]
+  observedSignals: ObservedSignals
+  likelyPxlBriefActions: string[]
+}
+
 function corpusFrom(
   state: ConversationStatePayload,
   messages: MessageLike[],
@@ -203,6 +230,311 @@ function nextActions(
     `Map the first system around ${systems[0]?.toLowerCase() ?? serviceFit.toLowerCase()}.`,
     `Validate ${serviceFit.toLowerCase()} as the primary service path before execution.`,
   ]
+}
+
+function meaningfulUserMessages(messages: MessageLike[]): MessageLike[] {
+  return messages.filter(
+    (message) =>
+      message.role === "user" && message.content.trim().replace(/\s+/g, " ").length >= 12
+  )
+}
+
+function countSignals(corpus: string, patterns: RegExp[]): number {
+  return patterns.reduce((score, pattern) => {
+    const matches = corpus.match(new RegExp(pattern.source, "gi"))
+    return score + (matches?.length ?? 0)
+  }, 0)
+}
+
+function clampScore(value: number): number {
+  return Math.max(8, Math.min(96, Math.round(value)))
+}
+
+function scoreDetails(score: number, high: string, medium: string, low: string): string {
+  if (score >= 72) return high
+  if (score >= 45) return medium
+  return low
+}
+
+function deriveScores(
+  state: ConversationStatePayload,
+  corpus: string,
+  diagnosis: AiDiagnosis
+): StrategicScore[] {
+  const lower = corpus.toLowerCase()
+  const contextDepth = Math.min(18, meaningfulContextDepth(state, corpus))
+  const hasContact = state.email.trim() || state.whatsapp.trim() ? 10 : 0
+  const highIntent = countSignals(lower, [
+    /budget/i,
+    /proposal/i,
+    /urgent/i,
+    /start/i,
+    /hire/i,
+    /call/i,
+    /growth/i,
+    /scale/i,
+  ])
+  const automationSignals = countSignals(lower, [
+    /manual/i,
+    /workflow/i,
+    /automation/i,
+    /crm/i,
+    /follow[-\s]?up/i,
+    /whatsapp/i,
+    /ops/i,
+    /process/i,
+  ])
+  const brandSignals = countSignals(lower, [
+    /brand/i,
+    /position/i,
+    /identity/i,
+    /premium/i,
+    /luxury/i,
+    /differentiat/i,
+    /trust/i,
+  ])
+  const acquisitionSignals = countSignals(lower, [
+    /lead/i,
+    /traffic/i,
+    /ads/i,
+    /seo/i,
+    /conversion/i,
+    /funnel/i,
+    /retention/i,
+    /shopify/i,
+  ])
+
+  const opportunity = clampScore(
+    34 +
+      contextDepth +
+      hasContact +
+      highIntent * 8 +
+      acquisitionSignals * 4 +
+      (diagnosis.urgencyLevel === "High" ? 14 : diagnosis.urgencyLevel === "Medium" ? 8 : 0)
+  )
+  const readiness = clampScore(
+    30 +
+      contextDepth +
+      (state.businessStage.trim() ? 12 : 0) +
+      (state.businessVertical.trim() ? 10 : 0) +
+      (state.servicesInterested.trim() ? 10 : 0) +
+      (diagnosis.leadScore === "High" ? 10 : diagnosis.leadScore === "Medium" ? 6 : 0)
+  )
+  const automation = clampScore(
+    28 +
+      automationSignals * 10 +
+      (/enterprise|networked|real estate|local/i.test(diagnosis.industry) ? 10 : 0) +
+      (/lead|workflow|manual|crm/i.test(diagnosis.mainBottleneck) ? 14 : 0)
+  )
+  const positioning = clampScore(
+    30 +
+      brandSignals * 9 +
+      (/luxury|fashion|premium/i.test(diagnosis.industry) ? 14 : 0) +
+      (/brand|trust|position/i.test(diagnosis.mainBottleneck) ? 14 : 0)
+  )
+
+  return [
+    {
+      label: "Opportunity Score",
+      value: opportunity,
+      detail: scoreDetails(
+        opportunity,
+        "Strong commercial signal with clear paths to leverage.",
+        "Qualified opportunity forming; needs sharper system definition.",
+        "Early signal; more business context will improve precision."
+      ),
+    },
+    {
+      label: "Growth Readiness Score",
+      value: readiness,
+      detail: scoreDetails(
+        readiness,
+        "Business context is mature enough for a strategic roadmap.",
+        "Some readiness signals are present; sequencing matters next.",
+        "Discovery should clarify stage, offer and current channels."
+      ),
+    },
+    {
+      label: "Automation Potential Score",
+      value: automation,
+      detail: scoreDetails(
+        automation,
+        "High potential to remove manual leakage with AI workflows.",
+        "Automation can improve response speed and handoff quality.",
+        "Automation potential will depend on process clarity."
+      ),
+    },
+    {
+      label: "Brand Positioning Score",
+      value: positioning,
+      detail: scoreDetails(
+        positioning,
+        "Positioning and trust signals appear central to growth.",
+        "Brand clarity can improve conversion and perceived value.",
+        "Brand need is not dominant yet; monitor as context develops."
+      ),
+    },
+  ]
+}
+
+function meaningfulContextDepth(
+  state: ConversationStatePayload,
+  corpus: string
+): number {
+  const structured = [
+    state.businessVertical,
+    state.businessStage,
+    state.servicesInterested,
+    state.currentChallenge,
+    state.acquisitionChannels,
+    state.company,
+  ].filter((value) => value.trim()).length
+  return structured * 2 + Math.min(8, Math.floor(corpus.length / 180))
+}
+
+function blockersFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const blockers = [
+    /lead|inquir|pipeline/.test(lower) && "Lead quality is not yet structured into a reliable qualification path.",
+    /conversion|funnel|website|landing/.test(lower) && "Conversion architecture may be too weak to turn interest into action.",
+    /brand|position|luxury|premium/.test(lower) && "The market may not have a sharp enough reason to trust or choose the brand.",
+    /ads|paid|performance|traffic/.test(lower) && "Acquisition spend may be operating ahead of funnel and message clarity.",
+    /manual|workflow|crm|follow/.test(lower) && "Manual handoffs may be limiting response speed and consistency.",
+  ].filter(Boolean) as string[]
+  return [
+    ...blockers,
+    `${diagnosis.mainBottleneck} is likely constraining the next growth move.`,
+  ].slice(0, 3)
+}
+
+function missedRevenueFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const areas = [
+    /retention|repeat|ltv|customer/.test(lower) && "Repeat purchase and retention journeys may be underdeveloped.",
+    /seo|organic|search|local/.test(lower) && "Search intent may be escaping to better-structured competitors.",
+    /whatsapp|phone|call|crm/.test(lower) && "Warm prospects may drop between enquiry, follow-up and decision.",
+    /checkout|cart|landing|website/.test(lower) && "High-intent visitors may not be seeing enough proof or urgency to convert.",
+    /content|instagram|social/.test(lower) && "Content attention may not be connected to a measurable sales path.",
+  ].filter(Boolean) as string[]
+  return [
+    ...areas,
+    `${diagnosis.recommendedGrowthDirection} could unlock better commercial capture.`,
+  ].slice(0, 3)
+}
+
+function inefficienciesFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const inefficiencies = [
+    /manual|process|ops|team/.test(lower) && "Repeated internal tasks may still depend on people instead of workflows.",
+    /lead|crm|whatsapp|follow/.test(lower) && "Lead data may not be centralised enough for timely decision-making.",
+    /content|creative|campaign/.test(lower) && "Creative production may not be supported by a repeatable intelligence system.",
+    /report|dashboard|analytics|data/.test(lower) && "Performance signals may be reviewed too late to guide action.",
+  ].filter(Boolean) as string[]
+  return [
+    ...inefficiencies,
+    `${diagnosis.suggestedSystems[0] ?? "A system blueprint"} should reduce operational drag first.`,
+  ].slice(0, 3)
+}
+
+function prioritiesFrom(diagnosis: AiDiagnosis): string[] {
+  return [
+    `Validate ${diagnosis.serviceFit} as the primary service lane.`,
+    `Design ${diagnosis.suggestedSystems[0]?.toLowerCase() ?? "the first operating system"} before scaling activity.`,
+    `Use ${diagnosis.recommendedGrowthDirection.toLowerCase()} as the immediate strategic direction.`,
+  ]
+}
+
+function observedSignals(
+  state: ConversationStatePayload,
+  diagnosis: AiDiagnosis,
+  corpus: string
+): ObservedSignals {
+  const lower = corpus.toLowerCase()
+  return {
+    founderMindset:
+      /scale|growth|system|strategy|automation|performance/.test(lower)
+        ? "Leverage-seeking; oriented toward systems and sharper growth decisions."
+        : "Exploratory; still clarifying the most valuable growth constraint.",
+    businessMaturity:
+      state.businessStage.trim() || diagnosis.businessStage,
+    marketingGaps:
+      /ads|seo|content|instagram|traffic|lead|conversion/.test(lower)
+        ? diagnosis.mainBottleneck
+        : "Marketing gap not fully explicit yet; acquisition path needs more signal.",
+    operationalGaps:
+      /manual|workflow|crm|follow|ops|automation/.test(lower)
+        ? "Operational handoffs and response systems appear important."
+        : "Operational gaps are not explicit yet; watch for manual handoffs.",
+    customerAcquisitionWeaknesses:
+      /lead|traffic|seo|ads|funnel|conversion|pipeline/.test(lower)
+        ? "Acquisition likely needs cleaner qualification, proof and conversion structure."
+        : "Acquisition weakness is still emerging from the conversation.",
+  }
+}
+
+function likelyActions(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const actions = [
+    /lead|crm|whatsapp|follow|real\s+estate/.test(lower) && "Build AI sales workflows",
+    /retention|repeat|ltv|d2c|shopify/.test(lower) && "Improve retention systems",
+    /brand|position|luxury|premium|identity/.test(lower) && "Reposition brand",
+    /website|landing|funnel|conversion|checkout/.test(lower) && "Improve funnel conversion",
+    /seo|organic|search|local/.test(lower) && "Create SEO authority",
+    /manual|workflow|automation|ops|enterprise/.test(lower) && "Implement CRM automation",
+  ].filter(Boolean) as string[]
+
+  return [
+    ...new Set([
+      ...actions,
+      diagnosis.serviceFit === "AI Automation" && "Implement CRM automation",
+      diagnosis.serviceFit === "Performance Marketing" && "Improve funnel conversion",
+      diagnosis.serviceFit === "Branding" && "Reposition brand",
+      diagnosis.serviceFit === "SEO" && "Create SEO authority",
+      diagnosis.serviceFit === "Website Systems" && "Improve funnel conversion",
+      "Build AI sales workflows",
+    ].filter(Boolean) as string[]),
+  ].slice(0, 4)
+}
+
+function confidenceLabel(value: number): string {
+  if (value >= 78) return "High confidence"
+  if (value >= 55) return "Directional confidence"
+  return "Forming signal"
+}
+
+export function deriveStrategicIntelligence(
+  state: ConversationStatePayload,
+  messages: MessageLike[],
+  diagnosis: AiDiagnosis,
+  leadIntel?: LeadIntelligenceResult | null
+): StrategicIntelligence {
+  const corpus = corpusFrom(state, messages, leadIntel)
+  const meaningful = meaningfulUserMessages(messages)
+  const structuredDepth = meaningfulContextDepth(state, corpus)
+  const isReady = meaningful.length >= 3 || (messages.length >= 5 && structuredDepth >= 5)
+  const baseConfidence =
+    32 +
+    meaningful.length * 10 +
+    structuredDepth * 2 +
+    (leadIntel ? 12 : 0) +
+    (state.businessVertical.trim() ? 8 : 0) +
+    (state.currentChallenge.trim() ? 8 : 0)
+  const confidenceLevel = isReady
+    ? clampScore(baseConfidence)
+    : clampScore(Math.min(baseConfidence, 48))
+
+  return {
+    isReady,
+    confidenceLevel,
+    confidenceLabel: confidenceLabel(confidenceLevel),
+    scores: deriveScores(state, corpus, diagnosis),
+    estimatedGrowthBlockers: blockersFrom(diagnosis, corpus),
+    estimatedMissedRevenueAreas: missedRevenueFrom(diagnosis, corpus),
+    estimatedOperationalInefficiencies: inefficienciesFrom(diagnosis, corpus),
+    suggestedStrategicPriorities: prioritiesFrom(diagnosis),
+    observedSignals: observedSignals(state, diagnosis, corpus),
+    likelyPxlBriefActions: likelyActions(diagnosis, corpus),
+  }
 }
 
 export function deriveAiDiagnosis(
