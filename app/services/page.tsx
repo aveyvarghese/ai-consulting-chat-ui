@@ -13,7 +13,7 @@ import { brandServices } from "@/lib/brand-services"
 export const metadata: Metadata = {
   title: "Services | PxlBrief",
   description:
-    "AI consulting, branding, growth strategy, performance marketing, automation and website systems.",
+    "Intelligence systems, growth architecture, automation design, and digital estates—delivered as one operating layer.",
 }
 
 const icons = [Brain, Palette, TrendingUp, Target, Workflow, LayoutGrid] as const
@@ -28,12 +28,11 @@ export default function ServicesPage() {
             Services
           </p>
           <h1 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.5rem]">
-            Capabilities built for modern brands
+            What we install with you
           </h1>
           <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg">
-            Each line is delivered as integrated work — not disconnected
-            deliverables. Start a thread with PxlBrief AI to scope what matters
-            first.
+            Integrated mandates—not disconnected decks. Open a session on the
+            home page to pressure-test where to start.
           </p>
         </header>
 
@@ -58,7 +57,7 @@ export default function ServicesPage() {
                   href="/#consulting-chat"
                   className="inline-flex w-fit items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary transition-all duration-300 hover:border-primary/45 hover:bg-primary/15"
                 >
-                  Discuss in chat
+                  Scope in session
                 </Link>
               </article>
             )
@@ -66,12 +65,12 @@ export default function ServicesPage() {
         </div>
 
         <p className="mx-auto mt-16 max-w-xl text-center text-sm text-muted-foreground/80 md:mt-20">
-          Prefer to talk it through?{" "}
+          Want a live pass?{" "}
           <Link
             href="/#consulting-chat"
             className="font-medium text-primary underline-offset-4 hover:underline"
           >
-            Open PxlBrief AI on the homepage
+            Start from the homepage session
           </Link>
           .
         </p>

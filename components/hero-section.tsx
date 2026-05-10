@@ -113,18 +113,18 @@ function shouldAutoPrepareLeadIntel(
 }
 
 const placeholderPrompts = [
-  "Why am I not getting leads?",
-  "How can AI improve my business?",
-  "Audit my marketing strategy",
-  "How should I position my brand?",
+  "Where is operational drag hiding?",
+  "Map our automation architecture.",
+  "Pressure-test our growth plan.",
+  "What should leadership see weekly?",
 ]
 
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
-  { label: "Why no leads?", prompt: "Why am I not getting leads?" },
-  { label: "AI for my business", prompt: "How can AI improve my business?" },
-  { label: "Marketing audit", prompt: "Audit my marketing strategy" },
-  { label: "Brand positioning", prompt: "How should I position my brand?" },
+  { label: "Find operational drag", prompt: "Where is operational drag hiding?" },
+  { label: "Automation map", prompt: "Map our automation architecture." },
+  { label: "Growth pressure-test", prompt: "Pressure-test our growth plan." },
+  { label: "Leadership view", prompt: "What should leadership see weekly?" },
 ]
 
 interface Message {
@@ -502,7 +502,7 @@ export function HeroSection() {
     <section
       id="consulting-chat"
       className="relative flex min-h-[78vh] scroll-mt-24 flex-col items-center justify-center px-4 pb-24 pt-16 md:min-h-[80vh] md:pb-28 md:pt-24"
-      aria-label="PxlBrief — AI consulting hero"
+      aria-label="PxlBrief — strategic intelligence and consulting"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -526,18 +526,18 @@ export function HeroSection() {
         </div>
 
         <h1 className="mx-auto mb-5 max-w-4xl text-balance text-[2.125rem] font-semibold leading-[1.08] tracking-[-0.03em] text-foreground md:mb-6 md:text-5xl md:tracking-[-0.035em] lg:text-[3.25rem]">
-          Diagnose. Strategize. Scale.
+          Systems for serious leverage, not experiments.
         </h1>
 
         <p className="mx-auto mb-12 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.65] text-muted-foreground/90 md:mb-14 md:max-w-2xl md:text-lg md:leading-relaxed">
-          AI consulting, growth strategy, performance marketing and brand
-          intelligence — built to scale modern businesses.
+          We architect AI systems, automation, and growth infrastructure your
+          operators can run. Founders get signal, not noise.
         </p>
 
         {!hasMessages && (
           <>
             <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
-              PxlBrief AI
+              Strategic session
             </p>
             <div
               className={`relative mx-auto mb-6 w-full max-w-2xl transition-[box-shadow,filter] duration-500 ease-out md:mb-7 ${
@@ -601,8 +601,8 @@ export function HeroSection() {
             </div>
 
             <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/65 md:text-sm">
-              Helping brands scale through AI, growth systems and strategic
-              marketing.
+              Same rigor we bring to boards and operating reviews—now at first
+              contact.
             </p>
           </>
         )}
@@ -618,10 +618,10 @@ export function HeroSection() {
                 </div>
                 <div className="text-left">
                   <span className="block text-sm font-medium tracking-tight text-foreground">
-                    PxlBrief AI
+                    PxlBrief
                   </span>
                   <span className="text-[0.6875rem] text-muted-foreground/75">
-                    Strategic consultant
+                    Intelligence layer
                   </span>
                 </div>
               </div>
@@ -694,7 +694,7 @@ export function HeroSection() {
                   <div className="rounded-[1.05rem] border border-hairline bg-muted/[0.35] px-4 py-3.5 shadow-sm md:px-5">
                     <div className="mb-2 flex items-center gap-2">
                       <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
-                        Thinking
+                        Synthesizing
                       </span>
                     </div>
                     <div
@@ -797,7 +797,7 @@ export function HeroSection() {
                         className="text-[0.6875rem] font-medium text-primary/85 md:text-xs"
                         aria-live="polite"
                       >
-                        Strategic analysis active
+                        Context mapping active
                       </span>
                     )}
                 </div>
@@ -809,7 +809,7 @@ export function HeroSection() {
                       {LEAD_SUBMIT_SUCCESS_MESSAGE}
                     </p>
                     <p className="mt-3 text-[0.75rem] leading-relaxed text-muted-foreground/80 md:text-[0.8125rem]">
-                      Prefer to schedule directly?
+                      Prefer a calendar hold?
                     </p>
                     <a
                       href={STRATEGY_CALL_BOOKING_URL}
@@ -817,7 +817,7 @@ export function HeroSection() {
                       rel="noopener noreferrer"
                       className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-2.5 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
                     >
-                      Book a Strategy Call
+                      Schedule working session
                     </a>
                   </div>
                 ) : (
@@ -831,7 +831,7 @@ export function HeroSection() {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Continue the conversation..."
+                  placeholder="Add detail or your next move…"
                   disabled={isLoading}
                   className="min-h-[2.75rem] flex-1 bg-transparent py-2 text-[0.8125rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:text-[0.9375rem]"
                 />
@@ -855,7 +855,7 @@ export function HeroSection() {
                   className="flex w-full items-center justify-center gap-2 rounded-[0.875rem] border border-hairline bg-foreground/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
                 >
                   <Send className="h-4 w-4 shrink-0 text-primary/90" />
-                  {leadSubmitBusy ? "Submitting enquiry…" : "Submit Enquiry"}
+                  {leadSubmitBusy ? "Sending…" : "Send brief"}
                 </button>
               </div>
             </form>

@@ -29,14 +29,14 @@ export function ServicesGrid() {
       <div className="relative mx-auto max-w-6xl">
         <header className="mb-14 max-w-2xl md:mb-16">
           <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
-            Capabilities
+            Scope
           </p>
           <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-            Full-stack intelligence for ambitious brands
+            What we build with you
           </h2>
           <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg md:leading-relaxed">
-            Strategy, creative and systems — unified under an AI-native
-            operating model.
+            From founder intelligence to field execution—one architecture, not
+            a patchwork of vendors.
           </p>
         </header>
 

@@ -12,8 +12,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'AI Growth Consultant | Strategy & Marketing Intelligence',
-  description: 'AI-powered growth consulting for strategy, marketing intelligence, branding, and go-to-market solutions.',
+  title: 'PxlBrief | AI systems & strategic intelligence',
+  description:
+    'Operating architecture for growth: intelligence systems, automation design, and infrastructure founders can run.',
   generator: 'v0.app',
   icons: {
     icon: [

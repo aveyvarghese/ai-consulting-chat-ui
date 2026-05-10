@@ -3,23 +3,23 @@ import { ChevronRight } from "lucide-react"
 const processSteps = [
   {
     key: "diagnose",
-    label: "Diagnose",
-    detail: "Signal, data and narrative — where leverage actually lives.",
+    label: "Frame",
+    detail: "Where capital, time, and attention leak—and what signal is missing.",
   },
   {
     key: "strategize",
-    label: "Strategize",
-    detail: "A focused thesis, roadmap and metrics you can defend.",
+    label: "Thesis",
+    detail: "A defensible view: priorities, tradeoffs, and the metrics that matter.",
   },
   {
     key: "build",
-    label: "Build",
-    detail: "Systems, creative and automation as one coherent stack.",
+    label: "Install",
+    detail: "Automation, creative, and workflows wired as one operating layer.",
   },
   {
     key: "scale",
-    label: "Scale",
-    detail: "Compound loops — optimize what works, retire what does not.",
+    label: "Compound",
+    detail: "Tighten what works; cut what does not. No heroics required.",
   },
 ] as const
 
@@ -35,10 +35,10 @@ const industries = [
 ] as const
 
 const metrics = [
-  { value: "9+", label: "Years Experience" },
-  { value: "50+", label: "Brands" },
-  { value: "AI-First", label: "Systems" },
-  { value: "Growth-Led", label: "Execution" },
+  { value: "9+", label: "Years in market" },
+  { value: "50+", label: "Organizations" },
+  { value: "Unified", label: "Strategy to stack" },
+  { value: "Senior", label: "Principal involvement" },
 ] as const
 
 export function HowWeWorkSection() {
@@ -51,12 +51,11 @@ export function HowWeWorkSection() {
               Method
             </p>
             <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-              How we work
+              How engagements run
             </h2>
           </div>
           <p className="max-w-md text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-base md:leading-relaxed">
-            Diagnose → Strategize → Build → Scale. A linear rhythm with
-            executive-grade clarity.
+            Frame → Thesis → Install → Compound. Clear stages. No theater.
           </p>
         </header>
 
@@ -126,7 +125,7 @@ export function IndustriesSection() {
             Sectors
           </p>
           <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-            Industries we elevate
+            Where we deploy depth
           </h2>
         </header>
 
@@ -176,17 +175,17 @@ export function FinalCtaSection() {
 
         <div className="relative z-10">
           <h2 className="text-balance text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-            Need clarity before scaling?
+            Ready when you are.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg md:leading-relaxed">
-            Start a conversation with PxlBrief AI and explore how intelligent
-            systems, branding and growth strategy can accelerate your business.
+            Open a session. Bring a problem, a metric, or a deck. We map the
+            next move with the same discipline we bring behind closed doors.
           </p>
           <a
             href="#consulting-chat"
             className="mt-10 inline-flex min-h-[2.875rem] items-center justify-center rounded-[0.875rem] bg-primary px-9 py-3 text-[0.8125rem] font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18 active:scale-[0.99] md:text-sm"
           >
-            Open PxlBrief AI
+            Start a session
           </a>
         </div>
       </div>

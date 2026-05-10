@@ -70,25 +70,6 @@ const systems = [
   },
 ] as const
 
-const pillars = [
-  {
-    title: "Systems-first strategy",
-    line: "We design for how work actually flows — not slide decks that age in a week.",
-  },
-  {
-    title: "AI + human intelligence",
-    line: "Automation where it earns trust; judgment where stakes are real.",
-  },
-  {
-    title: "Scalable growth infrastructure",
-    line: "Build channels and creative as repeatable machinery, not hero projects.",
-  },
-  {
-    title: "Operational leverage",
-    line: "Every system should remove drag from selling, servicing and scaling.",
-  },
-] as const
-
 export function StrategicSystemsSection() {
   return (
     <section className="relative px-4 py-24 md:py-32">
@@ -101,11 +82,11 @@ export function StrategicSystemsSection() {
             Systems
           </p>
           <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-            Strategic Systems We Help Build
+            Architectures we stand behind
           </h2>
           <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg">
-            Not feature lists — operating systems your team can run. Each build
-            ties narrative, data and automation into one coherent stack.
+            Operating patterns your team can run—narrative, instrumentation, and
+            automation in one stack, not three competing roadmaps.
           </p>
         </header>
 
@@ -130,19 +111,19 @@ export function StrategicSystemsSection() {
                 <dl className="space-y-3.5 text-[0.8125rem] leading-relaxed md:text-sm">
                   <div>
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
-                      Challenge
+                      Constraint
                     </dt>
                     <dd className="text-muted-foreground/90">{item.challenge}</dd>
                   </div>
                   <div>
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-primary/80">
-                      Approach
+                      Move
                     </dt>
                     <dd className="text-foreground/88">{item.approach}</dd>
                   </div>
                   <div>
                     <dt className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/75">
-                      Impact
+                      Outcome
                     </dt>
                     <dd className="text-muted-foreground/90">{item.impact}</dd>
                   </div>
@@ -150,32 +131,6 @@ export function StrategicSystemsSection() {
               </div>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-export function HowPxlBriefThinksSection() {
-  return (
-    <section className="relative border-t border-hairline px-4 pb-24 pt-10 md:pb-28 md:pt-12">
-      <div className="relative mx-auto max-w-6xl">
-        <div className="rounded-[1.25rem] border border-hairline bg-panel-deep/80 p-6 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl md:p-8">
-          <h2 className="text-center text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85 md:text-left">
-            How PxlBrief Thinks
-          </h2>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {pillars.map((p) => (
-              <div key={p.title} className="text-center lg:text-left">
-                <h3 className="text-sm font-semibold tracking-tight text-foreground md:text-[0.9375rem]">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/85">
-                  {p.line}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
