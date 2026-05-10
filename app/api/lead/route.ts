@@ -9,6 +9,7 @@ import type { LeadData } from "@/lib/lead-data"
 import {
   mergeLeadDataIntoConversationSnapshot,
 } from "@/lib/lead-submit"
+import { generateStrategicBrief } from "@/lib/strategic-brief"
 import {
   buildLeadEnquiryEmailHtml,
   buildLeadEnquiryEmailText,
@@ -221,6 +222,20 @@ export async function POST(req: Request) {
 
     const transcriptExcerpt = transcript.slice(0, 4500)
 
+    const strategicBrief = await generateStrategicBrief({
+      messages: raw.data.messages ?? [],
+      transcript,
+      leadData: ld,
+      intelligence: {
+        businessVertical: intelligence.businessVertical,
+        businessStage: intelligence.businessStage,
+        currentChallenge: intelligence.currentChallenge,
+        servicesInterested: intelligence.servicesInterested,
+      },
+      professionalSummary: profSummary,
+      serviceRecommendation: raw.data.serviceRecommendation ?? null,
+    })
+
     const emailInput = {
       intelligence,
       leadData: ld,
@@ -232,6 +247,7 @@ export async function POST(req: Request) {
       submittedAt: submittedAtDate,
       attachmentsLine: filesLine,
       serviceRecommendation: raw.data.serviceRecommendation,
+      strategicBrief,
     }
 
     const htmlBody = buildLeadEnquiryEmailHtml(emailInput)
@@ -311,8 +327,7 @@ export async function POST(req: Request) {
 
     return Response.json({
       ok: true,
-      leadScore: intelligence.leadScore,
-      subjectAccent: intelligence.subjectAccent,
+      strategicBrief,
     })
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unexpected error"
