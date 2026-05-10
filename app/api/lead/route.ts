@@ -13,13 +13,14 @@ import {
   buildLeadEnquiryEmailHtml,
   buildLeadEnquiryEmailText,
 } from "@/lib/lead-email-html"
+import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 import { PUBLIC_SUPPORT_EMAIL_MESSAGE } from "@/lib/public-errors"
 import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
 
 export const maxDuration = 60
 
-const LEAD_TO_EMAIL = "info@pxlbrief.com"
+const LEAD_TO_EMAIL = SITE_CONTACT_EMAIL
 
 const chatMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),

@@ -17,7 +17,6 @@ export default function Home() {
       <HeroSection />
       <CredibilityStrip />
       <StrategicSystemsWeBuildSection />
-      {/* Phase 3: mounted client section — verify in DOM as #strategic-case-intelligence */}
       <StrategicCaseIntelligenceSection />
       <ServicesGrid />
       <StrategicSystemsSection />

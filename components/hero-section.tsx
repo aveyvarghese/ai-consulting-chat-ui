@@ -18,13 +18,11 @@ import {
   sanitizeConversationStateForChat,
   type ConversationStatePayload,
 } from "@/lib/conversation-state"
-import type { LeadIntelligenceResult } from "@/lib/lead-intelligence"
 import {
   createInitialLeadData,
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
-import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 import {
   AnalyticsEvent,
   trackAnalyticsEvent,
@@ -95,27 +93,6 @@ function uploadButtonLabel(messages: Message[]): string {
   return "Share Brief / Reference"
 }
 
-function shouldAutoPrepareLeadIntel(
-  state: ConversationStatePayload,
-  messageCount: number
-): boolean {
-  if (state.visitorType === "unknown") return false
-  if (messageCount < 4) return false
-  if (
-    state.visitorType === "potential_client" &&
-    state.potentialClientStage >= 3
-  )
-    return true
-  if (state.visitorType === "job_seeker" && state.name && state.role)
-    return true
-  if (
-    state.visitorType === "vendor" &&
-    (state.company.trim().length > 0 || state.role.trim().length > 0)
-  )
-    return true
-  return messageCount >= 10
-}
-
 const placeholderPrompts = [
   "Where is operational drag hiding?",
   "Map our automation architecture.",
@@ -160,24 +137,14 @@ export function HeroSection() {
   const [conversationState, setConversationState] =
     useState<ConversationStatePayload>(createInitialConversationState)
   const [leadData, setLeadData] = useState<LeadData>(createInitialLeadData)
-  const [leadIntel, setLeadIntel] = useState<LeadIntelligenceResult | null>(
-    null
-  )
-  const [leadPrepBusy, setLeadPrepBusy] = useState(false)
   const [leadSubmitBusy, setLeadSubmitBusy] = useState(false)
   const [leadSubmitMessage, setLeadSubmitMessage] = useState<string | null>(
     null
   )
   const [enquirySubmitSuccess, setEnquirySubmitSuccess] = useState(false)
-  const leadPrepFingerprintRef = useRef<string>("")
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
-
-  const conversationReadyForLeadPrep = useMemo(
-    () => shouldAutoPrepareLeadIntel(conversationState, messages.length),
-    [conversationState, messages.length]
-  )
 
   const attachmentUploadLabel = useMemo(() => {
     switch (conversationState.visitorType) {
@@ -238,64 +205,6 @@ export function HeroSection() {
     chatOpenedTrackedRef.current = true
     trackAnalyticsEvent(AnalyticsEvent.CHAT_OPENED)
   }, [hasMessages])
-
-  useEffect(() => {
-    console.log("Lead Data:", leadData)
-  }, [leadData])
-
-  useEffect(() => {
-    if (!hasMessages || !conversationReadyForLeadPrep) return
-
-    const fingerprint = [
-      messages.length,
-      conversationState.potentialClientStage,
-      conversationState.visitorType,
-      conversationState.businessVertical.slice(0, 40),
-      conversationState.currentChallenge.slice(0, 40),
-      conversationState.uploadedFileName,
-      messages[messages.length - 1]?.id ?? "",
-    ].join("|")
-
-    if (fingerprint === leadPrepFingerprintRef.current) return
-
-    const controller = new AbortController()
-    const timer = window.setTimeout(async () => {
-      leadPrepFingerprintRef.current = fingerprint
-      setLeadPrepBusy(true)
-      try {
-        const res = await fetch("/api/lead/intelligence", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            snapshot: conversationState,
-            messages: messages.map((m) => ({
-              role: m.role,
-              content: m.content,
-            })),
-          }),
-          signal: controller.signal,
-        })
-        const data = await res.json()
-        if (!res.ok || data.error) return
-        if (data.skipped) return
-        if (data.intelligence) setLeadIntel(data.intelligence)
-      } catch {
-        /* aborted or network */
-      } finally {
-        setLeadPrepBusy(false)
-      }
-    }, 750)
-
-    return () => {
-      window.clearTimeout(timer)
-      controller.abort()
-    }
-  }, [
-    hasMessages,
-    conversationReadyForLeadPrep,
-    conversationState,
-    messages,
-  ])
 
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
@@ -394,11 +303,8 @@ export function HeroSection() {
     setConversationState(createInitialConversationState())
     setLeadData(createInitialLeadData())
     setAttachedFile(null)
-    setLeadIntel(null)
     setLeadSubmitMessage(null)
     setEnquirySubmitSuccess(false)
-    setLeadPrepBusy(false)
-    leadPrepFingerprintRef.current = ""
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -816,31 +722,18 @@ export function HeroSection() {
                 onChange={handleChatFileChange}
                 aria-label="Attach PDF or document"
               />
-              <div className="mb-3 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex min-w-0 justify-start">
-                  <button
-                    type="button"
-                    disabled={isLoading}
-                    onClick={() => chatFileInputRef.current?.click()}
-                    className="inline-flex min-h-11 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2.5 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
-                  >
-                    <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
-                    <span className="text-left leading-snug">
-                      {attachmentUploadLabel}
-                    </span>
-                  </button>
-                </div>
-                <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
-                  {(leadPrepBusy || leadIntel) &&
-                    conversationState.visitorType !== "unknown" && (
-                      <span
-                        className="text-[0.6875rem] font-medium text-primary/85 md:text-xs"
-                        aria-live="polite"
-                      >
-                        Context mapping active
-                      </span>
-                    )}
-                </div>
+              <div className="mb-3 flex min-w-0 justify-start">
+                <button
+                  type="button"
+                  disabled={isLoading}
+                  onClick={() => chatFileInputRef.current?.click()}
+                  className="inline-flex min-h-11 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2.5 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
+                >
+                  <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
+                  <span className="text-left leading-snug">
+                    {attachmentUploadLabel}
+                  </span>
+                </button>
               </div>
               {enquirySubmitSuccess ? (
                 <div
@@ -859,9 +752,8 @@ export function HeroSection() {
                           Thank you — your brief is in.
                         </p>
                         <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
-                          A principal will review your thread and context map, then
-                          follow up personally. Most replies land within one to two
-                          business days.
+                          A principal will review your thread and follow up personally.
+                          Most replies land within one to two business days.
                         </p>
                       </div>
                       <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/85 md:text-sm">
@@ -870,7 +762,6 @@ export function HeroSection() {
                         on.
                       </p>
                       <StrategicSessionBookingLink
-                        href={STRATEGY_CALL_BOOKING_URL}
                         source="hero_enquiry_success"
                         className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 motion-reduce:transition-colors"
                       >

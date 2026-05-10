@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/about",
   title: "About",
   description:
-    "About PxlBrief: an AI strategy consultant and AI consulting practice—AI consulting India and globally, AI automation consulting, Diagnose · Strategize · Build · Scale.",
+    "About PxlBrief: an AI strategy consultant and AI consulting practice—AI consulting India and globally, AI automation consulting, Diagnose · Design · Deploy.",
 })
 
 export default function AboutPage() {
@@ -52,17 +52,15 @@ export default function AboutPage() {
             Philosophy
           </h2>
           <p className="text-lg font-semibold tracking-tight text-foreground md:text-xl">
-            Diagnose. Strategize. Build. Scale.
+            Diagnose. Design. Deploy.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground/90 md:text-[0.9375rem]">
             <strong className="font-medium text-foreground/90">Diagnose</strong>{" "}
             — find leverage, not noise.{" "}
-            <strong className="font-medium text-foreground/90">Strategize</strong>{" "}
-            — one clear thesis and roadmap.{" "}
-            <strong className="font-medium text-foreground/90">Build</strong> — ship
-            creative and systems together.{" "}
-            <strong className="font-medium text-foreground/90">Scale</strong> —
-            compound what works, cut what does not.
+            <strong className="font-medium text-foreground/90">Design</strong>{" "}
+            — architecture, ownership, and metrics.{" "}
+            <strong className="font-medium text-foreground/90">Deploy</strong> —
+            systems your operators run, measured and governed.
           </p>
         </div>
 
