@@ -7,6 +7,7 @@ import type { ConversationStatePayload } from "@/lib/conversation-state"
 import type { LeadData } from "@/lib/lead-data"
 import type { LeadIntelligenceResult } from "@/lib/lead-intelligence"
 import { VISITOR_PUBLIC_LABEL } from "@/lib/lead-intelligence"
+import type { PublicServiceRecommendation } from "@/lib/service-routing"
 
 export interface LeadSummaryContext {
   businessVertical: string
@@ -122,8 +123,12 @@ export function toCrmPayload(
 
 function fallbackProfessionalSummary(
   leadData: LeadData,
-  ctx: LeadSummaryContext
+  ctx: LeadSummaryContext,
+  serviceRecommendation?: PublicServiceRecommendation | null
 ): string {
+  const routing =
+    serviceRecommendation &&
+    `Session routing: ${serviceRecommendation.directionLabel}. ${serviceRecommendation.whyItMatters} ${serviceRecommendation.suggestedNextStep}`
   const parts = [
     `${visitorLabel(leadData.visitorType)} enquiry.`,
     leadData.company.trim() &&
@@ -136,9 +141,14 @@ function fallbackProfessionalSummary(
       `Digital presence shared: ${[leadData.website, leadData.instagram].filter(Boolean).join(" · ")}.`,
     (leadData.email || leadData.phone) &&
       `Contact on file: ${[leadData.email, leadData.phone].filter(Boolean).join(" · ")}.`,
+    routing,
     `Next step: internal review and outreach.`,
   ].filter(Boolean) as string[]
   return parts.join(" ").slice(0, 1200)
+}
+
+export type LeadSummaryExtras = {
+  serviceRecommendation?: PublicServiceRecommendation | null
 }
 
 /**
@@ -147,7 +157,8 @@ function fallbackProfessionalSummary(
 export async function generateProfessionalLeadSummary(
   messages: { role: string; content: string }[],
   leadData: LeadData,
-  ctx: LeadSummaryContext
+  ctx: LeadSummaryContext,
+  extras?: LeadSummaryExtras
 ): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY
   const transcript = messages
@@ -157,11 +168,14 @@ export async function generateProfessionalLeadSummary(
     .join("\n")
     .slice(0, 10000)
 
+  const routing = extras?.serviceRecommendation ?? null
+
   if (!apiKey) {
-    return fallbackProfessionalSummary(leadData, ctx)
+    return fallbackProfessionalSummary(leadData, ctx, routing)
   }
 
-  const system = `You write internal CRM lead summaries for PxlBrief (consulting / growth / AI). Output a single concise professional paragraph (5–8 sentences max). No bullet points. No quoted transcript. Do not invent facts not supported by the structured fields or chat. Summarise: what they need, situation, urgency, and recommended internal next step. Plain text only.`
+  const system = `You write internal CRM lead summaries for PxlBrief (consulting / growth / AI). Output a single concise professional paragraph (5–8 sentences max). No bullet points. No quoted transcript. Do not invent facts not supported by the structured fields or chat. Summarise: what they need, situation, urgency, and recommended internal next step. Plain text only.
+If sessionRouting is present, weave that direction naturally into the narrative (do not describe it as an algorithm, score, or automated classification).`
 
   const userPayload = {
     structured: {
@@ -177,6 +191,13 @@ export async function generateProfessionalLeadSummary(
       businessStage: ctx.businessStage,
       notes: leadData.notes,
     },
+    sessionRouting: routing
+      ? {
+          direction: routing.directionLabel,
+          rationale: routing.whyItMatters,
+          suggestedVisitorStep: routing.suggestedNextStep,
+        }
+      : null,
     conversationExcerpt: transcript,
   }
 
@@ -200,13 +221,13 @@ export async function generateProfessionalLeadSummary(
         max_tokens: 450,
       }),
     })
-    if (!res.ok) return fallbackProfessionalSummary(leadData, ctx)
+    if (!res.ok) return fallbackProfessionalSummary(leadData, ctx, routing)
     const data = await res.json()
     const text = data.choices?.[0]?.message?.content?.trim()
-    if (!text) return fallbackProfessionalSummary(leadData, ctx)
+    if (!text) return fallbackProfessionalSummary(leadData, ctx, routing)
     return text.slice(0, 2500)
   } catch {
-    return fallbackProfessionalSummary(leadData, ctx)
+    return fallbackProfessionalSummary(leadData, ctx, routing)
   }
 }
 

@@ -4,6 +4,7 @@
 
 import type { LeadData } from "@/lib/lead-data"
 import type { LeadIntelligenceResult } from "@/lib/lead-intelligence"
+import type { PublicServiceRecommendation } from "@/lib/service-routing"
 import { VISITOR_PUBLIC_LABEL } from "@/lib/lead-intelligence"
 
 /** Approximates default Executive Sunrise: warm paper, ink, ember CTA, blue accent */
@@ -71,6 +72,8 @@ export interface LeadEnquiryEmailInput {
   submittedSource: string
   submittedAt: Date
   attachmentsLine: string
+  /** Visitor-facing routing card mirrored for the team (no scores). */
+  serviceRecommendation?: PublicServiceRecommendation | null
 }
 
 function first(...vals: string[]): string {
@@ -88,6 +91,7 @@ export function buildLeadEnquiryEmailHtml(input: LeadEnquiryEmailInput): string 
     submittedSource,
     submittedAt,
     attachmentsLine,
+    serviceRecommendation,
   } = input
 
   const visitorLabel =
@@ -135,10 +139,24 @@ export function buildLeadEnquiryEmailHtml(input: LeadEnquiryEmailInput): string 
 
   const strategicCell = `${scorePill(f.leadScore)}<span style="display:inline-block;margin-left:10px;font-size:14px;font-weight:400;color:${C.muted};">${esc(f.leadScoreRationale)}</span>`
 
+  const routingRows =
+    serviceRecommendation &&
+    serviceRecommendation.directionLabel.trim()
+      ? [
+          row("Session routing — direction", serviceRecommendation.directionLabel),
+          row("Session routing — context", serviceRecommendation.whyItMatters),
+          row(
+            "Session routing — next step",
+            serviceRecommendation.suggestedNextStep
+          ),
+        ].join("")
+      : ""
+
   const bodyRows = [
     row("Business context", businessType || "—"),
     row("Key pain point", pain),
     row("Recommended service direction", serviceDirection),
+    routingRows,
     `<tr>
   <td style="padding:10px 14px 10px 0;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:${C.muted};vertical-align:top;width:168px;">Strategic priority</td>
   <td style="padding:10px 0;vertical-align:top;">${strategicCell}</td>
@@ -192,6 +210,7 @@ export function buildLeadEnquiryEmailText(input: LeadEnquiryEmailInput): string 
     submittedSource,
     submittedAt,
     attachmentsLine,
+    serviceRecommendation,
   } = input
   const visitorLabel =
     VISITOR_PUBLIC_LABEL[f.visitorType as keyof typeof VISITOR_PUBLIC_LABEL] ??
@@ -222,6 +241,15 @@ export function buildLeadEnquiryEmailText(input: LeadEnquiryEmailInput): string 
     "RECOMMENDED SERVICE DIRECTION",
     f.servicesInterested.trim() || ld.service.trim() || "—",
     "",
+    ...(serviceRecommendation?.directionLabel.trim()
+      ? [
+          "SESSION ROUTING (from chat)",
+          `Direction: ${serviceRecommendation.directionLabel.trim()}`,
+          `Context: ${serviceRecommendation.whyItMatters.trim()}`,
+          `Suggested next step: ${serviceRecommendation.suggestedNextStep.trim()}`,
+          "",
+        ]
+      : []),
     "STRATEGIC PRIORITY",
     `Lead score: ${f.leadScore}`,
     f.leadScoreRationale.trim() || "—",
