@@ -127,6 +127,9 @@ const suggestionChips: { label: string; prompt: string }[] = [
   { label: "Brand positioning", prompt: "How should I position my brand?" },
 ]
 
+const VISITOR_FRIENDLY_ERROR =
+  "Something went wrong. Please try again or email info@pxlbrief.com."
+
 interface Message {
   id: string
   role: "user" | "assistant"
@@ -444,9 +447,8 @@ export function HeroSection() {
         throw new Error("No reply received from the assistant")
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to get a response"
-      setError(errorMessage)
+      console.warn("Chat response failed", err)
+      setError(VISITOR_FRIENDLY_ERROR)
       setLeadData((prev) =>
         deriveLeadData(prev, updatedMessages, nextConversationState)
       )
@@ -646,10 +648,9 @@ export function HeroSection() {
         "Your enquiry has been submitted successfully. Our team will review it and connect shortly."
       )
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to submit enquiry"
-      setIntakeError(message)
-      setLeadSubmitMessage(message)
+      console.warn("Premium intake submission failed", err)
+      setIntakeError(VISITOR_FRIENDLY_ERROR)
+      setLeadSubmitMessage(VISITOR_FRIENDLY_ERROR)
       setIntakeStatus("ready")
     } finally {
       setLeadSubmitBusy(false)

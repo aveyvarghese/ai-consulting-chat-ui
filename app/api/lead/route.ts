@@ -14,12 +14,13 @@ import {
   mergeLeadDataIntoConversationSnapshot,
   type PremiumSalesIntake,
 } from "@/lib/lead-submit"
-import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
 
 export const maxDuration = 60
 
 const LEAD_TO_EMAIL = "info@pxlbrief.com"
+const SUBMISSION_ERROR_MESSAGE =
+  "Something went wrong. Please try again or email info@pxlbrief.com."
 
 const chatMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
@@ -136,21 +137,22 @@ export async function POST(req: Request) {
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {
       return Response.json(
-        { error: "RESEND_API_KEY is not configured" },
+        { error: SUBMISSION_ERROR_MESSAGE },
         { status: 500 }
       )
     }
 
-    const from = process.env.RESEND_FROM_EMAIL?.trim()
+    const from =
+      process.env.RESEND_FROM_EMAIL?.trim() ||
+      process.env.LEAD_EMAIL?.trim() ||
+      LEAD_TO_EMAIL
     if (!from) {
       return Response.json(
-        {
-          error:
-            "RESEND_FROM_EMAIL is not configured (verified sender address required)",
-        },
+        { error: SUBMISSION_ERROR_MESSAGE },
         { status: 500 }
       )
     }
+    const to = process.env.LEAD_EMAIL?.trim() || LEAD_TO_EMAIL
 
     const raw = submitBodySchema.safeParse(await req.json())
     if (!raw.success) {
@@ -298,54 +300,18 @@ export async function POST(req: Request) {
     const resend = new Resend(apiKey)
     const { error } = await resend.emails.send({
       from,
-      to: LEAD_TO_EMAIL,
+      to,
       subject,
       text: textBody,
       ...(attachments.length ? { attachments } : {}),
     })
 
     if (error) {
-      return Response.json(
-        { error: error.message || "Failed to send email" },
-        { status: 502 }
-      )
-    }
-
-    try {
-      await appendLeadToGoogleSheets({
-        submittedAt,
-        visitorType: intelligence.visitorType,
-        leadScore: intelligence.leadScore,
-        name: firstNonEmpty(emailLeadData.name, intelligence.name),
-        company: firstNonEmpty(emailLeadData.company, intelligence.company),
-        businessVertical: firstNonEmpty(
-          intelligence.businessVertical,
-          normalized.businessVertical
-        ),
-        serviceNeeded: firstNonEmpty(
-          preferredService,
-          intelligence.servicesInterested
-        ),
-        phoneOrWhatsApp: firstNonEmpty(emailLeadData.phone, intelligence.whatsApp),
-        email: firstNonEmpty(emailLeadData.email, intelligence.email),
-        website: firstNonEmpty(emailLeadData.website, intake?.websiteInstagram ?? ""),
-        instagram: emailLeadData.instagram.trim(),
-        uploadedFileName: firstNonEmpty(
-          attachmentNames.join(", "),
-          intelligence.uploadedFileName
-        ),
-        conversationSummary: firstNonEmpty(
-          aiSummary,
-          intelligence.consultantSummary,
-          normalized.conversationSummary,
-          transcript
-        ),
-      })
-    } catch (sheetsError) {
       console.warn(
-        "Google Sheets CRM logging failed",
-        sheetsError instanceof Error ? sheetsError.message : sheetsError
+        "Resend lead submission failed",
+        error.message || "Unknown Resend error"
       )
+      return Response.json({ error: SUBMISSION_ERROR_MESSAGE }, { status: 502 })
     }
 
     return Response.json({
@@ -354,7 +320,7 @@ export async function POST(req: Request) {
       subjectAccent: intelligence.subjectAccent,
     })
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Unexpected error"
-    return Response.json({ error: message }, { status: 500 })
+    console.warn("Lead submission failed", e)
+    return Response.json({ error: SUBMISSION_ERROR_MESSAGE }, { status: 500 })
   }
 }
