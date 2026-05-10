@@ -64,6 +64,24 @@ export interface StrategicBrief {
   estimatedImpactAreas: string[]
 }
 
+export interface StrategicEngagementOption {
+  title: string
+  outcome: string
+  estimatedTimeline: string
+  idealBusinessStage: string
+  whyRecommended: string
+  impactAreas: string[]
+  scarcityNote: string
+  isRecommended: boolean
+}
+
+export interface StrategicEngagementLayer {
+  isReady: boolean
+  recommendedNextStep: string
+  schedulingPositioning: string
+  options: StrategicEngagementOption[]
+}
+
 function corpusFrom(
   state: ConversationStatePayload,
   messages: MessageLike[],
@@ -616,6 +634,231 @@ function impactAreas(diagnosis: AiDiagnosis, corpus: string): string[] {
       "conversion",
     ].filter(Boolean) as string[]),
   ].slice(0, 5)
+}
+
+function strategicScoreValue(
+  intelligence: StrategicIntelligence,
+  label: string
+): number {
+  return intelligence.scores.find((score) => score.label === label)?.value ?? 50
+}
+
+function option(
+  title: string,
+  outcome: string,
+  estimatedTimeline: string,
+  idealBusinessStage: string,
+  whyRecommended: string,
+  impactAreas: string[],
+  scarcityNote: string
+): Omit<StrategicEngagementOption, "isRecommended"> {
+  return {
+    title,
+    outcome,
+    estimatedTimeline,
+    idealBusinessStage,
+    whyRecommended,
+    impactAreas,
+    scarcityNote,
+  }
+}
+
+function engagementOptionsFor(
+  diagnosis: AiDiagnosis,
+  brief: StrategicBrief
+): Omit<StrategicEngagementOption, "isRecommended">[] {
+  const industry = diagnosis.industry.toLowerCase()
+  const type = diagnosis.businessType.toLowerCase()
+  const stage = diagnosis.businessStage.toLowerCase()
+
+  if (/enterprise|networked|dealer|distribution/.test(`${industry} ${type}`)) {
+    return [
+      option(
+        "AI Workflow Audit",
+        "Identify workflow leakage, manual handoffs and decision bottlenecks across the operating model.",
+        "1-2 weeks",
+        "Enterprise teams with active process complexity",
+        "The diagnosis points to systems and workflow clarity as the highest-leverage first move.",
+        ["automation savings", "operational clarity", "lead efficiency"],
+        "Best suited for teams actively scaling operational capacity."
+      ),
+      option(
+        "Automation Consulting",
+        "Design automation logic for CRM, routing, follow-up and internal execution layers.",
+        "3-6 weeks",
+        "Growth teams with repeatable manual processes",
+        "Automation potential appears meaningful once the first system architecture is defined.",
+        ["automation savings", "operational clarity", "conversion improvement"],
+        "Typically implemented during growth transition phases."
+      ),
+      option(
+        "Strategic Systems Architecture",
+        "Map the AI, CRM, funnel and reporting architecture needed for scalable decision-making.",
+        "4-8 weeks",
+        "Multi-team businesses preparing to scale systems",
+        "The recommended direction requires connected infrastructure rather than isolated tactics.",
+        ["operational clarity", "revenue growth", "automation savings"],
+        "High-leverage for businesses moving from fragmented tools to integrated systems."
+      ),
+    ]
+  }
+
+  if (/d2c|ecommerce|commerce|shopify|fashion|apparel/.test(`${industry} ${type}`)) {
+    return [
+      option(
+        "Performance Scale Plan",
+        "Clarify acquisition economics, channel sequencing and creative-testing priorities.",
+        "2-4 weeks",
+        "Operating brands ready to improve acquisition quality",
+        "The brief suggests performance, funnel and commercial capture need a cleaner growth thesis.",
+        ["revenue growth", "lead efficiency", "conversion improvement"],
+        "Best suited for teams actively scaling paid or organic acquisition."
+      ),
+      option(
+        "Retention System Design",
+        "Build repeat-purchase, CRM and lifecycle workflows around customer behaviour.",
+        "3-5 weeks",
+        "D2C brands with early traction or repeat-purchase potential",
+        "Retention can protect growth efficiency once acquisition paths start improving.",
+        ["retention", "automation savings", "revenue growth"],
+        "Typically valuable when a brand is entering its next growth transition."
+      ),
+      option(
+        "Conversion Optimization Program",
+        "Improve landing pages, product journeys, proof architecture and funnel measurement.",
+        "2-5 weeks",
+        "Brands with traffic but uneven conversion quality",
+        "The diagnosis indicates funnel clarity and conversion architecture may be limiting upside.",
+        ["conversion improvement", "revenue growth", "positioning"],
+        "High-leverage when traffic exists but buying intent is not converting cleanly."
+      ),
+    ]
+  }
+
+  if (/pre-launch|early|startup|initial|founder/.test(`${stage} ${type}`)) {
+    return [
+      option(
+        "AI Growth Sprint",
+        "Define the first AI-assisted growth system and validate the highest-leverage execution lane.",
+        "2-3 weeks",
+        "Founder-led startups seeking focused momentum",
+        "The brief suggests the business needs a sharp first system before broader execution.",
+        ["revenue growth", "operational clarity", "automation savings"],
+        "High-leverage for founder-led businesses before they overbuild."
+      ),
+      option(
+        "Brand & Funnel Setup",
+        "Shape positioning, proof, landing flow and enquiry capture into one coherent launch layer.",
+        "3-6 weeks",
+        "Early brands preparing to enter market",
+        "The diagnosis points to clarity and conversion foundations as important before scale.",
+        ["positioning", "conversion improvement", "lead efficiency"],
+        "Best suited before a brand starts investing heavily in acquisition."
+      ),
+      option(
+        "Founder Strategy Session",
+        "A focused advisory session to clarify priorities, constraints and execution sequence.",
+        "60-90 minutes",
+        "Founders needing senior strategic direction",
+        "The conversation has enough signal for a high-quality strategic review without over-scoping.",
+        ["operational clarity", "revenue growth", "positioning"],
+        "Ideal when the next decision matters more than a long engagement."
+      ),
+    ]
+  }
+
+  return [
+    option(
+      "AI Growth Sprint",
+      "Prioritise the first growth system and turn the diagnosis into an execution-ready sprint.",
+      "2-4 weeks",
+      brief.recommendedPriority === "Scale stage"
+        ? "Scaling businesses"
+        : "Founder-led or growth-transition businesses",
+      "The brief indicates a focused growth system would create more leverage than scattered tactics.",
+      ["revenue growth", "lead efficiency", "operational clarity"],
+      "Best suited for teams actively moving from exploration to execution."
+    ),
+    option(
+      "Brand & Funnel Setup",
+      "Align positioning, website/funnel structure and enquiry capture into a premium conversion layer.",
+      "3-6 weeks",
+      "Brands strengthening market trust and conversion",
+      "The diagnosis suggests positioning and funnel clarity can improve commercial outcomes.",
+      ["positioning", "conversion improvement", "revenue growth"],
+      "Typically implemented during brand or growth transition phases."
+    ),
+    option(
+      "Automation Consulting",
+      "Design CRM, workflow and AI-assisted follow-up systems around the customer journey.",
+      "3-6 weeks",
+      "Teams with repeatable sales or service workflows",
+      "Automation opportunities are visible in the recommended service stack and system diagnosis.",
+      ["automation savings", "operational clarity", "lead efficiency"],
+      "High-leverage for teams where manual handoffs slow growth."
+    ),
+  ]
+}
+
+function recommendedEngagementIndex(
+  options: Omit<StrategicEngagementOption, "isRecommended">[],
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence,
+  brief: StrategicBrief
+): number {
+  const opportunity = strategicScoreValue(intelligence, "Opportunity Score")
+  const automation = strategicScoreValue(intelligence, "Automation Potential Score")
+  const readiness = strategicScoreValue(intelligence, "Growth Readiness Score")
+
+  if (diagnosis.urgencyLevel === "High" && opportunity >= 70) return 0
+  if (automation >= 72) {
+    const automationIndex = options.findIndex((item) =>
+      /automation|workflow|systems architecture/i.test(item.title)
+    )
+    if (automationIndex >= 0) return automationIndex
+  }
+  if (readiness < 55 || brief.recommendedPriority === "Foundational") {
+    const strategyIndex = options.findIndex((item) =>
+      /strategy|setup|sprint/i.test(item.title)
+    )
+    if (strategyIndex >= 0) return strategyIndex
+  }
+  if (brief.recommendedPriority === "Scale stage") {
+    const scaleIndex = options.findIndex((item) =>
+      /scale|optimization|architecture/i.test(item.title)
+    )
+    if (scaleIndex >= 0) return scaleIndex
+  }
+  return 0
+}
+
+export function deriveStrategicEngagementLayer(
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence,
+  brief: StrategicBrief
+): StrategicEngagementLayer {
+  const baseOptions = engagementOptionsFor(diagnosis, brief)
+  const recommendedIndex = recommendedEngagementIndex(
+    baseOptions,
+    diagnosis,
+    intelligence,
+    brief
+  )
+  const options = baseOptions.map((item, index) => ({
+    ...item,
+    isRecommended: index === recommendedIndex,
+  }))
+  const recommended = options[recommendedIndex] ?? options[0]
+
+  return {
+    isReady: brief.isReady,
+    recommendedNextStep: recommended
+      ? `Request a strategic call to review ${recommended.title.toLowerCase()} fit.`
+      : "Request a strategic call to review the operating diagnosis.",
+    schedulingPositioning:
+      "Executive consultation placeholder: a focused strategic review with founder-level advisory framing before scope or implementation.",
+    options,
+  }
 }
 
 export function deriveStrategicBrief(

@@ -35,8 +35,10 @@ import {
 import {
   deriveAiDiagnosis,
   deriveStrategicBrief,
+  deriveStrategicEngagementLayer,
   deriveStrategicIntelligence,
   type AiDiagnosis,
+  type StrategicEngagementLayer,
   type StrategicBrief,
   type StrategicIntelligence,
 } from "@/lib/ai-diagnosis"
@@ -544,6 +546,118 @@ function StrategicBriefDocument({
   )
 }
 
+function StrategicEngagementCards({
+  engagement,
+  onRequestCall,
+}: {
+  engagement: StrategicEngagementLayer
+  onRequestCall: () => void
+}) {
+  if (!engagement.isReady) return null
+
+  return (
+    <section className="mt-6 overflow-hidden rounded-[1.15rem] border border-white/[0.085] bg-gradient-to-br from-card/[0.52] via-black/[0.16] to-primary/[0.055] p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div>
+          <p className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/86">
+            Strategic Engagement Layer
+          </p>
+          <h4 className="text-base font-semibold tracking-[-0.015em] text-foreground">
+            Advisory paths worth considering
+          </h4>
+        </div>
+        <span className="hidden rounded-full border border-primary/16 bg-primary/[0.06] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.12em] text-primary/82 sm:inline-flex">
+          Consultative
+        </span>
+      </div>
+
+      <div className="mb-4 rounded-[0.95rem] border border-primary/14 bg-primary/[0.055] p-3">
+        <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
+          Recommended next step
+        </p>
+        <p className="text-[0.8125rem] leading-relaxed text-foreground/90">
+          {engagement.recommendedNextStep}
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {engagement.options.map((option) => (
+          <article
+            key={option.title}
+            className={`group rounded-[1rem] border p-3.5 transition-[transform,border-color,background-color,box-shadow] duration-300 hover:-translate-y-0.5 ${
+              option.isRecommended
+                ? "border-primary/24 bg-primary/[0.065] shadow-[0_20px_48px_-34px_oklch(0.75_0.12_180/0.9)]"
+                : "border-white/[0.075] bg-white/[0.035] hover:border-primary/22 hover:bg-primary/[0.045]"
+            }`}
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <h5 className="text-sm font-semibold tracking-tight text-foreground">
+                  {option.title}
+                </h5>
+                <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground/86">
+                  {option.outcome}
+                </p>
+              </div>
+              {option.isRecommended && (
+                <span className="shrink-0 rounded-full border border-primary/18 bg-primary/[0.075] px-2 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-primary/84">
+                  Suggested
+                </span>
+              )}
+            </div>
+
+            <div className="mb-3 grid gap-2 sm:grid-cols-2">
+              <DiagnosisField label="Estimated timeline" value={option.estimatedTimeline} />
+              <DiagnosisField label="Ideal stage" value={option.idealBusinessStage} />
+            </div>
+
+            <div className="mb-3 rounded-[0.85rem] border border-white/[0.07] bg-black/20 p-3">
+              <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/66">
+                Why this is recommended
+              </p>
+              <p className="text-[0.75rem] leading-relaxed text-muted-foreground/88">
+                {option.whyRecommended}
+              </p>
+            </div>
+
+            <div className="mb-3 flex flex-wrap gap-2">
+              {option.impactAreas.map((area) => (
+                <span
+                  key={area}
+                  className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[0.68rem] font-medium text-foreground/82"
+                >
+                  {area}
+                </span>
+              ))}
+            </div>
+
+            <p className="text-[0.72rem] leading-relaxed text-muted-foreground/72">
+              {option.scarcityNote}
+            </p>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-[1rem] border border-white/[0.075] bg-black/20 p-3.5">
+        <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/82">
+          Executive consultation placeholder
+        </p>
+        <p className="text-[0.75rem] leading-relaxed text-muted-foreground/86">
+          {engagement.schedulingPositioning}
+        </p>
+        <button
+          type="button"
+          onClick={onRequestCall}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-[0.9rem] border border-primary/20 bg-primary/[0.12] px-4 py-3 text-[0.8125rem] font-semibold tracking-tight text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/36 hover:bg-primary/[0.16] active:scale-[0.99]"
+        >
+          <Send className="h-4 w-4 text-primary" />
+          Request Strategic Call
+        </button>
+      </div>
+    </section>
+  )
+}
+
 function ObservedSignalGrid({
   signals,
 }: {
@@ -710,16 +824,20 @@ function AiDiagnosisPanel({
   diagnosis,
   intelligence,
   brief,
+  engagement,
   isBriefGenerating,
   isAnalyzing,
   analysisLabel,
+  onRequestStrategicCall,
 }: {
   diagnosis: AiDiagnosis
   intelligence: StrategicIntelligence
   brief: StrategicBrief
+  engagement: StrategicEngagementLayer
   isBriefGenerating: boolean
   isAnalyzing: boolean
   analysisLabel: string
+  onRequestStrategicCall: () => void
 }) {
   return (
     <aside className="relative overflow-hidden rounded-[1.25rem] border border-primary/18 bg-gradient-to-b from-card/[0.66] via-card/[0.42] to-black/[0.24] p-4 text-left shadow-[0_28px_72px_-36px_rgba(0,0,0,0.9),0_0_54px_-34px_oklch(0.75_0.12_180/0.9),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-2xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:p-4 xl:p-5">
@@ -840,6 +958,11 @@ function AiDiagnosisPanel({
           brief={brief}
           isGenerating={isBriefGenerating}
         />
+
+        <StrategicEngagementCards
+          engagement={engagement}
+          onRequestCall={onRequestStrategicCall}
+        />
       </div>
     </aside>
   )
@@ -932,6 +1055,16 @@ export function HeroSection() {
         leadIntel
       ),
     [aiDiagnosis, conversationState, messages, strategicIntelligence, leadIntel]
+  )
+
+  const strategicEngagement = useMemo(
+    () =>
+      deriveStrategicEngagementLayer(
+        aiDiagnosis,
+        strategicIntelligence,
+        strategicBrief
+      ),
+    [aiDiagnosis, strategicBrief, strategicIntelligence]
   )
 
   const analysisStatusLabel =
@@ -1819,9 +1952,11 @@ export function HeroSection() {
             diagnosis={aiDiagnosis}
             intelligence={strategicIntelligence}
             brief={strategicBrief}
+            engagement={strategicEngagement}
             isBriefGenerating={strategicBriefGenerating}
             isAnalyzing={isLoading || leadPrepBusy}
             analysisLabel={analysisStatusLabel}
+            onRequestStrategicCall={handleSubmitEnquiry}
           />
         </div>
       )}
