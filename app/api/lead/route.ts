@@ -8,9 +8,11 @@ import { normalizeConversationPayload } from "@/lib/conversation-state"
 import type { LeadData } from "@/lib/lead-data"
 import {
   formatIntelligenceTail,
+  formatPremiumIntakeSection,
   formatProfessionalSummarySection,
   formatStructuredEnquirySection,
   mergeLeadDataIntoConversationSnapshot,
+  type PremiumSalesIntake,
 } from "@/lib/lead-submit"
 import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
 import { z } from "zod"
@@ -42,12 +44,27 @@ const attachmentSchema = z.object({
   base64: z.string().max(6_000_000),
 })
 
+const intakeSchema = z.object({
+  fullName: z.string().max(500).optional().default(""),
+  companyName: z.string().max(500).optional().default(""),
+  email: z.string().max(320).optional().default(""),
+  phoneNumber: z.string().max(120).optional().default(""),
+  websiteInstagram: z.string().max(2000).optional().default(""),
+  budgetRange: z.string().max(120).optional().default(""),
+  preferredService: z.string().max(1000).optional().default(""),
+  additionalNotes: z.string().max(4000).optional().default(""),
+  aiSummary: z.string().max(1000).optional().default(""),
+  recommendedService: z.string().max(1000).optional().default(""),
+  opportunityLevel: z.string().max(120).optional().default(""),
+})
+
 const submitBodySchema = z.object({
   messages: z.array(chatMessageSchema).max(250).optional().default([]),
   snapshot: z.record(z.unknown()),
   leadData: leadDataSchema.optional(),
   professionalSummary: z.string().max(4000).optional().default(""),
   attachment: attachmentSchema.optional(),
+  intake: intakeSchema.optional(),
 })
 
 function transcriptFromMessages(
@@ -87,6 +104,31 @@ function resolveVisitorType(
 
 function firstNonEmpty(...values: string[]): string {
   return values.map((value) => value.trim()).find(Boolean) ?? ""
+}
+
+function normalizeIntake(
+  intake: z.infer<typeof intakeSchema> | undefined,
+  summaryFallback: string,
+  serviceFallback: string
+): PremiumSalesIntake | null {
+  if (!intake) return null
+  return {
+    fullName: intake.fullName.trim(),
+    companyName: intake.companyName.trim(),
+    email: intake.email.trim(),
+    phoneNumber: intake.phoneNumber.trim(),
+    websiteInstagram: intake.websiteInstagram.trim(),
+    budgetRange: intake.budgetRange.trim(),
+    preferredService: intake.preferredService.trim(),
+    additionalNotes: intake.additionalNotes.trim(),
+    aiSummary: firstNonEmpty(intake.aiSummary, summaryFallback),
+    recommendedService: firstNonEmpty(
+      intake.recommendedService,
+      intake.preferredService,
+      serviceFallback
+    ),
+    opportunityLevel: intake.opportunityLevel.trim(),
+  }
 }
 
 export async function POST(req: Request) {
@@ -161,6 +203,8 @@ export async function POST(req: Request) {
       potentialClientStage: normalized.potentialClientStage,
     }
 
+    const intakeRaw = raw.data.intake
+
     const ld: LeadData = leadData
       ? { ...leadData, visitorType: effectiveVisitor }
       : {
@@ -174,6 +218,40 @@ export async function POST(req: Request) {
           phone: normalized.whatsapp,
           notes: "",
         }
+
+    const preferredService = firstNonEmpty(
+      intakeRaw?.preferredService ?? "",
+      ld.service,
+      intelligence.servicesInterested
+    )
+    const aiSummary = firstNonEmpty(
+      intakeRaw?.aiSummary ?? "",
+      profSummary,
+      intelligence.consultantSummary
+    )
+    const intake = normalizeIntake(
+      intakeRaw,
+      aiSummary,
+      preferredService
+    )
+    const emailLeadData: LeadData = {
+      ...ld,
+      name: firstNonEmpty(intake?.fullName ?? "", ld.name, intelligence.name),
+      company: firstNonEmpty(
+        intake?.companyName ?? "",
+        ld.company,
+        intelligence.company
+      ),
+      email: firstNonEmpty(intake?.email ?? "", ld.email, intelligence.email),
+      phone: firstNonEmpty(
+        intake?.phoneNumber ?? "",
+        ld.phone,
+        intelligence.whatsApp
+      ),
+      website: firstNonEmpty(intake?.websiteInstagram ?? "", ld.website),
+      service: preferredService,
+      notes: firstNonEmpty(intake?.additionalNotes ?? "", ld.notes),
+    }
 
     const attachmentNames: string[] = []
     if (normalized.uploadedFileName.trim()) {
@@ -193,15 +271,14 @@ export async function POST(req: Request) {
     )
 
     const textBody = [
-      formatStructuredEnquirySection(ld, ctx),
-      "",
-      "ATTACHMENTS",
-      filesLine,
-      "",
-      formatProfessionalSummarySection(profSummary),
-      "",
+      formatStructuredEnquirySection(emailLeadData, ctx),
+      formatPremiumIntakeSection(intake),
+      ["ATTACHMENTS", filesLine].join("\n"),
+      formatProfessionalSummarySection(aiSummary),
       formatIntelligenceTail(intelligence, submittedAt),
-    ].join("\n")
+    ]
+      .filter((section) => section !== "")
+      .join("\n\n")
 
     const attachments: { filename: string; content: Buffer }[] = []
     if (raw.data.attachment?.base64 && raw.data.attachment.filename) {
@@ -239,23 +316,26 @@ export async function POST(req: Request) {
         submittedAt,
         visitorType: intelligence.visitorType,
         leadScore: intelligence.leadScore,
-        name: firstNonEmpty(ld.name, intelligence.name),
-        company: firstNonEmpty(ld.company, intelligence.company),
+        name: firstNonEmpty(emailLeadData.name, intelligence.name),
+        company: firstNonEmpty(emailLeadData.company, intelligence.company),
         businessVertical: firstNonEmpty(
           intelligence.businessVertical,
           normalized.businessVertical
         ),
-        serviceNeeded: firstNonEmpty(ld.service, intelligence.servicesInterested),
-        phoneOrWhatsApp: firstNonEmpty(ld.phone, intelligence.whatsApp),
-        email: firstNonEmpty(ld.email, intelligence.email),
-        website: ld.website.trim(),
-        instagram: ld.instagram.trim(),
+        serviceNeeded: firstNonEmpty(
+          preferredService,
+          intelligence.servicesInterested
+        ),
+        phoneOrWhatsApp: firstNonEmpty(emailLeadData.phone, intelligence.whatsApp),
+        email: firstNonEmpty(emailLeadData.email, intelligence.email),
+        website: firstNonEmpty(emailLeadData.website, intake?.websiteInstagram ?? ""),
+        instagram: emailLeadData.instagram.trim(),
         uploadedFileName: firstNonEmpty(
           attachmentNames.join(", "),
           intelligence.uploadedFileName
         ),
         conversationSummary: firstNonEmpty(
-          profSummary,
+          aiSummary,
           intelligence.consultantSummary,
           normalized.conversationSummary,
           transcript

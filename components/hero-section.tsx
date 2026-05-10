@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Paperclip,
   Send,
+  CheckCircle2,
 } from "lucide-react"
 import {
   createInitialConversationState,
@@ -23,6 +24,13 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
+import {
+  BUDGET_RANGE_OPTIONS,
+  PREFERRED_SERVICE_OPTIONS,
+  buildFallbackSalesSummary,
+  deriveRecommendedService,
+  estimateOpportunityLevel,
+} from "@/lib/intake-recommendation"
 
 const ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -130,6 +138,54 @@ interface ChatRequestMessage {
   content: string
 }
 
+type IntakeStatus = "idle" | "analysing" | "ready" | "submitting" | "success"
+
+interface IntakeFormState {
+  fullName: string
+  companyName: string
+  email: string
+  phoneNumber: string
+  websiteInstagram: string
+  budgetRange: string
+  preferredService: string
+  additionalNotes: string
+}
+
+function createEmptyIntakeForm(): IntakeFormState {
+  return {
+    fullName: "",
+    companyName: "",
+    email: "",
+    phoneNumber: "",
+    websiteInstagram: "",
+    budgetRange: "",
+    preferredService: "Growth Strategy",
+    additionalNotes: "",
+  }
+}
+
+function digitalPresenceFromLead(lead: LeadData): string {
+  return [lead.website.trim(), lead.instagram.trim()].filter(Boolean).join(" / ")
+}
+
+function splitDigitalPresence(value: string): Pick<LeadData, "website" | "instagram"> {
+  const parts = value
+    .split(/[,\n/]+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+  const instagram =
+    parts.find((part) => /(^@|instagram\.com)/i.test(part)) ??
+    (/^@|instagram\.com/i.test(value.trim()) ? value.trim() : "")
+  const website =
+    parts.find((part) => part !== instagram && /(?:https?:\/\/|www\.|[a-z0-9-]+\.[a-z]{2,})/i.test(part)) ??
+    (!instagram ? value.trim() : "")
+
+  return {
+    website,
+    instagram,
+  }
+}
+
 export function HeroSection() {
   const [inputValue, setInputValue] = useState("")
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -156,6 +212,14 @@ export function HeroSection() {
   const [leadSubmitMessage, setLeadSubmitMessage] = useState<string | null>(
     null
   )
+  const [isIntakeOpen, setIsIntakeOpen] = useState(false)
+  const [intakeStatus, setIntakeStatus] = useState<IntakeStatus>("idle")
+  const [intakeForm, setIntakeForm] = useState<IntakeFormState>(
+    createEmptyIntakeForm
+  )
+  const [intakeAiSummary, setIntakeAiSummary] = useState("")
+  const [intakeLeadScore, setIntakeLeadScore] = useState<string>("")
+  const [intakeError, setIntakeError] = useState<string | null>(null)
   const leadPrepFingerprintRef = useRef<string>("")
 
   const hasMessages = messages.length > 0 || error !== null
@@ -163,6 +227,21 @@ export function HeroSection() {
   const conversationReadyForLeadPrep = useMemo(
     () => shouldAutoPrepareLeadIntel(conversationState, messages.length),
     [conversationState, messages.length]
+  )
+
+  const recommendedService = useMemo(
+    () => deriveRecommendedService(conversationState, messages, leadIntel),
+    [conversationState, messages, leadIntel]
+  )
+
+  const opportunityLevel = useMemo(
+    () =>
+      estimateOpportunityLevel(
+        intakeLeadScore || leadIntel?.leadScore,
+        intakeForm.budgetRange,
+        conversationState
+      ),
+    [conversationState, intakeForm.budgetRange, intakeLeadScore, leadIntel]
   )
 
   const attachmentUploadLabel = useMemo(() => {
@@ -217,6 +296,25 @@ export function HeroSection() {
   useEffect(() => {
     scrollToBottom()
   }, [messages, attachedFile])
+
+  useEffect(() => {
+    if (!isIntakeOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && intakeStatus !== "submitting") {
+        setIsIntakeOpen(false)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isIntakeOpen, intakeStatus])
 
   useEffect(() => {
     console.log("Lead Data:", leadData)
@@ -371,6 +469,12 @@ export function HeroSection() {
     setLeadIntel(null)
     setLeadSubmitMessage(null)
     setLeadPrepBusy(false)
+    setIsIntakeOpen(false)
+    setIntakeStatus("idle")
+    setIntakeForm(createEmptyIntakeForm())
+    setIntakeAiSummary("")
+    setIntakeLeadScore("")
+    setIntakeError(null)
     leadPrepFingerprintRef.current = ""
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
@@ -394,35 +498,113 @@ export function HeroSection() {
     }
   }
 
+  const prepareIntakeAnalysis = async (synced: LeadData) => {
+    setIntakeStatus("analysing")
+    setIntakeError(null)
+    const service = synced.service.trim() || recommendedService
+    setIntakeAiSummary(buildFallbackSalesSummary(conversationState, service))
+    setIntakeLeadScore(leadIntel?.leadScore ?? "")
+
+    try {
+      const [summaryResult, intelResult] = await Promise.allSettled([
+        fetch("/api/lead/summary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: messages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+            leadData: synced,
+            snapshot: conversationState,
+            summaryFormat: "sales_intake",
+            recommendedService: service,
+          }),
+        }),
+        leadIntel
+          ? Promise.resolve(null)
+          : fetch("/api/lead/intelligence", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                snapshot: conversationState,
+                messages: messages.map((m) => ({
+                  role: m.role,
+                  content: m.content,
+                })),
+              }),
+            }),
+      ])
+
+      if (summaryResult.status === "fulfilled") {
+        const sumRes = summaryResult.value
+        const sumJson = await sumRes.json()
+        if (sumRes.ok && typeof sumJson.professionalSummary === "string") {
+          setIntakeAiSummary(sumJson.professionalSummary)
+        }
+      }
+
+      if (
+        intelResult.status === "fulfilled" &&
+        intelResult.value instanceof Response
+      ) {
+        const intelJson = await intelResult.value.json()
+        if (intelResult.value.ok && intelJson.intelligence) {
+          setLeadIntel(intelJson.intelligence)
+          setIntakeLeadScore(intelJson.intelligence.leadScore ?? "")
+        }
+      }
+    } catch {
+      /* Keep fallback summary; modal should still submit. */
+    } finally {
+      setIntakeStatus("ready")
+    }
+  }
+
   const handleSubmitEnquiry = async () => {
     if (conversationState.visitorType === "unknown") return
-    setLeadSubmitBusy(true)
+    const synced = deriveLeadData(leadData, messages, conversationState)
+    setLeadData(synced)
+    const nextService = synced.service.trim() || recommendedService
+    setIntakeForm({
+      fullName: synced.name || conversationState.name,
+      companyName: synced.company || conversationState.company,
+      email: synced.email || conversationState.email,
+      phoneNumber: synced.phone || conversationState.whatsapp,
+      websiteInstagram: digitalPresenceFromLead(synced),
+      budgetRange: "",
+      preferredService: nextService,
+      additionalNotes: synced.notes,
+    })
     setLeadSubmitMessage(null)
-    try {
-      const synced = deriveLeadData(leadData, messages, conversationState)
-      setLeadData(synced)
+    setIsIntakeOpen(true)
+    void prepareIntakeAnalysis({ ...synced, service: nextService })
+  }
 
-      const sumRes = await fetch("/api/lead/summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: messages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-          leadData: synced,
-          snapshot: conversationState,
-        }),
-      })
-      const sumJson = await sumRes.json()
-      if (!sumRes.ok) {
-        throw new Error(sumJson.error || "Could not generate lead summary")
+  const handlePremiumIntakeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (conversationState.visitorType === "unknown") return
+    setLeadSubmitBusy(true)
+    setIntakeStatus("submitting")
+    setIntakeError(null)
+    try {
+      const digitalPresence = splitDigitalPresence(intakeForm.websiteInstagram)
+      const synced = deriveLeadData(leadData, messages, conversationState)
+      const leadForSubmit: LeadData = {
+        ...synced,
+        visitorType: conversationState.visitorType,
+        name: intakeForm.fullName.trim() || synced.name,
+        company: intakeForm.companyName.trim() || synced.company,
+        email: intakeForm.email.trim() || synced.email,
+        phone: intakeForm.phoneNumber.trim() || synced.phone,
+        website: digitalPresence.website || synced.website,
+        instagram: digitalPresence.instagram || synced.instagram,
+        service: intakeForm.preferredService.trim() || recommendedService,
+        notes: intakeForm.additionalNotes.trim() || synced.notes,
       }
       const professionalSummary =
-        typeof sumJson.professionalSummary === "string"
-          ? sumJson.professionalSummary
-          : ""
-
+        intakeAiSummary.trim() ||
+        buildFallbackSalesSummary(conversationState, leadForSubmit.service)
       let attachment:
         | {
             filename: string
@@ -443,8 +625,14 @@ export function HeroSection() {
             content: m.content,
           })),
           snapshot: conversationState,
-          leadData: synced,
+          leadData: leadForSubmit,
           professionalSummary,
+          intake: {
+            ...intakeForm,
+            aiSummary: professionalSummary,
+            recommendedService,
+            opportunityLevel,
+          },
           attachment,
         }),
       })
@@ -452,13 +640,17 @@ export function HeroSection() {
       if (!res.ok) {
         throw new Error(data.error || `Request failed (${res.status})`)
       }
+      setLeadData(leadForSubmit)
+      setIntakeStatus("success")
       setLeadSubmitMessage(
         "Your enquiry has been submitted successfully. Our team will review it and connect shortly."
       )
     } catch (err) {
-      setLeadSubmitMessage(
+      const message =
         err instanceof Error ? err.message : "Failed to submit enquiry"
-      )
+      setIntakeError(message)
+      setLeadSubmitMessage(message)
+      setIntakeStatus("ready")
     } finally {
       setLeadSubmitBusy(false)
     }
@@ -850,6 +1042,309 @@ export function HeroSection() {
                   {leadSubmitBusy ? "Submitting enquiry…" : "Submit Enquiry"}
                 </button>
               </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isIntakeOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 px-3 py-4 backdrop-blur-xl sm:items-center sm:px-5"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="premium-intake-title"
+        >
+          <div
+            className="absolute inset-0"
+            onClick={() => {
+              if (intakeStatus !== "submitting") setIsIntakeOpen(false)
+            }}
+          />
+          <div className="relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-[1.5rem] border border-white/[0.1] bg-card/[0.78] text-left shadow-[0_32px_120px_-42px_rgba(0,0,0,0.95),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-2xl animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
+            <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-primary/[0.16] blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 right-0 h-72 w-72 rounded-full bg-accent/[0.1] blur-3xl" />
+
+            <div className="relative flex items-start justify-between gap-5 border-b border-white/[0.07] px-5 py-5 sm:px-7">
+              <div>
+                <p className="mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
+                  Premium AI Sales Intake
+                </p>
+                <h2
+                  id="premium-intake-title"
+                  className="text-xl font-semibold tracking-[-0.02em] text-foreground sm:text-2xl"
+                >
+                  Confirm the brief before we route it.
+                </h2>
+                <p className="mt-2 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground/82 sm:text-sm">
+                  PxlBrief AI has analysed the conversation and prepared a concise
+                  sales context for the team.
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={intakeStatus === "submitting"}
+                onClick={() => setIsIntakeOpen(false)}
+                className="rounded-[0.65rem] p-2 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                aria-label="Close intake modal"
+              >
+                <X className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            </div>
+
+            <form
+              onSubmit={handlePremiumIntakeSubmit}
+              className="relative grid max-h-[calc(92vh-7.5rem)] gap-0 overflow-y-auto lg:grid-cols-[1fr_0.86fr]"
+            >
+              <div className="space-y-4 px-5 py-5 sm:px-7 sm:py-6">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Full Name
+                    </span>
+                    <input
+                      required
+                      value={intakeForm.fullName}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          fullName: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                      placeholder="Your name"
+                    />
+                  </label>
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Company Name
+                    </span>
+                    <input
+                      value={intakeForm.companyName}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          companyName: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                      placeholder="Brand / company"
+                    />
+                  </label>
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Email
+                    </span>
+                    <input
+                      required
+                      type="email"
+                      value={intakeForm.email}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                      placeholder="name@company.com"
+                    />
+                  </label>
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Phone Number
+                    </span>
+                    <input
+                      required
+                      value={intakeForm.phoneNumber}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          phoneNumber: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                      placeholder="+91..."
+                    />
+                  </label>
+                </div>
+
+                <label className="block space-y-1.5">
+                  <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                    Website / Instagram
+                  </span>
+                  <input
+                    value={intakeForm.websiteInstagram}
+                    onChange={(e) =>
+                      setIntakeForm((prev) => ({
+                        ...prev,
+                        websiteInstagram: e.target.value,
+                      }))
+                    }
+                    className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                    placeholder="Website, Instagram, or both"
+                  />
+                </label>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Budget Range
+                    </span>
+                    <select
+                      value={intakeForm.budgetRange}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          budgetRange: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                    >
+                      <option value="">Select range</option>
+                      {BUDGET_RANGE_OPTIONS.map((range) => (
+                        <option key={range} value={range}>
+                          {range}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="space-y-1.5">
+                    <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                      Preferred Service
+                    </span>
+                    <select
+                      value={intakeForm.preferredService}
+                      onChange={(e) =>
+                        setIntakeForm((prev) => ({
+                          ...prev,
+                          preferredService: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                    >
+                      {PREFERRED_SERVICE_OPTIONS.map((service) => (
+                        <option key={service} value={service}>
+                          {service}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <label className="block space-y-1.5">
+                  <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/72">
+                    Additional Notes
+                  </span>
+                  <textarea
+                    rows={4}
+                    value={intakeForm.additionalNotes}
+                    onChange={(e) =>
+                      setIntakeForm((prev) => ({
+                        ...prev,
+                        additionalNotes: e.target.value,
+                      }))
+                    }
+                    className="w-full resize-none rounded-[0.8rem] border border-white/[0.09] bg-black/25 px-3.5 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-primary/45 focus:ring-1 focus:ring-primary/20"
+                    placeholder="Anything the team should know before replying?"
+                  />
+                </label>
+              </div>
+
+              <aside className="border-t border-white/[0.07] bg-black/[0.16] px-5 py-5 sm:px-7 sm:py-6 lg:border-l lg:border-t-0">
+                <div className="mb-4 flex items-center gap-2">
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      intakeStatus === "success"
+                        ? "bg-emerald-400"
+                        : intakeStatus === "analysing" ||
+                            intakeStatus === "submitting"
+                          ? "bg-primary"
+                          : "bg-muted-foreground/50"
+                    }`}
+                  />
+                  <span className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-muted-foreground/78">
+                    {intakeStatus === "analysing"
+                      ? "Analysing enquiry..."
+                      : intakeStatus === "submitting"
+                        ? "Submitting enquiry..."
+                        : intakeStatus === "success"
+                          ? "Enquiry submitted"
+                          : "AI intake ready"}
+                  </span>
+                </div>
+
+                <div className="grid gap-3">
+                  <div className="rounded-[1rem] border border-white/[0.08] bg-white/[0.035] p-4">
+                    <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
+                      Lead Score
+                    </p>
+                    <p className="mt-1 text-lg font-semibold text-foreground">
+                      {intakeLeadScore || leadIntel?.leadScore || "Analysing"}
+                    </p>
+                  </div>
+                  <div className="rounded-[1rem] border border-primary/18 bg-primary/[0.075] p-4">
+                    <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-primary/82">
+                      Recommended Service
+                    </p>
+                    <p className="mt-1 text-lg font-semibold text-foreground">
+                      {recommendedService}
+                    </p>
+                  </div>
+                  <div className="rounded-[1rem] border border-white/[0.08] bg-white/[0.035] p-4">
+                    <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
+                      Estimated Opportunity Level
+                    </p>
+                    <p className="mt-1 text-lg font-semibold text-foreground">
+                      {opportunityLevel}
+                    </p>
+                  </div>
+                  <div className="rounded-[1rem] border border-white/[0.08] bg-black/20 p-4">
+                    <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
+                      AI Summary
+                    </p>
+                    <p className="mt-2 min-h-[4.5rem] text-sm leading-relaxed text-muted-foreground/92">
+                      {intakeStatus === "analysing"
+                        ? "Analysing enquiry..."
+                        : intakeAiSummary || "Preparing concise summary..."}
+                    </p>
+                  </div>
+                </div>
+
+                {intakeError && (
+                  <p className="mt-4 rounded-[0.9rem] border border-red-500/20 bg-red-500/[0.08] px-3 py-2.5 text-[0.8125rem] leading-relaxed text-red-300">
+                    {intakeError}
+                  </p>
+                )}
+
+                {intakeStatus === "success" ? (
+                  <div className="mt-5 rounded-[1rem] border border-emerald-400/20 bg-emerald-400/[0.08] p-4 text-center">
+                    <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-300/[0.12] animate-in zoom-in-50 duration-300">
+                      <CheckCircle2 className="h-6 w-6 text-emerald-300" />
+                    </div>
+                    <p className="text-sm font-medium text-emerald-100">
+                      Enquiry submitted successfully.
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-emerald-100/70">
+                      The PxlBrief team has the AI summary and intake context.
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={
+                      intakeStatus === "analysing" ||
+                      intakeStatus === "submitting"
+                    }
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-[0.95rem] bg-primary px-4 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/[0.08] transition hover:bg-primary/92 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-55"
+                  >
+                    <Send className="h-4 w-4" />
+                    {intakeStatus === "submitting"
+                      ? "Submitting enquiry..."
+                      : intakeStatus === "analysing"
+                        ? "Analysing enquiry..."
+                        : "Submit premium enquiry"}
+                  </button>
+                )}
+              </aside>
             </form>
           </div>
         </div>

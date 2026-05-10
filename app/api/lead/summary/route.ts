@@ -1,6 +1,9 @@
 import { normalizeConversationPayload } from "@/lib/conversation-state"
 import type { LeadData } from "@/lib/lead-data"
-import { generateProfessionalLeadSummary } from "@/lib/lead-submit"
+import {
+  generateProfessionalLeadSummary,
+  generateSalesIntakeSummary,
+} from "@/lib/lead-submit"
 import { z } from "zod"
 
 export const maxDuration = 30
@@ -26,6 +29,8 @@ const bodySchema = z.object({
   messages: z.array(chatMessageSchema).max(250),
   leadData: leadDataSchema,
   snapshot: z.record(z.unknown()),
+  summaryFormat: z.enum(["professional", "sales_intake"]).optional().default("professional"),
+  recommendedService: z.string().max(1000).optional().default(""),
 })
 
 export async function POST(req: Request) {
@@ -47,11 +52,15 @@ export async function POST(req: Request) {
       potentialClientStage: snap.potentialClientStage,
     }
 
-    const professionalSummary = await generateProfessionalLeadSummary(
-      parsed.data.messages,
-      leadData,
-      ctx
-    )
+    const professionalSummary =
+      parsed.data.summaryFormat === "sales_intake"
+        ? await generateSalesIntakeSummary(
+            parsed.data.messages,
+            leadData,
+            ctx,
+            parsed.data.recommendedService
+          )
+        : await generateProfessionalLeadSummary(parsed.data.messages, leadData, ctx)
 
     return Response.json({ ok: true, professionalSummary })
   } catch (e) {
