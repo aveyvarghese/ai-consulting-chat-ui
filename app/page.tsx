@@ -2,7 +2,7 @@ import { HeroSection } from "@/components/hero-section"
 import { ServicesGrid } from "@/components/services-grid"
 import {
   HowWeWorkSection,
-  IndustriesSection,
+  WhyBrandsChooseUsSection,
   ResultsSection,
   FinalCtaSection,
 } from "@/components/landing-sections"
@@ -13,7 +13,7 @@ export default function Home() {
       <HeroSection />
       <ServicesGrid />
       <HowWeWorkSection />
-      <IndustriesSection />
+      <WhyBrandsChooseUsSection />
       <ResultsSection />
       <FinalCtaSection />
     </main>

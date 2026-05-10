@@ -691,41 +691,63 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[78vh] scroll-mt-24 flex-col items-center justify-center px-4 pb-24 pt-16 md:min-h-[80vh] md:pb-28 md:pt-24"
+      className="relative flex min-h-[88vh] scroll-mt-24 flex-col items-center justify-center px-4 pb-24 pt-16 md:min-h-[92vh] md:pb-32 md:pt-28"
       aria-label="PxlBrief — AI consulting hero"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
-          className="absolute left-1/2 top-[28%] h-[min(90vw,720px)] w-[min(95vw,920px)] -translate-x-1/2 rounded-full bg-primary/[0.055] blur-[128px]"
+          className="absolute left-1/2 top-[24%] h-[min(96vw,780px)] w-[min(105vw,1040px)] -translate-x-1/2 rounded-full bg-primary/[0.075] blur-[138px]"
           style={{ animation: "pxl-breathe 14s ease-in-out infinite" }}
         />
         <div
-          className="absolute bottom-[18%] right-[12%] h-[min(70vw,520px)] w-[min(70vw,520px)] rounded-full bg-accent/[0.04] blur-[110px]"
+          className="absolute bottom-[12%] right-[8%] h-[min(72vw,560px)] w-[min(72vw,560px)] rounded-full bg-accent/[0.06] blur-[120px]"
           style={{
             animation: "pxl-breathe 18s ease-in-out infinite 2s",
           }}
         />
+        <div
+          className="absolute -left-[12%] top-[12%] h-[min(70vw,520px)] w-[min(70vw,520px)] rounded-full bg-cyan-300/[0.035] blur-[118px]"
+          style={{ animation: "pxl-drift 20s ease-in-out infinite" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.045),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.025),transparent_45%)]" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background/80 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-3xl text-center">
+      <div className="relative z-10 mx-auto w-full max-w-5xl text-center animate-in fade-in-0 slide-in-from-bottom-3 duration-700">
         <div className="mb-7 md:mb-8">
-          <span className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+          <span className="inline-flex items-center rounded-full border border-white/[0.09] bg-white/[0.035] px-4 py-2 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:text-base">
             Pxl<span className="text-primary">Brief</span>
           </span>
         </div>
 
-        <h1 className="mx-auto mb-5 max-w-4xl text-balance text-[2.125rem] font-semibold leading-[1.08] tracking-[-0.03em] text-foreground md:mb-6 md:text-5xl md:tracking-[-0.035em] lg:text-[3.25rem]">
-          Diagnose. Strategize. Scale.
+        <h1 className="mx-auto mb-6 max-w-5xl text-balance text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground md:text-6xl lg:text-[4.8rem]">
+          AI Systems, Creative Intelligence & Growth Infrastructure for Modern Brands.
         </h1>
 
-        <p className="mx-auto mb-12 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.65] text-muted-foreground/90 md:mb-14 md:max-w-2xl md:text-lg md:leading-relaxed">
-          AI consulting, growth strategy, performance marketing and brand
-          intelligence — built to scale modern businesses.
+        <p className="mx-auto mb-8 max-w-3xl text-pretty text-[1rem] font-normal leading-[1.75] text-muted-foreground/90 md:text-xl md:leading-relaxed">
+          We design AI automation, brand systems, growth infrastructure,
+          performance marketing loops and AI workflows for brands that need
+          sharper decisions and cleaner execution.
         </p>
 
         {!hasMessages && (
           <>
+            <div className="mx-auto mb-10 flex max-w-2xl flex-col items-center justify-center gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => inputRef.current?.focus()}
+                className="inline-flex min-h-[3rem] w-full items-center justify-center rounded-[0.95rem] bg-primary px-6 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-[0_18px_42px_-24px_oklch(0.75_0.12_180/0.7)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_22px_56px_-24px_oklch(0.75_0.12_180/0.9)] active:scale-[0.99] sm:w-auto"
+              >
+                Start AI Consultation
+              </button>
+              <a
+                href="#what-we-build"
+                className="inline-flex min-h-[3rem] w-full items-center justify-center rounded-[0.95rem] border border-white/[0.1] bg-white/[0.045] px-6 py-3 text-sm font-semibold tracking-tight text-foreground/95 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/30 hover:bg-primary/[0.07] active:scale-[0.99] sm:w-auto"
+              >
+                View Capabilities
+              </a>
+            </div>
+
             <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
               PxlBrief AI
             </p>
