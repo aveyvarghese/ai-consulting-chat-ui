@@ -295,3 +295,10 @@
     transform: scaleX(0.72);
   }
 }
+
+/* Lighter motion on small viewports (battery / scroll) */
+@media (max-width: 767px) {
+  .pxl-data-grid-shift {
+    animation: none;
+  }
+}

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 
 const links = [
@@ -62,6 +63,14 @@ export function SiteFooter() {
             >
               PxlBrief AI
             </Link>
+            <a
+              href={STRATEGY_CALL_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 touch-manipulation items-center text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
+            >
+              Strategic session
+            </a>
           </nav>
         </div>
       </div>

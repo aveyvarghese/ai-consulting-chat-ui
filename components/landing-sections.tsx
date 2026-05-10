@@ -136,7 +136,7 @@ export function IndustriesSection() {
           {industries.map((name) => (
             <span
               key={name}
-              className="inline-flex min-h-11 min-w-0 touch-manipulation items-center justify-center rounded-full border border-hairline bg-card/94 px-3 py-2.5 text-center text-[0.8125rem] font-medium leading-snug text-foreground/92 shadow-sm backdrop-blur-md transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md dark:bg-card/[0.32] md:px-5 md:text-sm"
+              className="inline-flex min-h-11 min-w-0 touch-manipulation items-center justify-center rounded-full border border-hairline bg-card/94 px-3 py-2.5 text-center text-[0.8125rem] font-medium leading-snug text-foreground/92 shadow-sm backdrop-blur-md transition-[box-shadow,border-color,background-color] duration-300 ease-out hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground hover:shadow-md dark:bg-card/[0.32] md:px-5 md:text-sm"
             >
               {name}
             </span>
@@ -154,7 +154,7 @@ export function ResultsSection() {
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="min-w-0 rounded-[1.125rem] border border-hairline bg-gradient-to-b from-card/92 to-card/80 p-4 text-center shadow-sm backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/28 hover:shadow-md dark:from-card/[0.48] dark:to-card/[0.22] sm:p-6 md:p-8"
+            className="min-w-0 rounded-[1.125rem] border border-hairline bg-gradient-to-b from-card/92 to-card/80 p-4 text-center shadow-sm backdrop-blur-xl transition-[box-shadow,border-color] duration-300 ease-out hover:border-primary/28 hover:shadow-md dark:from-card/[0.48] dark:to-card/[0.22] sm:p-6 md:p-8"
           >
             <div className="font-mono text-2xl font-semibold tracking-tight text-primary/95 md:text-3xl">
               {m.value}
