@@ -14,6 +14,12 @@ import {
   buildLeadEnquiryEmailHtml,
   buildLeadEnquiryEmailText,
 } from "@/lib/lead-email-html"
+import {
+  buildVisitorFollowUpEmailHtml,
+  buildVisitorFollowUpEmailText,
+  isValidVisitorEmail,
+  pickVisitorFollowUpSubject,
+} from "@/lib/visitor-follow-up-email"
 import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 import { PUBLIC_SUPPORT_EMAIL_MESSAGE } from "@/lib/public-errors"
 import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
@@ -289,6 +295,47 @@ export async function POST(req: Request) {
         { error: PUBLIC_SUPPORT_EMAIL_MESSAGE },
         { status: 502 }
       )
+    }
+
+    const visitorEmail = firstNonEmpty(ld.email, intelligence.email).trim()
+    if (isValidVisitorEmail(visitorEmail)) {
+      const visitorName = firstNonEmpty(ld.name, intelligence.name)
+      const visitorInput = {
+        name: visitorName,
+        professionalSummary: profSummary,
+        strategicBrief,
+        intelligence: {
+          currentChallenge: intelligence.currentChallenge,
+          servicesInterested: intelligence.servicesInterested,
+          consultantSummary: intelligence.consultantSummary,
+          businessVertical: intelligence.businessVertical,
+          businessStage: intelligence.businessStage,
+        },
+        serviceRecommendation: raw.data.serviceRecommendation ?? null,
+      }
+      try {
+        const { error: visitorErr } = await resend.emails.send({
+          from,
+          to: visitorEmail,
+          subject: pickVisitorFollowUpSubject(visitorEmail),
+          html: buildVisitorFollowUpEmailHtml(visitorInput),
+          text: buildVisitorFollowUpEmailText(visitorInput),
+          replyTo: LEAD_TO_EMAIL,
+        })
+        if (visitorErr) {
+          console.warn(
+            "Visitor follow-up email could not be sent",
+            visitorErr.message ?? "unknown"
+          )
+        }
+      } catch (visitorSendError) {
+        console.warn(
+          "Visitor follow-up email could not be sent",
+          visitorSendError instanceof Error
+            ? visitorSendError.message
+            : visitorSendError
+        )
+      }
     }
 
     try {
