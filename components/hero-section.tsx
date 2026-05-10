@@ -23,6 +23,12 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
+import { LEAD_SUBMIT_SUCCESS_MESSAGE } from "@/lib/booking"
+import { BookingStrategyCallLink } from "@/components/booking-strategy-call-link"
+import {
+  PUBLIC_SUPPORT_EMAIL_MESSAGE,
+  sanitizeEnquirySubmitErrorMessage,
+} from "@/lib/public-errors"
 
 const ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -345,10 +351,8 @@ export function HeroSection() {
       } else {
         throw new Error("No reply received from the assistant")
       }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to get a response"
-      setError(errorMessage)
+    } catch {
+      setError(PUBLIC_SUPPORT_EMAIL_MESSAGE)
       setLeadData((prev) =>
         deriveLeadData(prev, updatedMessages, nextConversationState)
       )
@@ -452,13 +456,10 @@ export function HeroSection() {
       if (!res.ok) {
         throw new Error(data.error || `Request failed (${res.status})`)
       }
-      setLeadSubmitMessage(
-        "Your enquiry has been submitted successfully. Our team will review it and connect shortly."
-      )
+      setLeadSubmitMessage(LEAD_SUBMIT_SUCCESS_MESSAGE)
     } catch (err) {
-      setLeadSubmitMessage(
-        err instanceof Error ? err.message : "Failed to submit enquiry"
-      )
+      const raw = err instanceof Error ? err.message : "Failed to submit enquiry"
+      setLeadSubmitMessage(sanitizeEnquirySubmitErrorMessage(raw))
     } finally {
       setLeadSubmitBusy(false)
     }
@@ -718,13 +719,10 @@ export function HeroSection() {
                   <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-red-500/20 bg-red-500/[0.08]">
                     <AlertCircle className="h-3.5 w-3.5 text-red-400" />
                   </div>
-                  <div className="max-w-[min(85%,28rem)] rounded-[1.05rem] border border-red-500/20 bg-red-500/[0.07] px-4 py-3 text-red-300/95 md:px-[1.125rem] md:py-3.5">
-                    <div className="mb-1 text-[0.8125rem] font-medium">
-                      Something went wrong
-                    </div>
-                    <div className="text-[0.8125rem] leading-relaxed text-red-200/80">
+                  <div className="max-w-[min(85%,28rem)] rounded-[1.05rem] border border-red-500/20 bg-red-500/[0.07] px-4 py-3 text-red-200/90 md:px-[1.125rem] md:py-3.5">
+                    <p className="text-[0.8125rem] leading-relaxed md:text-sm">
                       {error}
-                    </div>
+                    </p>
                   </div>
                 </div>
               )}
@@ -794,29 +792,30 @@ export function HeroSection() {
                   {(leadPrepBusy || leadIntel) &&
                     conversationState.visitorType !== "unknown" && (
                       <span
-                        className="text-[0.6875rem] text-muted-foreground/75 md:text-xs"
+                        className="text-[0.6875rem] font-medium text-primary/85 md:text-xs"
                         aria-live="polite"
                       >
-                        {leadPrepBusy
-                          ? "Preparing structured lead preview…"
-                          : leadIntel
-                            ? `Lead signal: ${leadIntel.leadScore}`
-                            : null}
+                        Strategic analysis active
                       </span>
                     )}
                 </div>
               </div>
-              {leadSubmitMessage && (
-                <p
-                  className={`mb-3 text-[0.8125rem] leading-relaxed md:text-sm ${
-                    leadSubmitMessage.startsWith("Your enquiry")
-                      ? "text-muted-foreground/85"
-                      : "text-red-400/95"
-                  }`}
-                >
-                  {leadSubmitMessage}
-                </p>
-              )}
+              {leadSubmitMessage &&
+                (leadSubmitMessage === LEAD_SUBMIT_SUCCESS_MESSAGE ? (
+                  <div className="mb-4 rounded-[0.875rem] border border-white/[0.08] bg-card/[0.35] p-4 shadow-sm backdrop-blur-sm md:p-5">
+                    <p className="text-[0.8125rem] font-medium leading-relaxed text-foreground/95 md:text-sm">
+                      {LEAD_SUBMIT_SUCCESS_MESSAGE}
+                    </p>
+                    <p className="mt-3 text-[0.75rem] leading-relaxed text-muted-foreground/80 md:text-[0.8125rem]">
+                      Prefer to schedule directly?
+                    </p>
+                    <BookingStrategyCallLink className="mt-3 w-full" />
+                  </div>
+                ) : (
+                  <p className="mb-3 text-[0.8125rem] leading-relaxed text-red-400/95 md:text-sm">
+                    {leadSubmitMessage}
+                  </p>
+                ))}
               <div className="flex items-center gap-2 rounded-[0.875rem] border border-white/[0.1] bg-black/25 px-3 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 md:gap-3 md:px-4 md:py-2">
                 <input
                   ref={chatInputRef}
