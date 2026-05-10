@@ -48,6 +48,22 @@ export interface StrategicIntelligence {
   likelyPxlBriefActions: string[]
 }
 
+export interface StrategicBrief {
+  isReady: boolean
+  businessUnderstanding: string
+  currentBottlenecks: string[]
+  likelyGrowthBlockers: string[]
+  brandPositioningObservations: string[]
+  customerAcquisitionGaps: string[]
+  funnelSystemWeaknesses: string[]
+  recommendedStrategicDirection: string
+  automationOpportunities: string[]
+  recommendedServiceStack: string[]
+  suggestedExecutionRoadmap: string[]
+  recommendedPriority: "Immediate" | "High leverage" | "Foundational" | "Scale stage"
+  estimatedImpactAreas: string[]
+}
+
 function corpusFrom(
   state: ConversationStatePayload,
   messages: MessageLike[],
@@ -500,6 +516,150 @@ function confidenceLabel(value: number): string {
   if (value >= 78) return "High confidence"
   if (value >= 55) return "Directional confidence"
   return "Forming signal"
+}
+
+function sentence(parts: string[]): string {
+  return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim()
+}
+
+function briefBusinessUnderstanding(
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence
+): string {
+  return sentence([
+    `This appears to be a ${diagnosis.businessType.toLowerCase()} in ${diagnosis.industry}.`,
+    `The current stage reads as ${diagnosis.businessStage.toLowerCase()}, with ${diagnosis.mainBottleneck.toLowerCase()} as the clearest strategic constraint.`,
+    intelligence.observedSignals.founderMindset,
+  ])
+}
+
+function positioningObservations(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const observations = [
+    /luxury|premium|high[-\s]?end/.test(lower) &&
+      "Premium perception needs to be protected across copy, proof and funnel design.",
+    /brand|position|identity|differentiat/.test(lower) &&
+      "Positioning appears important to improving trust and conversion quality.",
+    /fashion|real\s+estate|d2c|ecommerce/.test(lower) &&
+      "Visual and narrative consistency likely influences how quickly buyers understand value.",
+  ].filter(Boolean) as string[]
+
+  return [
+    ...observations,
+    `Brand expression should support ${diagnosis.recommendedGrowthDirection.toLowerCase()}.`,
+  ].slice(0, 3)
+}
+
+function acquisitionGaps(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const gaps = [
+    /seo|organic|search|local/.test(lower) &&
+      "Search intent may not be captured with enough authority or technical structure.",
+    /ads|paid|meta|google|performance/.test(lower) &&
+      "Paid acquisition may need tighter offer, creative and landing-page alignment.",
+    /lead|inquir|pipeline|callback/.test(lower) &&
+      "Lead capture likely needs clearer qualification and routing.",
+    /instagram|social|content/.test(lower) &&
+      "Social attention may not be connected to a measurable conversion path.",
+  ].filter(Boolean) as string[]
+
+  return [
+    ...gaps,
+    `Acquisition should be sequenced around ${diagnosis.serviceFit.toLowerCase()} rather than scattered tactics.`,
+  ].slice(0, 3)
+}
+
+function funnelWeaknesses(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const weaknesses = [
+    /website|landing|funnel|checkout|conversion/.test(lower) &&
+      "The digital journey may not move visitors from interest to action with enough clarity.",
+    /whatsapp|phone|crm|follow/.test(lower) &&
+      "Follow-up and CRM handoffs may be too manual or inconsistent.",
+    /proof|trust|case|testimonial|premium/.test(lower) &&
+      "Proof architecture may need to work harder for higher-value decisions.",
+  ].filter(Boolean) as string[]
+
+  return [
+    ...weaknesses,
+    `${diagnosis.suggestedSystems[0] ?? "The first system"} should become the first measurable funnel asset.`,
+  ].slice(0, 3)
+}
+
+function priorityFor(
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence
+): StrategicBrief["recommendedPriority"] {
+  if (diagnosis.urgencyLevel === "High") return "Immediate"
+  if (intelligence.confidenceLevel >= 72) return "High leverage"
+  if (/scaling|growth|operating/i.test(diagnosis.businessStage)) return "Scale stage"
+  return "Foundational"
+}
+
+function impactAreas(diagnosis: AiDiagnosis, corpus: string): string[] {
+  const lower = corpus.toLowerCase()
+  const areas = [
+    /lead|pipeline|inquir|real\s+estate/.test(lower) && "lead generation",
+    /retention|repeat|ltv|d2c|shopify/.test(lower) && "retention",
+    /automation|manual|workflow|crm|ops/.test(lower) && "automation",
+    /conversion|funnel|website|landing|checkout/.test(lower) && "conversion",
+    /brand|position|luxury|premium|identity/.test(lower) && "positioning",
+    /manual|process|workflow|team|ops/.test(lower) && "operational efficiency",
+  ].filter(Boolean) as string[]
+
+  return [
+    ...new Set([
+      ...areas,
+      diagnosis.serviceFit === "SEO" && "lead generation",
+      diagnosis.serviceFit === "Branding" && "positioning",
+      diagnosis.serviceFit === "AI Automation" && "automation",
+      "conversion",
+    ].filter(Boolean) as string[]),
+  ].slice(0, 5)
+}
+
+export function deriveStrategicBrief(
+  state: ConversationStatePayload,
+  messages: MessageLike[],
+  diagnosis: AiDiagnosis,
+  intelligence: StrategicIntelligence,
+  leadIntel?: LeadIntelligenceResult | null
+): StrategicBrief {
+  const corpus = corpusFrom(state, messages, leadIntel)
+  const isReady = intelligence.isReady
+  const serviceStack = [
+    diagnosis.serviceFit,
+    ...diagnosis.suggestedSystems,
+    ...intelligence.likelyPxlBriefActions,
+  ]
+  const uniqueServiceStack = [...new Set(serviceStack)].slice(0, 5)
+
+  return {
+    isReady,
+    businessUnderstanding: briefBusinessUnderstanding(diagnosis, intelligence),
+    currentBottlenecks: [
+      diagnosis.mainBottleneck,
+      ...intelligence.estimatedOperationalInefficiencies,
+    ].slice(0, 3),
+    likelyGrowthBlockers: intelligence.estimatedGrowthBlockers,
+    brandPositioningObservations: positioningObservations(diagnosis, corpus),
+    customerAcquisitionGaps: acquisitionGaps(diagnosis, corpus),
+    funnelSystemWeaknesses: funnelWeaknesses(diagnosis, corpus),
+    recommendedStrategicDirection: diagnosis.recommendedGrowthDirection,
+    automationOpportunities: [
+      ...diagnosis.suggestedSystems,
+      ...intelligence.estimatedOperationalInefficiencies,
+    ].slice(0, 4),
+    recommendedServiceStack: uniqueServiceStack,
+    suggestedExecutionRoadmap: [
+      "Run a focused strategic diagnosis from the captured conversation.",
+      `Blueprint ${diagnosis.suggestedSystems[0]?.toLowerCase() ?? "the primary system"} around the highest-friction growth path.`,
+      `Deploy ${diagnosis.serviceFit.toLowerCase()} as the first measurable execution lane.`,
+      "Review performance signals and sequence the next system layer.",
+    ],
+    recommendedPriority: priorityFor(diagnosis, intelligence),
+    estimatedImpactAreas: impactAreas(diagnosis, corpus),
+  }
 }
 
 export function deriveStrategicIntelligence(
