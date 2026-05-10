@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { ThemeSwitcher } from "@/components/theme-switcher"
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -17,29 +16,26 @@ export function SiteHeader() {
         >
           Pxl<span className="text-primary">Brief</span>
         </Link>
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
-          <nav
-            className="flex min-w-0 items-center gap-1 sm:gap-2"
-            aria-label="Primary"
-          >
-            {nav.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground md:px-3"
-              >
-                {label}
-              </Link>
-            ))}
+        <nav
+          className="flex min-w-0 items-center justify-end gap-1 sm:gap-2"
+          aria-label="Primary"
+        >
+          {nav.map(({ href, label }) => (
             <Link
-              href="/#consulting-chat"
-              className="ml-1 rounded-lg border border-primary/25 bg-primary/10 px-2.5 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/15 md:ml-2 md:px-3"
+              key={href}
+              href={href}
+              className="rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground md:px-3"
             >
-              Chat
+              {label}
             </Link>
-          </nav>
-          <ThemeSwitcher />
-        </div>
+          ))}
+          <Link
+            href="/#consulting-chat"
+            className="ml-1 rounded-lg border border-primary/25 bg-primary/10 px-2.5 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/15 md:ml-2 md:px-3"
+          >
+            Chat
+          </Link>
+        </nav>
       </div>
     </header>
   )

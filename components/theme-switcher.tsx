@@ -1,5 +1,6 @@
 "use client"
 
+/** Retained for internal reuse; not mounted in public chrome (theme via `lib/theme` + layout boot). */
 import { useEffect, useState } from "react"
 import {
   DEFAULT_THEME,
