@@ -1,9 +1,10 @@
 "use client"
 
 import { AnalyticsEvent, trackAnalyticsEvent } from "@/lib/analytics-events"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 type StrategicSessionBookingLinkProps = {
-  href: string
+  href?: string
   className: string
   children: React.ReactNode
   /** Where the click originated (for analytics breakdown) */
@@ -11,7 +12,7 @@ type StrategicSessionBookingLinkProps = {
 }
 
 export function StrategicSessionBookingLink({
-  href,
+  href = STRATEGY_CALL_BOOKING_URL,
   className,
   children,
   source = "unknown",

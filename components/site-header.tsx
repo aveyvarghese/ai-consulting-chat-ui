@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { SiteHeaderMobileNav } from "@/components/site-header-mobile-nav"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -32,12 +33,14 @@ export function SiteHeader() {
               {label}
             </Link>
           ))}
-          <Link
-            href="/#consulting-chat"
+          <a
+            href={STRATEGY_CALL_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="touch-manipulation rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-sm font-semibold tracking-tight text-primary transition-colors hover:border-primary/40 hover:bg-primary/15 md:ml-1 md:py-2.5"
           >
             Strategic session
-          </Link>
+          </a>
         </nav>
         <div className="shrink-0 md:hidden">
           <SiteHeaderMobileNav />

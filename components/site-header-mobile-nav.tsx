@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -53,12 +54,14 @@ export function SiteHeaderMobileNav() {
             </SheetClose>
           ))}
           <SheetClose asChild>
-            <Link
-              href="/#consulting-chat"
+            <a
+              href={STRATEGY_CALL_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-3 touch-manipulation rounded-lg border border-primary/28 bg-primary/[0.07] px-3 py-2.5 text-center text-sm font-semibold leading-snug tracking-tight text-primary shadow-sm transition-colors [-webkit-tap-highlight-color:transparent] hover:border-primary/40 hover:bg-primary/12"
             >
               Strategic session
-            </Link>
+            </a>
           </SheetClose>
         </nav>
       </SheetContent>
