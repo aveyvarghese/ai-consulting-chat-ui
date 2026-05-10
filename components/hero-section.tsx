@@ -24,7 +24,6 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
-import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 import {
   AnalyticsEvent,
   trackAnalyticsEvent,
@@ -855,7 +854,6 @@ export function HeroSection() {
                         on.
                       </p>
                       <StrategicSessionBookingLink
-                        href={STRATEGY_CALL_BOOKING_URL}
                         source="hero_enquiry_success"
                         className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-md hover:shadow-primary/15"
                       >
