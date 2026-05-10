@@ -412,7 +412,7 @@ function missedRevenueFrom(diagnosis: AiDiagnosis, corpus: string): string[] {
   const areas = [
     /retention|repeat|ltv|customer/.test(lower) && "Repeat purchase and retention journeys may be underdeveloped.",
     /seo|organic|search|local/.test(lower) && "Search intent may be escaping to better-structured competitors.",
-    /whatsapp|phone|call|crm/.test(lower) && "Warm prospects may drop between enquiry, follow-up and decision.",
+    /whatsapp|phone|call|crm/.test(lower) && "Interested prospects may drop between enquiry, follow-up and decision.",
     /checkout|cart|landing|website/.test(lower) && "High-intent visitors may not be seeing enough proof or urgency to convert.",
     /content|instagram|social/.test(lower) && "Content attention may not be connected to a measurable sales path.",
   ].filter(Boolean) as string[]
@@ -547,7 +547,7 @@ export function deriveAiDiagnosis(
   const serviceFit = deriveRecommendedService(state, messages, leadIntel)
   const businessStage = detectStage(state, corpus)
   const mainBottleneck = detectBottleneck(state, corpus)
-  const leadScore = leadIntel?.leadScore ?? (messages.length >= 4 ? "Medium" : "Warming")
+  const leadScore = leadIntel?.leadScore ?? (messages.length >= 4 ? "Medium" : "Forming")
   const urgencyLevel = detectUrgency(leadScore, state, corpus)
   const suggestedSystems = industrySystems(industry, serviceFit)
 

@@ -36,7 +36,6 @@ import {
   deriveStrategicIntelligence,
   type AiDiagnosis,
   type StrategicIntelligence,
-  type StrategicScore,
 } from "@/lib/ai-diagnosis"
 
 const ACCEPTED_EXTENSIONS = [
@@ -202,33 +201,6 @@ function splitDigitalPresence(value: string): Pick<LeadData, "website" | "instag
   }
 }
 
-function leadQualityFrom(
-  diagnosis: AiDiagnosis,
-  intelligence: StrategicIntelligence
-): "Cold" | "Warm" | "Hot" {
-  if (
-    diagnosis.leadScore === "High" ||
-    diagnosis.urgencyLevel === "High" ||
-    intelligence.confidenceLevel >= 78
-  ) {
-    return "Hot"
-  }
-  if (
-    diagnosis.leadScore === "Medium" ||
-    diagnosis.urgencyLevel === "Medium" ||
-    intelligence.confidenceLevel >= 50
-  ) {
-    return "Warm"
-  }
-  return "Cold"
-}
-
-function leadQualityClasses(quality: "Cold" | "Warm" | "Hot"): string {
-  if (quality === "Hot") return "border-emerald-300/30 bg-emerald-300/[0.11] text-emerald-200 shadow-[0_0_38px_-20px_rgba(110,231,183,0.95)]"
-  if (quality === "Warm") return "border-primary/30 bg-primary/[0.1] text-primary shadow-[0_0_34px_-20px_oklch(0.75_0.12_180/0.95)]"
-  return "border-white/[0.09] bg-white/[0.04] text-muted-foreground"
-}
-
 function DiagnosisField({
   label,
   value,
@@ -294,8 +266,12 @@ function StrategicSnapshotCard({
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-primary/90">
             AI Strategic Snapshot
           </p>
-          <span className="rounded-full border border-white/[0.08] bg-white/[0.045] px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground/78">
-            {intelligence.confidenceLevel}% confidence
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/16 bg-primary/[0.065] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.12em] text-primary/82">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-primary"
+              style={{ animation: "pxl-dot-pulse 1.35s ease-in-out infinite" }}
+            />
+            Strategic analysis active
           </span>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -319,33 +295,6 @@ function StrategicSnapshotCard({
           </p>
         </div>
       </article>
-    </div>
-  )
-}
-
-function StrategicScoreCard({ score }: { score: StrategicScore }) {
-  return (
-    <div className="rounded-[0.9rem] border border-white/[0.075] bg-black/20 p-3">
-      <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-          {score.label}
-        </p>
-        <span className="font-mono text-sm font-semibold text-primary">
-          {score.value}
-        </span>
-      </div>
-      <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-primary/35 via-primary to-emerald-300/60"
-          style={{
-            width: `${score.value}%`,
-            animation: "pxl-shimmer 5s ease-in-out infinite",
-          }}
-        />
-      </div>
-      <p className="text-[0.7rem] leading-relaxed text-muted-foreground/78">
-        {score.detail}
-      </p>
     </div>
   )
 }
@@ -407,10 +356,10 @@ function StrategicIntelligenceDashboard({
         </div>
         <div className="text-right">
           <p className="text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground/65">
-            Confidence
+            Status
           </p>
-          <p className="font-mono text-sm font-semibold text-primary">
-            {intelligence.confidenceLevel}%
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-primary">
+            Active
           </p>
         </div>
       </div>
@@ -434,7 +383,7 @@ function StrategicIntelligenceDashboard({
           <div
             className="h-full rounded-full bg-gradient-to-r from-primary/45 via-primary to-emerald-300/70"
             style={{
-              width: `${intelligence.confidenceLevel}%`,
+              width: intelligence.isReady ? "76%" : "42%",
               animation: "pxl-shimmer 4.4s ease-in-out infinite",
             }}
           />
@@ -465,9 +414,22 @@ function StrategicIntelligenceDashboard({
       ) : (
         <>
           <div className="mb-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-            {intelligence.scores.map((score) => (
-              <StrategicScoreCard key={score.label} score={score} />
-            ))}
+            <DiagnosisField
+              label="Estimated growth blockers"
+              value={intelligence.estimatedGrowthBlockers[0] ?? "Monitoring business constraints"}
+            />
+            <DiagnosisField
+              label="Estimated missed revenue areas"
+              value={intelligence.estimatedMissedRevenueAreas[0] ?? "Monitoring commercial leakage"}
+            />
+            <DiagnosisField
+              label="Estimated operational inefficiencies"
+              value={intelligence.estimatedOperationalInefficiencies[0] ?? "Monitoring workflow gaps"}
+            />
+            <DiagnosisField
+              label="Suggested strategic priorities"
+              value={intelligence.suggestedStrategicPriorities[0] ?? "Mapping advisory priorities"}
+            />
           </div>
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-1">
@@ -510,14 +472,6 @@ function AiDiagnosisPanel({
   isAnalyzing: boolean
   analysisLabel: string
 }) {
-  const leadQuality = leadQualityFrom(diagnosis, intelligence)
-  const opportunityScore =
-    intelligence.scores.find((score) => score.label === "Opportunity Score")
-      ?.value ?? intelligence.confidenceLevel
-  const growthPotential =
-    intelligence.scores.find((score) => score.label === "Growth Readiness Score")
-      ?.value ?? intelligence.confidenceLevel
-
   return (
     <aside className="relative overflow-hidden rounded-[1.25rem] border border-primary/18 bg-gradient-to-b from-card/[0.66] via-card/[0.42] to-black/[0.24] p-4 text-left shadow-[0_28px_72px_-36px_rgba(0,0,0,0.9),0_0_54px_-34px_oklch(0.75_0.12_180/0.9),inset_0_1px_0_0_rgba(255,255,255,0.055)] backdrop-blur-2xl animate-in fade-in-0 slide-in-from-bottom-2 duration-500 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:p-4 xl:p-5">
       <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-primary/[0.11] blur-2xl" />
@@ -533,8 +487,12 @@ function AiDiagnosisPanel({
               Strategic intelligence
             </h3>
           </div>
-          <span className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-[0.12em] ${leadQualityClasses(leadQuality)}`}>
-            {leadQuality}
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/18 bg-primary/[0.075] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.12em] text-primary/86 shadow-[0_0_34px_-22px_oklch(0.75_0.12_180/0.95)]">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-primary"
+              style={{ animation: "pxl-dot-pulse 1.35s ease-in-out infinite" }}
+            />
+            Strategic analysis active
           </span>
         </div>
 
@@ -549,44 +507,37 @@ function AiDiagnosisPanel({
         </div>
 
         <div className="mb-3 grid grid-cols-2 gap-2">
-          <DiagnosisField label="Opportunity Score" value={`${opportunityScore}/100`} />
-          <DiagnosisField label="Growth Potential" value={`${growthPotential}/100`} />
-          <DiagnosisField label="Lead Quality" value={leadQuality} />
+          <DiagnosisField label="AI Diagnosis" value={diagnosis.mainBottleneck} />
+          <DiagnosisField label="Growth Potential" value={diagnosis.recommendedGrowthDirection} />
           <DiagnosisField label="Strategic Priority" value={intelligence.suggestedStrategicPriorities[0] ?? diagnosis.serviceFit} />
+          <DiagnosisField label="Analysis Status" value="Strategic analysis active" />
         </div>
 
         <div className="mb-3 grid grid-cols-2 gap-2">
           <DiagnosisField label="Industry" value={diagnosis.industry} />
           <DiagnosisField label="Business stage" value={diagnosis.businessStage} />
-          <DiagnosisField label="Revenue Leak Signals" value={`${diagnosis.potentialRevenueLeaks.length} detected`} />
+          <DiagnosisField label="Revenue Leak Signals" value={diagnosis.potentialRevenueLeaks[0] ?? "Monitoring"} />
           <DiagnosisField label="Recommended Systems" value={diagnosis.suggestedSystems.slice(0, 2).join(" + ")} />
         </div>
 
-        <div className="mb-4 rounded-[1rem] border border-white/[0.075] bg-black/20 p-3">
+        <div className="mb-4 rounded-[1rem] border border-primary/14 bg-primary/[0.055] p-3">
           <div className="mb-3 flex items-center justify-between gap-3">
             <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/72">
-              Lead signal
+              Strategic analysis active
             </p>
-            <span className={`font-mono text-lg font-semibold ${
-              leadQuality === "Hot"
-                ? "text-emerald-300"
-                : leadQuality === "Warm"
-                  ? "text-primary"
-                  : "text-muted-foreground"
-            }`}>
-              {leadQuality}
+            <span className="flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.12em] text-primary/82">
+              <span
+                className="h-1.5 w-1.5 rounded-full bg-primary"
+                style={{ animation: "pxl-dot-pulse 1.35s ease-in-out infinite" }}
+              />
+              Live
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
             <div
               className="h-full rounded-full bg-gradient-to-r from-primary/40 via-primary to-emerald-300/70"
               style={{
-                width:
-                  leadQuality === "Hot"
-                    ? "92%"
-                    : leadQuality === "Warm"
-                      ? "66%"
-                      : "34%",
+                width: intelligence.isReady ? "76%" : "42%",
                 animation: "pxl-shimmer 4.2s ease-in-out infinite",
               }}
             />
@@ -1504,14 +1455,16 @@ export function HeroSection() {
                   {(leadPrepBusy || leadIntel) &&
                     conversationState.visitorType !== "unknown" && (
                       <span
-                        className="text-[0.6875rem] text-muted-foreground/75 md:text-xs"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-primary/14 bg-primary/[0.055] px-2.5 py-1 text-[0.625rem] font-medium uppercase tracking-[0.12em] text-primary/78 md:text-[0.6875rem]"
                         aria-live="polite"
                       >
-                        {leadPrepBusy
-                          ? "Preparing structured lead preview…"
-                          : leadIntel
-                            ? `Lead signal: ${leadIntel.leadScore}`
-                            : null}
+                        <span
+                          className="h-1.5 w-1.5 rounded-full bg-primary"
+                          style={{
+                            animation: "pxl-dot-pulse 1.35s ease-in-out infinite",
+                          }}
+                        />
+                        Strategic analysis active
                       </span>
                     )}
                 </div>
@@ -1799,10 +1752,16 @@ export function HeroSection() {
                 <div className="grid gap-3">
                   <div className="rounded-[1rem] border border-white/[0.08] bg-white/[0.035] p-4">
                     <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
-                      Lead Score
+                      Strategic analysis
                     </p>
-                    <p className="mt-1 text-lg font-semibold text-foreground">
-                      {intakeLeadScore || leadIntel?.leadScore || "Analysing"}
+                    <p className="mt-1 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                      <span
+                        className="h-1.5 w-1.5 rounded-full bg-primary"
+                        style={{
+                          animation: "pxl-dot-pulse 1.35s ease-in-out infinite",
+                        }}
+                      />
+                      Active
                     </p>
                   </div>
                   <div className="rounded-[1rem] border border-primary/18 bg-primary/[0.075] p-4">
@@ -1815,10 +1774,10 @@ export function HeroSection() {
                   </div>
                   <div className="rounded-[1rem] border border-white/[0.08] bg-white/[0.035] p-4">
                     <p className="text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/68">
-                      Estimated Opportunity Level
+                      Advisory status
                     </p>
                     <p className="mt-1 text-lg font-semibold text-foreground">
-                      {opportunityLevel}
+                      Strategic context ready
                     </p>
                   </div>
                   <div className="rounded-[1rem] border border-white/[0.08] bg-black/20 p-4">
