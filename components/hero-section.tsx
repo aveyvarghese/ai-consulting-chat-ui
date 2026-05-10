@@ -28,7 +28,9 @@ import {
   trackAnalyticsEvent,
 } from "@/lib/analytics-events"
 import { ExecutiveIntelligencePanel } from "@/components/executive-intelligence-panel"
+import { ServiceRecommendationCard } from "@/components/service-recommendation-card"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
+import { computePublicServiceRecommendation } from "@/lib/service-routing"
 import {
   PUBLIC_SUPPORT_EMAIL_MESSAGE,
   sanitizeEnquirySubmitErrorMessage,
@@ -142,9 +144,19 @@ export function HeroSection() {
     null
   )
   const [enquirySubmitSuccess, setEnquirySubmitSuccess] = useState(false)
+  const [routingCardDismissed, setRoutingCardDismissed] = useState(false)
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
+
+  const serviceRecommendation = useMemo(
+    () =>
+      computePublicServiceRecommendation(
+        messages,
+        conversationState.visitorType
+      ),
+    [messages, conversationState.visitorType]
+  )
 
   const attachmentUploadLabel = useMemo(() => {
     switch (conversationState.visitorType) {
@@ -205,6 +217,10 @@ export function HeroSection() {
     chatOpenedTrackedRef.current = true
     trackAnalyticsEvent(AnalyticsEvent.CHAT_OPENED)
   }, [hasMessages])
+
+  useEffect(() => {
+    setRoutingCardDismissed(false)
+  }, [serviceRecommendation?.directionLabel])
 
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
@@ -305,6 +321,7 @@ export function HeroSection() {
     setAttachedFile(null)
     setLeadSubmitMessage(null)
     setEnquirySubmitSuccess(false)
+    setRoutingCardDismissed(false)
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -336,6 +353,11 @@ export function HeroSection() {
       const synced = deriveLeadData(leadData, messages, conversationState)
       setLeadData(synced)
 
+      const routingPayload = computePublicServiceRecommendation(
+        messages,
+        conversationState.visitorType
+      )
+
       const sumRes = await fetch("/api/lead/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -346,6 +368,7 @@ export function HeroSection() {
           })),
           leadData: synced,
           snapshot: conversationState,
+          ...(routingPayload ? { serviceRecommendation: routingPayload } : {}),
         }),
       })
       const sumJson = await sumRes.json()
@@ -381,6 +404,7 @@ export function HeroSection() {
           professionalSummary,
           attachment,
           submitSource: "Homepage · PxlBrief AI",
+          ...(routingPayload ? { serviceRecommendation: routingPayload } : {}),
         }),
       })
       const data = await res.json()
@@ -722,6 +746,14 @@ export function HeroSection() {
                 onChange={handleChatFileChange}
                 aria-label="Attach PDF or document"
               />
+              {serviceRecommendation &&
+                !routingCardDismissed &&
+                messages.filter((m) => m.role === "user").length >= 2 && (
+                  <ServiceRecommendationCard
+                    recommendation={serviceRecommendation}
+                    onDismiss={() => setRoutingCardDismissed(true)}
+                  />
+                )}
               <div className="mb-3 flex min-w-0 justify-start">
                 <button
                   type="button"

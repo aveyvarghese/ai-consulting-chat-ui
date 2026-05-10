@@ -45,11 +45,18 @@ const attachmentSchema = z.object({
   base64: z.string().max(6_000_000),
 })
 
+const serviceRecommendationSchema = z.object({
+  directionLabel: z.string().max(200),
+  whyItMatters: z.string().max(600),
+  suggestedNextStep: z.string().max(600),
+})
+
 const submitBodySchema = z.object({
   messages: z.array(chatMessageSchema).max(250).optional().default([]),
   snapshot: z.record(z.unknown()),
   leadData: leadDataSchema.optional(),
   professionalSummary: z.string().max(4000).optional().default(""),
+  serviceRecommendation: serviceRecommendationSchema.optional(),
   attachment: attachmentSchema.optional(),
   /** Client-provided label, e.g. "Homepage · PxlBrief AI" */
   submitSource: z.string().max(200).optional(),
@@ -224,6 +231,7 @@ export async function POST(req: Request) {
       submittedSource,
       submittedAt: submittedAtDate,
       attachmentsLine: filesLine,
+      serviceRecommendation: raw.data.serviceRecommendation,
     }
 
     const htmlBody = buildLeadEnquiryEmailHtml(emailInput)
