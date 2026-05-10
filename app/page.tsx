@@ -1,3 +1,4 @@
+import { CredibilityStrip } from "@/components/credibility-strip"
 import { HeroSection } from "@/components/hero-section"
 import { StrategicCaseIntelligenceSection } from "@/components/strategic-case-intelligence-section"
 import { StrategicSystemsWeBuildSection } from "@/components/strategic-systems-we-build-section"
@@ -14,6 +15,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-hidden">
       <HeroSection />
+      <CredibilityStrip />
       <StrategicSystemsWeBuildSection />
       {/* Phase 3: mounted client section — verify in DOM as #strategic-case-intelligence */}
       <StrategicCaseIntelligenceSection />

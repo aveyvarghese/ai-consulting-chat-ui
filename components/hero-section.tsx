@@ -29,6 +29,7 @@ import {
   AnalyticsEvent,
   trackAnalyticsEvent,
 } from "@/lib/analytics-events"
+import { ExecutiveIntelligencePanel } from "@/components/executive-intelligence-panel"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import {
   PUBLIC_SUPPORT_EMAIL_MESSAGE,
@@ -526,115 +527,129 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[min(78vh,820px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-20 pt-12 sm:px-4 sm:pb-24 sm:pt-16 md:min-h-[80vh] md:pb-28 md:pt-24"
+      className="relative flex min-h-[min(82vh,880px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-24 pt-14 sm:px-4 sm:pb-28 sm:pt-16 md:min-h-[min(84vh,920px)] md:pb-32 md:pt-24 lg:pt-28"
       aria-label="PxlBrief — strategic intelligence and consulting"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
-          className="absolute left-1/2 top-[28%] h-[min(90vw,720px)] w-[min(95vw,920px)] -translate-x-1/2 rounded-full bg-primary/[0.055] blur-[128px]"
+          className="absolute left-1/2 top-[26%] h-[min(90vw,720px)] w-[min(95vw,920px)] -translate-x-1/2 rounded-full bg-primary/[0.055] blur-[128px]"
           style={{ animation: "pxl-breathe 14s ease-in-out infinite" }}
         />
         <div
-          className="absolute bottom-[18%] right-[12%] h-[min(70vw,520px)] w-[min(70vw,520px)] rounded-full bg-accent/[0.04] blur-[110px]"
+          className="absolute bottom-[16%] right-[10%] h-[min(70vw,520px)] w-[min(70vw,520px)] rounded-full bg-accent/[0.06] blur-[110px]"
           style={{
             animation: "pxl-breathe 18s ease-in-out infinite 2s",
           }}
         />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background/80 to-transparent" />
+        <div
+          className="absolute inset-0 opacity-[0.28] pxl-data-grid pxl-data-grid-shift"
+          aria-hidden
+        />
+        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-background/85 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full min-w-0 max-w-3xl text-center">
-        <div className="mb-7 md:mb-8">
-          <span className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
-            Pxl<span className="text-primary">Brief</span>
-          </span>
-        </div>
+      {!hasMessages ? (
+        <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_min(400px,38%)] lg:gap-14 xl:gap-20">
+            <div className="text-center lg:text-left">
+              <div className="mb-8 md:mb-10 lg:mb-12">
+                <span className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+                  Pxl<span className="text-primary">Brief</span>
+                </span>
+              </div>
 
-        <h1 className="mx-auto mb-5 max-w-4xl text-balance text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.03em] text-foreground sm:text-[2.125rem] md:mb-6 md:text-5xl md:tracking-[-0.035em] lg:text-[3.25rem]">
-          Systems for serious leverage, not experiments.
-        </h1>
+              <h1 className="mx-auto mb-6 max-w-4xl text-balance text-[1.8125rem] font-semibold leading-[1.08] tracking-[-0.03em] text-foreground sm:text-[2.125rem] md:mb-8 md:text-5xl md:leading-[1.06] md:tracking-[-0.035em] lg:mx-0 lg:text-[3.125rem] xl:text-[3.35rem]">
+                Systems for serious leverage, not experiments.
+              </h1>
 
-        <p className="mx-auto mb-12 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.65] text-muted-foreground/90 md:mb-14 md:max-w-2xl md:text-lg md:leading-relaxed">
-          We architect AI systems, automation, and growth infrastructure your
-          operators can run. Founders get signal, not noise.
-        </p>
+              <p className="mx-auto mb-12 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.7] text-muted-foreground/90 md:mb-14 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
+                We architect AI systems, automation, and growth infrastructure your
+                operators can run. Founders get signal, not noise.
+              </p>
 
-        {!hasMessages && (
-          <>
-            <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
-              Strategic session
-            </p>
-            <div
-              className={`relative mx-auto mb-6 w-full min-w-0 max-w-2xl transition-[box-shadow,filter] duration-500 ease-out md:mb-7 ${
-                isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
-              }`}
-            >
+              <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80 lg:text-left">
+                Strategic session
+              </p>
               <div
-                className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-primary/25 via-primary/[0.12] to-primary/25 blur-md transition-opacity duration-500 ease-out ${
-                  isFocused ? "opacity-90" : "opacity-35"
+                className={`relative mx-auto mb-6 w-full min-w-0 max-w-2xl transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:mx-0 ${
+                  isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
                 }`}
-                style={{
-                  animation: "pulse-glow 4s ease-in-out infinite",
-                }}
-              />
-
-              <form onSubmit={handleSubmit}>
+              >
                 <div
-                  className={`relative flex min-w-0 items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-300 ease-out dark:bg-card/[0.72] ${
-                    isFocused
-                      ? "border-primary/45 shadow-lg shadow-primary/[0.08] ring-1 ring-primary/15"
-                      : "border-hairline hover:border-primary/25 hover:bg-card dark:hover:bg-card/[0.78]"
+                  className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-primary/25 via-primary/[0.12] to-primary/25 blur-md transition-opacity duration-500 ease-out ${
+                    isFocused ? "opacity-90" : "opacity-35"
                   }`}
-                >
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    placeholder={displayedPlaceholder}
-                    className="min-h-[3.25rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-4 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
-                  />
-                  <button
-                    type="submit"
-                    disabled={isLoading || !inputValue.trim()}
-                    className="mr-2 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md hover:shadow-primary/15 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 sm:mr-2.5 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
+                  style={{
+                    animation: "pulse-glow 4s ease-in-out infinite",
+                  }}
+                />
+
+                <form onSubmit={handleSubmit}>
+                  <div
+                    className={`relative flex min-w-0 items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.72] ${
+                      isFocused
+                        ? "border-primary/45 shadow-lg shadow-primary/[0.08] ring-1 ring-primary/15"
+                        : "border-hairline hover:border-primary/28 hover:bg-card dark:hover:bg-card/[0.78]"
+                    }`}
                   >
-                    <ArrowRight className="h-[1.125rem] w-[1.125rem] md:h-5 md:w-5" />
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                      placeholder={displayedPlaceholder}
+                      className="min-h-[3.25rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-4 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading || !inputValue.trim()}
+                      className="mr-2 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 motion-reduce:transition-colors sm:mr-2.5 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
+                    >
+                      <ArrowRight className="h-[1.125rem] w-[1.125rem] md:h-5 md:w-5" />
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div
+                className="mx-auto mb-10 flex min-w-0 max-w-2xl flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start md:mb-12 md:gap-2.5"
+                role="group"
+                aria-label="Suggested prompts"
+              >
+                {suggestionChips.map(({ label, prompt }) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => void submitMessage(prompt)}
+                    className="min-h-11 touch-manipulation rounded-full border border-hairline bg-card/96 px-3.5 py-2.5 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm motion-reduce:transition-colors"
+                  >
+                    {label}
                   </button>
-                </div>
-              </form>
+                ))}
+              </div>
+
+              <p className="mx-auto max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/65 md:text-sm lg:mx-0">
+                Same rigor we bring to boards and operating reviews—now at first
+                contact.
+              </p>
             </div>
 
-            <div
-              className="mx-auto mb-10 flex min-w-0 max-w-2xl flex-wrap justify-center gap-2 md:gap-2.5"
-              role="group"
-              aria-label="Suggested prompts"
-            >
-              {suggestionChips.map(({ label, prompt }) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => void submitMessage(prompt)}
-                  className="min-h-11 touch-manipulation rounded-full border border-hairline bg-card/96 px-3.5 py-2.5 text-left text-[0.8125rem] font-medium leading-snug text-muted-foreground/90 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/30 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:px-4 md:text-sm"
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">
+              <ExecutiveIntelligencePanel />
             </div>
+          </div>
 
-            <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/65 md:text-sm">
-              Same rigor we bring to boards and operating reviews—now at first
-              contact.
-            </p>
-          </>
-        )}
-      </div>
+          <div className="mx-auto mt-14 w-full max-w-md lg:hidden">
+            <ExecutiveIntelligencePanel compact />
+          </div>
+        </div>
+      ) : null}
 
       {hasMessages && (
-        <div className="relative z-10 mt-8 w-full min-w-0 max-w-3xl px-2 sm:mt-10 sm:px-3 md:mt-12 md:px-0">
+        <div className="relative z-10 mx-auto mt-8 w-full min-w-0 max-w-3xl px-2 sm:mt-10 sm:px-3 md:mt-12 md:px-0">
           <div className="relative overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.25rem] dark:bg-card/[0.55]">
             <div className="flex min-w-0 items-center justify-between gap-2 border-b border-hairline bg-chrome-bar px-4 py-3 sm:px-5 sm:py-3.5 md:px-6 md:py-4">
               <div className="flex items-center gap-3">
@@ -857,7 +872,7 @@ export function HeroSection() {
                       <StrategicSessionBookingLink
                         href={STRATEGY_CALL_BOOKING_URL}
                         source="hero_enquiry_success"
-                        className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-md hover:shadow-primary/15"
+                        className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 motion-reduce:transition-colors"
                       >
                         Book strategy session
                       </StrategicSessionBookingLink>
@@ -882,7 +897,7 @@ export function HeroSection() {
                 <button
                   type="submit"
                   disabled={isLoading || !inputValue.trim()}
-                  className="flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/92 hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+                  className="flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none motion-reduce:transition-colors"
                 >
                   <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
                 </button>

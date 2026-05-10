@@ -3,23 +3,21 @@ import { ChevronRight } from "lucide-react"
 const processSteps = [
   {
     key: "diagnose",
-    label: "Frame",
-    detail: "Where capital, time, and attention leak—and what signal is missing.",
+    label: "Diagnose",
+    detail:
+      "Map constraints, signal gaps, and operating drag with executive-grade clarity.",
   },
   {
-    key: "strategize",
-    label: "Thesis",
-    detail: "A defensible view: priorities, tradeoffs, and the metrics that matter.",
+    key: "design",
+    label: "Design",
+    detail:
+      "Define the architecture: systems, ownership, metrics, and the path to leverage.",
   },
   {
-    key: "build",
-    label: "Install",
-    detail: "Automation, creative, and workflows wired as one operating layer.",
-  },
-  {
-    key: "scale",
-    label: "Compound",
-    detail: "Tighten what works; cut what does not. No heroics required.",
+    key: "deploy",
+    label: "Deploy",
+    detail:
+      "Install workflows and automation your team runs — measured, governed, compounding.",
   },
 ] as const
 
@@ -43,41 +41,46 @@ const metrics = [
 
 export function HowWeWorkSection() {
   return (
-    <section className="relative border-y border-hairline bg-section-tint px-3 py-16 sm:px-4 sm:py-24 md:py-32">
-      <div className="mx-auto max-w-6xl">
-        <header className="mb-14 flex flex-col gap-5 md:mb-16 md:flex-row md:items-end md:justify-between">
+    <section className="relative border-y border-hairline bg-section-tint px-3 py-20 sm:px-4 sm:py-28 md:py-36">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.22] pxl-data-grid"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-6xl">
+        <header className="mb-16 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between md:gap-10">
           <div>
-            <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
-              Method
+            <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
+              How we work
             </p>
-            <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
-              How engagements run
+            <h2 className="text-[1.875rem] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground sm:text-3xl md:text-[2.375rem] md:leading-[1.1] md:tracking-[-0.03em]">
+              Diagnose. Design. Deploy.
             </h2>
           </div>
           <p className="max-w-md text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-base md:leading-relaxed">
-            Frame → Thesis → Install → Compound. Clear stages. No theater.
+            A disciplined consulting cadence — evidence first, architecture second,
+            execution last.
           </p>
         </header>
 
-        <div className="hidden items-stretch gap-0 md:flex">
+        <div className="hidden items-stretch gap-4 md:flex md:gap-6 lg:gap-8">
           {processSteps.map((step, i) => (
             <div key={step.key} className="flex min-w-0 flex-1 items-start">
-              <div className="flex w-full flex-col">
-                <div className="mb-5 flex items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/28 bg-primary/[0.09] font-mono text-[11px] font-medium tabular-nums text-primary/95 shadow-sm">
+              <div className="flex w-full flex-col rounded-[1.125rem] border border-hairline/90 bg-card/[0.45] p-6 shadow-sm backdrop-blur-sm dark:bg-card/[0.22] lg:p-7">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/28 bg-primary/[0.09] font-mono text-[11px] font-medium tabular-nums text-primary/95 shadow-sm">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   {i < processSteps.length - 1 && (
                     <div
-                      className="h-px min-w-0 flex-1 bg-gradient-to-r from-primary/35 to-transparent"
+                      className="hidden h-px min-w-0 flex-1 bg-gradient-to-r from-primary/30 to-transparent xl:block"
                       aria-hidden
                     />
                   )}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold tracking-tight text-foreground/95">
+                <h3 className="mb-3 text-lg font-semibold tracking-tight text-foreground/95 lg:text-xl">
                   {step.label}
                 </h3>
-                <p className="pr-4 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
+                <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm md:leading-relaxed">
                   {step.detail}
                 </p>
               </div>
@@ -85,11 +88,11 @@ export function HowWeWorkSection() {
           ))}
         </div>
 
-        <ol className="flex flex-col gap-8 md:hidden">
+        <ol className="flex flex-col gap-6 md:hidden">
           {processSteps.map((step, i) => (
             <li
               key={step.key}
-              className="flex gap-4 rounded-[1.125rem] border border-hairline bg-card/92 p-5 shadow-sm backdrop-blur-md transition-shadow duration-300 hover:shadow-md dark:bg-card/[0.28]"
+              className="flex gap-4 rounded-[1.125rem] border border-hairline bg-card/92 p-6 shadow-sm backdrop-blur-md transition-shadow duration-500 ease-out hover:shadow-md dark:bg-card/[0.28]"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/28 bg-primary/[0.09] font-mono text-[11px] font-medium text-primary/95 shadow-sm">
                 {String(i + 1).padStart(2, "0")}
@@ -118,13 +121,13 @@ export function HowWeWorkSection() {
 
 export function IndustriesSection() {
   return (
-    <section className="relative px-3 py-16 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-20 sm:px-4 sm:py-28 md:py-36">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-12 md:mb-14">
-          <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
+        <header className="mb-14 md:mb-16">
+          <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/85">
             Sectors
           </p>
-          <h2 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
+          <h2 className="text-[1.875rem] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground sm:text-3xl md:text-[2.375rem] md:tracking-[-0.03em]">
             Where we deploy depth
           </h2>
         </header>
@@ -146,7 +149,7 @@ export function IndustriesSection() {
 
 export function ResultsSection() {
   return (
-    <section className="relative px-3 pb-20 pt-6 sm:px-4 sm:pb-24 md:pb-32 md:pt-10">
+    <section className="relative px-3 pb-24 pt-10 sm:px-4 sm:pb-28 md:pb-36 md:pt-14">
       <div className="mx-auto grid min-w-0 max-w-6xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         {metrics.map((m) => (
           <div
@@ -168,22 +171,26 @@ export function ResultsSection() {
 
 export function FinalCtaSection() {
   return (
-    <section className="relative px-3 pb-16 pt-6 sm:px-4 sm:pb-20 md:pb-28 md:pt-8">
-      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.25rem] border border-hairline bg-card/94 px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-8 sm:py-14 dark:bg-card/[0.42] md:px-14 md:py-16">
-        <div className="pointer-events-none absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl" />
-        <div className="pointer-events-none absolute -right-16 bottom-0 h-52 w-52 rounded-full bg-primary/[0.05] blur-2xl" />
+    <section className="relative px-3 pb-20 pt-10 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
+      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.25rem] border border-hairline bg-card/94 px-6 py-12 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 dark:bg-card/[0.42] md:px-14 md:py-20">
+        <div className="pointer-events-none absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl pxl-ambient-glow-drift" />
+        <div className="pointer-events-none absolute -right-16 bottom-0 h-52 w-52 rounded-full bg-accent/[0.08] blur-2xl pxl-ambient-glow-drift-reverse" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.2] pxl-data-grid"
+          aria-hidden
+        />
 
         <div className="relative z-10">
-          <h2 className="text-balance text-3xl font-semibold leading-tight tracking-[-0.02em] text-foreground md:text-[2.25rem]">
+          <h2 className="text-balance text-[1.875rem] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground sm:text-3xl md:text-[2.375rem] md:leading-[1.1] md:tracking-[-0.03em]">
             Ready when you are.
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:text-lg md:leading-relaxed">
+          <p className="mx-auto mt-6 max-w-xl text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:mt-8 md:text-lg md:leading-relaxed">
             Open a session. Bring a problem, a metric, or a deck. We map the
             next move with the same discipline we bring behind closed doors.
           </p>
           <a
             href="#consulting-chat"
-            className="mt-8 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 ease-out hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18 active:scale-[0.99] sm:mt-10 sm:w-auto sm:min-h-[2.875rem] sm:px-9"
+            className="mt-10 inline-flex min-h-[3rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors sm:mt-12 sm:w-auto sm:min-h-[3rem] sm:px-12"
           >
             Start a session
           </a>

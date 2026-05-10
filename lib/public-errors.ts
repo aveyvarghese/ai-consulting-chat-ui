@@ -1,6 +1,7 @@
+import { SITE_CONTACT_EMAIL } from "@/lib/contact"
+
 /** Safe copy for any chat/API failure shown in the product UI */
-export const PUBLIC_SUPPORT_EMAIL_MESSAGE =
-  "Something went wrong. Please email info@pxlbrief.com."
+export const PUBLIC_SUPPORT_EMAIL_MESSAGE = `Something went wrong. Please email ${SITE_CONTACT_EMAIL}.`
 
 const ENQUIRY_FILE_TOO_LARGE = /too large to attach/i
 
