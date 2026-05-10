@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 export const metadata: Metadata = {
   title: "Contact | PxlBrief",
@@ -32,13 +33,26 @@ export default function ContactPage() {
           </ul>
         </div>
 
-        <div className="mt-12">
+        <div className="mx-auto mt-12 flex w-full max-w-md flex-col items-stretch gap-5">
           <Link
             href="/#consulting-chat"
             className="inline-flex min-h-[2.875rem] items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/93 hover:shadow-lg hover:shadow-primary/18"
           >
             Start with PxlBrief AI
           </Link>
+          <div className="rounded-[0.875rem] border border-white/[0.06] bg-card/[0.25] px-5 py-5 text-center backdrop-blur-sm">
+            <p className="text-[0.8125rem] text-muted-foreground/85">
+              Prefer to schedule directly?
+            </p>
+            <a
+              href={STRATEGY_CALL_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-2.5 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
+            >
+              Book a Strategy Call
+            </a>
+          </div>
         </div>
 
         <p className="mt-10 text-sm text-muted-foreground/70">

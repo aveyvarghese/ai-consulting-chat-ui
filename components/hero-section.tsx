@@ -23,8 +23,10 @@ import {
   deriveLeadData,
   type LeadData,
 } from "@/lib/lead-data"
-import { LEAD_SUBMIT_SUCCESS_MESSAGE } from "@/lib/booking"
-import { BookingStrategyCallLink } from "@/components/booking-strategy-call-link"
+import {
+  LEAD_SUBMIT_SUCCESS_MESSAGE,
+  STRATEGY_CALL_BOOKING_URL,
+} from "@/lib/booking"
 import {
   PUBLIC_SUPPORT_EMAIL_MESSAGE,
   sanitizeEnquirySubmitErrorMessage,
@@ -809,7 +811,14 @@ export function HeroSection() {
                     <p className="mt-3 text-[0.75rem] leading-relaxed text-muted-foreground/80 md:text-[0.8125rem]">
                       Prefer to schedule directly?
                     </p>
-                    <BookingStrategyCallLink className="mt-3 w-full" />
+                    <a
+                      href={STRATEGY_CALL_BOOKING_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-2.5 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
+                    >
+                      Book a Strategy Call
+                    </a>
                   </div>
                 ) : (
                   <p className="mb-3 text-[0.8125rem] leading-relaxed text-red-400/95 md:text-sm">
