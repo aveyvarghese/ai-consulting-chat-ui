@@ -9,10 +9,17 @@ import type { LeadData } from "@/lib/lead-data"
 import {
   mergeLeadDataIntoConversationSnapshot,
 } from "@/lib/lead-submit"
+import { generateStrategicBrief } from "@/lib/strategic-brief"
 import {
   buildLeadEnquiryEmailHtml,
   buildLeadEnquiryEmailText,
 } from "@/lib/lead-email-html"
+import {
+  buildVisitorFollowUpEmailHtml,
+  buildVisitorFollowUpEmailText,
+  isValidVisitorEmail,
+  pickVisitorFollowUpSubject,
+} from "@/lib/visitor-follow-up-email"
 import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 import { PUBLIC_SUPPORT_EMAIL_MESSAGE } from "@/lib/public-errors"
 import { appendLeadToGoogleSheets } from "@/lib/google-sheets"
@@ -221,6 +228,20 @@ export async function POST(req: Request) {
 
     const transcriptExcerpt = transcript.slice(0, 4500)
 
+    const strategicBrief = await generateStrategicBrief({
+      messages: raw.data.messages ?? [],
+      transcript,
+      leadData: ld,
+      intelligence: {
+        businessVertical: intelligence.businessVertical,
+        businessStage: intelligence.businessStage,
+        currentChallenge: intelligence.currentChallenge,
+        servicesInterested: intelligence.servicesInterested,
+      },
+      professionalSummary: profSummary,
+      serviceRecommendation: raw.data.serviceRecommendation ?? null,
+    })
+
     const emailInput = {
       intelligence,
       leadData: ld,
@@ -232,6 +253,7 @@ export async function POST(req: Request) {
       submittedAt: submittedAtDate,
       attachmentsLine: filesLine,
       serviceRecommendation: raw.data.serviceRecommendation,
+      strategicBrief,
     }
 
     const htmlBody = buildLeadEnquiryEmailHtml(emailInput)
@@ -275,6 +297,47 @@ export async function POST(req: Request) {
       )
     }
 
+    const visitorEmail = firstNonEmpty(ld.email, intelligence.email).trim()
+    if (isValidVisitorEmail(visitorEmail)) {
+      const visitorName = firstNonEmpty(ld.name, intelligence.name)
+      const visitorInput = {
+        name: visitorName,
+        professionalSummary: profSummary,
+        strategicBrief,
+        intelligence: {
+          currentChallenge: intelligence.currentChallenge,
+          servicesInterested: intelligence.servicesInterested,
+          consultantSummary: intelligence.consultantSummary,
+          businessVertical: intelligence.businessVertical,
+          businessStage: intelligence.businessStage,
+        },
+        serviceRecommendation: raw.data.serviceRecommendation ?? null,
+      }
+      try {
+        const { error: visitorErr } = await resend.emails.send({
+          from,
+          to: visitorEmail,
+          subject: pickVisitorFollowUpSubject(visitorEmail),
+          html: buildVisitorFollowUpEmailHtml(visitorInput),
+          text: buildVisitorFollowUpEmailText(visitorInput),
+          replyTo: LEAD_TO_EMAIL,
+        })
+        if (visitorErr) {
+          console.warn(
+            "Visitor follow-up email could not be sent",
+            visitorErr.message ?? "unknown"
+          )
+        }
+      } catch (visitorSendError) {
+        console.warn(
+          "Visitor follow-up email could not be sent",
+          visitorSendError instanceof Error
+            ? visitorSendError.message
+            : visitorSendError
+        )
+      }
+    }
+
     try {
       await appendLeadToGoogleSheets({
         submittedAt,
@@ -311,8 +374,7 @@ export async function POST(req: Request) {
 
     return Response.json({
       ok: true,
-      leadScore: intelligence.leadScore,
-      subjectAccent: intelligence.subjectAccent,
+      strategicBrief,
     })
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unexpected error"

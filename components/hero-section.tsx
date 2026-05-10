@@ -28,9 +28,13 @@ import {
   trackAnalyticsEvent,
 } from "@/lib/analytics-events"
 import { ExecutiveIntelligencePanel } from "@/components/executive-intelligence-panel"
+import { ExecutiveSignalsPanel } from "@/components/executive-signals-panel"
+import type { ExecutiveSignalItem } from "@/lib/executive-signals-types"
 import { ServiceRecommendationCard } from "@/components/service-recommendation-card"
+import { StrategicBriefCard } from "@/components/strategic-brief-card"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { computePublicServiceRecommendation } from "@/lib/service-routing"
+import type { StrategicBriefPayload } from "@/lib/strategic-brief-types"
 import {
   PUBLIC_SUPPORT_EMAIL_MESSAGE,
   sanitizeEnquirySubmitErrorMessage,
@@ -145,6 +149,13 @@ export function HeroSection() {
   )
   const [enquirySubmitSuccess, setEnquirySubmitSuccess] = useState(false)
   const [routingCardDismissed, setRoutingCardDismissed] = useState(false)
+  const [strategicBrief, setStrategicBrief] = useState<StrategicBriefPayload | null>(
+    null
+  )
+  const [executiveSignals, setExecutiveSignals] = useState<
+    ExecutiveSignalItem[] | null
+  >(null)
+  const [execSignalsBusy, setExecSignalsBusy] = useState(false)
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
@@ -221,6 +232,68 @@ export function HeroSection() {
   useEffect(() => {
     setRoutingCardDismissed(false)
   }, [serviceRecommendation?.directionLabel])
+
+  useEffect(() => {
+    if (!hasMessages || enquirySubmitSuccess) {
+      return
+    }
+    const visitorType = conversationState.visitorType
+    if (visitorType !== "potential_client" && visitorType !== "unknown") {
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
+      return
+    }
+    const userTurns = messages.filter((m) => m.role === "user").length
+    if (userTurns < 2) {
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
+      return
+    }
+
+    let cancelled = false
+    const controller = new AbortController()
+    const timer = setTimeout(async () => {
+      setExecSignalsBusy(true)
+      try {
+        const res = await fetch("/api/chat/executive-signals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({
+            messages: messages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+            visitorType,
+          }),
+        })
+        const data: { signals?: unknown } = await res.json().catch(() => ({}))
+        if (cancelled) return
+        if (!res.ok) {
+          setExecutiveSignals([])
+          return
+        }
+        const list = Array.isArray(data.signals) ? data.signals : []
+        setExecutiveSignals(list as ExecutiveSignalItem[])
+      } catch {
+        if (cancelled || controller.signal.aborted) return
+        setExecutiveSignals([])
+      } finally {
+        if (!cancelled) setExecSignalsBusy(false)
+      }
+    }, 650)
+
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+      controller.abort()
+    }
+  }, [
+    hasMessages,
+    enquirySubmitSuccess,
+    messages,
+    conversationState.visitorType,
+  ])
 
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
@@ -322,6 +395,9 @@ export function HeroSection() {
     setLeadSubmitMessage(null)
     setEnquirySubmitSuccess(false)
     setRoutingCardDismissed(false)
+    setStrategicBrief(null)
+    setExecutiveSignals(null)
+    setExecSignalsBusy(false)
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -349,6 +425,7 @@ export function HeroSection() {
     setLeadSubmitBusy(true)
     setLeadSubmitMessage(null)
     setEnquirySubmitSuccess(false)
+    setStrategicBrief(null)
     try {
       const synced = deriveLeadData(leadData, messages, conversationState)
       setLeadData(synced)
@@ -411,7 +488,15 @@ export function HeroSection() {
       if (!res.ok) {
         throw new Error(data.error || `Request failed (${res.status})`)
       }
+      const br = data.strategicBrief as StrategicBriefPayload | undefined
+      if (br?.complete === true && br.fields) {
+        setStrategicBrief({ complete: true, fields: br.fields })
+      } else {
+        setStrategicBrief({ complete: false })
+      }
       setEnquirySubmitSuccess(true)
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
       setLeadSubmitMessage(null)
       trackAnalyticsEvent(AnalyticsEvent.SUBMIT_ENQUIRY, { success: true })
     } catch (err) {
@@ -734,6 +819,13 @@ export function HeroSection() {
               <div ref={messagesEndRef} />
             </div>
 
+            {!enquirySubmitSuccess ? (
+              <ExecutiveSignalsPanel
+                signals={executiveSignals}
+                loading={execSignalsBusy}
+              />
+            ) : null}
+
             <form
               onSubmit={handleSubmit}
               className="border-t border-hairline bg-chrome-bar p-3.5 sm:p-4 md:p-5"
@@ -768,39 +860,44 @@ export function HeroSection() {
                 </button>
               </div>
               {enquirySubmitSuccess ? (
-                <div
-                  className="mb-4 rounded-[0.875rem] border border-primary/20 bg-gradient-to-b from-primary/[0.06] to-card/96 p-5 shadow-sm backdrop-blur-sm dark:from-primary/[0.08] dark:to-card/[0.35] md:p-6"
-                  role="status"
-                >
-                  <div className="flex items-start gap-3 text-left">
-                    <CheckCircle2
-                      className="mt-0.5 h-5 w-5 shrink-0 text-primary"
-                      strokeWidth={1.75}
-                      aria-hidden
-                    />
-                    <div className="min-w-0 flex-1 space-y-3">
-                      <div>
-                        <p className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-foreground md:text-base">
-                          Thank you — your brief is in.
+                <div className="space-y-0">
+                  <div
+                    className="mb-4 rounded-[0.875rem] border border-primary/20 bg-gradient-to-b from-primary/[0.06] to-card/96 p-5 shadow-sm backdrop-blur-sm dark:from-primary/[0.08] dark:to-card/[0.35] md:p-6"
+                    role="status"
+                  >
+                    <div className="flex items-start gap-3 text-left">
+                      <CheckCircle2
+                        className="mt-0.5 h-5 w-5 shrink-0 text-primary"
+                        strokeWidth={1.75}
+                        aria-hidden
+                      />
+                      <div className="min-w-0 flex-1 space-y-3">
+                        <div>
+                          <p className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-foreground md:text-base">
+                            Thank you — your brief is in.
+                          </p>
+                          <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
+                            A principal will review your thread and follow up personally.
+                            Most replies land within one to two business days.
+                          </p>
+                        </div>
+                        <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/85 md:text-sm">
+                          If the matter is time-sensitive, hold a strategy session so
+                          we can align on cadence and ownership before the week moves
+                          on.
                         </p>
-                        <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
-                          A principal will review your thread and follow up personally.
-                          Most replies land within one to two business days.
-                        </p>
+                        <StrategicSessionBookingLink
+                          source="hero_enquiry_success"
+                          className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 motion-reduce:transition-colors"
+                        >
+                          Book strategy session
+                        </StrategicSessionBookingLink>
                       </div>
-                      <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/85 md:text-sm">
-                        If the matter is time-sensitive, hold a strategy session so
-                        we can align on cadence and ownership before the week moves
-                        on.
-                      </p>
-                      <StrategicSessionBookingLink
-                        source="hero_enquiry_success"
-                        className="inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 motion-reduce:transition-colors"
-                      >
-                        Book strategy session
-                      </StrategicSessionBookingLink>
                     </div>
                   </div>
+                  {strategicBrief !== null ? (
+                    <StrategicBriefCard payload={strategicBrief} />
+                  ) : null}
                 </div>
               ) : leadSubmitMessage ? (
                 <p className="mb-3 text-[0.8125rem] leading-relaxed text-muted-foreground md:text-sm">

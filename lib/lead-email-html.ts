@@ -5,6 +5,7 @@
 import type { LeadData } from "@/lib/lead-data"
 import type { LeadIntelligenceResult } from "@/lib/lead-intelligence"
 import type { PublicServiceRecommendation } from "@/lib/service-routing"
+import type { StrategicBriefPayload } from "@/lib/strategic-brief-types"
 import { VISITOR_PUBLIC_LABEL } from "@/lib/lead-intelligence"
 
 /** Approximates default Executive Sunrise: warm paper, ink, ember CTA, blue accent */
@@ -48,6 +49,28 @@ function sectionTitle(title: string): string {
 </td></tr>`
 }
 
+const STRATEGIC_BRIEF_PENDING =
+  "Brief will be completed after our strategy review."
+
+function strategicBriefEmailBlock(
+  strategicBrief: StrategicBriefPayload | null | undefined
+): string {
+  if (strategicBrief == null) return ""
+  if (!strategicBrief.complete) {
+    return `${sectionTitle("Strategic brief")}<tr><td colspan="2" style="padding:4px 0 12px 0;">
+  <div style="font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.55;color:${C.muted};border-left:3px solid ${C.primaryBorder};padding:12px 14px;background:${C.primarySoft};border-radius:0 10px 10px 0;">${esc(STRATEGIC_BRIEF_PENDING)}</div>
+</td></tr>`
+  }
+  const f = strategicBrief.fields
+  return `${sectionTitle("Strategic brief")}${[
+    row("Business context", f.businessContext),
+    row("Key challenge", f.keyChallenge),
+    row("Recommended direction", f.recommendedDirection),
+    row("Priority system to build", f.prioritySystem),
+    row("Suggested next step", f.suggestedNextStep),
+  ].join("")}`
+}
+
 function scorePill(score: string): string {
   const s = score.trim()
   const bg =
@@ -74,6 +97,8 @@ export interface LeadEnquiryEmailInput {
   attachmentsLine: string
   /** Visitor-facing routing card mirrored for the team (no scores). */
   serviceRecommendation?: PublicServiceRecommendation | null
+  /** Post-submit strategic brief (screen + email). */
+  strategicBrief?: StrategicBriefPayload | null
 }
 
 function first(...vals: string[]): string {
@@ -92,6 +117,7 @@ export function buildLeadEnquiryEmailHtml(input: LeadEnquiryEmailInput): string 
     submittedAt,
     attachmentsLine,
     serviceRecommendation,
+    strategicBrief,
   } = input
 
   const visitorLabel =
@@ -186,6 +212,9 @@ export function buildLeadEnquiryEmailHtml(input: LeadEnquiryEmailInput): string 
           ${sectionTitle("Conversation summary")}
           <table role="presentation" width="100%"><tr><td style="padding:4px 0 0 0;">${preBlock(summary)}</td></tr></table>
         </td></tr>
+        <tr><td style="padding:0 26px 8px 26px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">${strategicBriefEmailBlock(strategicBrief)}</table>
+        </td></tr>
         <tr><td style="padding:0 26px 22px 26px;">
           ${sectionTitle("Session excerpt")}
           <table role="presentation" width="100%"><tr><td style="padding:4px 0 0 0;">${preBlock(transcriptExcerpt.slice(0, 2800))}</td></tr></table>
@@ -211,6 +240,7 @@ export function buildLeadEnquiryEmailText(input: LeadEnquiryEmailInput): string 
     submittedAt,
     attachmentsLine,
     serviceRecommendation,
+    strategicBrief,
   } = input
   const visitorLabel =
     VISITOR_PUBLIC_LABEL[f.visitorType as keyof typeof VISITOR_PUBLIC_LABEL] ??
@@ -238,6 +268,21 @@ export function buildLeadEnquiryEmailText(input: LeadEnquiryEmailInput): string 
     "CONVERSATION SUMMARY",
     professionalSummary.trim() || f.consultantSummary.trim() || "—",
     "",
+    ...(strategicBrief != null
+      ? [
+          "STRATEGIC BRIEF",
+          ...(strategicBrief.complete
+            ? [
+                `Business context: ${strategicBrief.fields.businessContext}`,
+                `Key challenge: ${strategicBrief.fields.keyChallenge}`,
+                `Recommended direction: ${strategicBrief.fields.recommendedDirection}`,
+                `Priority system to build: ${strategicBrief.fields.prioritySystem}`,
+                `Suggested next step: ${strategicBrief.fields.suggestedNextStep}`,
+              ]
+            : [STRATEGIC_BRIEF_PENDING]),
+          "",
+        ]
+      : []),
     "RECOMMENDED SERVICE DIRECTION",
     f.servicesInterested.trim() || ld.service.trim() || "—",
     "",
