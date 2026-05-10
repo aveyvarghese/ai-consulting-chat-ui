@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { rootMetadata } from '@/lib/seo'
 import { DEFAULT_THEME, THEME_BOOT_SCRIPT } from '@/lib/theme'
 import { SiteAmbient } from '@/components/site-ambient'
 import { SiteFooter } from '@/components/site-footer'
@@ -11,29 +12,7 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: 'PxlBrief | AI systems & strategic intelligence',
-  description:
-    'Operating architecture for growth: intelligence systems, automation design, and infrastructure founders can run.',
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
-}
+export const metadata: Metadata = rootMetadata()
 
 export default function RootLayout({
   children,
@@ -57,7 +36,7 @@ export default function RootLayout({
           <div className="flex-1">{children}</div>
           <SiteFooter />
         </div>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <Analytics />
       </body>
     </html>
   )

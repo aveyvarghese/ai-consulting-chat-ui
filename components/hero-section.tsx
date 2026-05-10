@@ -28,6 +28,11 @@ import {
   STRATEGY_CALL_BOOKING_URL,
 } from "@/lib/booking"
 import {
+  AnalyticsEvent,
+  trackAnalyticsEvent,
+} from "@/lib/analytics-events"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
+import {
   PUBLIC_SUPPORT_EMAIL_MESSAGE,
   sanitizeEnquirySubmitErrorMessage,
 } from "@/lib/public-errors"
@@ -165,6 +170,7 @@ export function HeroSection() {
     null
   )
   const leadPrepFingerprintRef = useRef<string>("")
+  const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
 
@@ -227,6 +233,13 @@ export function HeroSection() {
   }, [messages, attachedFile])
 
   useEffect(() => {
+    if (!hasMessages) return
+    if (chatOpenedTrackedRef.current) return
+    chatOpenedTrackedRef.current = true
+    trackAnalyticsEvent(AnalyticsEvent.CHAT_OPENED)
+  }, [hasMessages])
+
+  useEffect(() => {
     console.log("Lead Data:", leadData)
   }, [leadData])
 
@@ -287,6 +300,12 @@ export function HeroSection() {
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
     if (!text || isLoading) return
+
+    if (messages.length === 0) {
+      trackAnalyticsEvent(AnalyticsEvent.START_AI_CONSULTATION, {
+        surface: "hero",
+      })
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -369,6 +388,7 @@ export function HeroSection() {
   }
 
   const handleClose = () => {
+    chatOpenedTrackedRef.current = false
     setMessages([])
     setError(null)
     setConversationState(createInitialConversationState())
@@ -459,6 +479,7 @@ export function HeroSection() {
         throw new Error(data.error || `Request failed (${res.status})`)
       }
       setLeadSubmitMessage(LEAD_SUBMIT_SUCCESS_MESSAGE)
+      trackAnalyticsEvent(AnalyticsEvent.SUBMIT_ENQUIRY, { success: true })
     } catch (err) {
       const raw = err instanceof Error ? err.message : "Failed to submit enquiry"
       setLeadSubmitMessage(sanitizeEnquirySubmitErrorMessage(raw))
@@ -811,14 +832,13 @@ export function HeroSection() {
                     <p className="mt-3 text-[0.75rem] leading-relaxed text-muted-foreground/80 md:text-[0.8125rem]">
                       Prefer a calendar hold?
                     </p>
-                    <a
+                    <StrategicSessionBookingLink
                       href={STRATEGY_CALL_BOOKING_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      source="hero_success"
                       className="mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-3 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
                     >
                       Schedule working session
-                    </a>
+                    </StrategicSessionBookingLink>
                   </div>
                 ) : (
                   <p className="mb-3 text-[0.8125rem] leading-relaxed text-red-400/95 md:text-sm">

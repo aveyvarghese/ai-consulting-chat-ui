@@ -1,11 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Contact | PxlBrief",
-  description: "Connect with PxlBrief — start with PxlBrief AI.",
-}
+export const metadata: Metadata = pageMetadata({
+  path: "/contact",
+  title: "Contact",
+  description:
+    "Contact PxlBrief for AI consulting India, AI automation consulting, and AI growth systems. Start with PxlBrief AI or book a strategy call—business automation and performance marketing systems for brands.",
+})
 
 export default function ContactPage() {
   return (
@@ -44,14 +48,13 @@ export default function ContactPage() {
             <p className="text-[0.8125rem] text-muted-foreground/85">
               Prefer to schedule directly?
             </p>
-            <a
+            <StrategicSessionBookingLink
               href={STRATEGY_CALL_BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              source="contact_page"
               className="mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-primary/[0.06] px-5 py-3 text-sm font-semibold tracking-tight text-primary transition-all duration-300 hover:border-primary/50 hover:bg-primary/12 hover:shadow-md hover:shadow-primary/10"
             >
               Book a Strategy Call
-            </a>
+            </StrategicSessionBookingLink>
           </div>
         </div>
 

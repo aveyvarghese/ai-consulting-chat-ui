@@ -9,12 +9,14 @@ import {
   Workflow,
 } from "lucide-react"
 import { brandServices } from "@/lib/brand-services"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Services | PxlBrief",
+export const metadata: Metadata = pageMetadata({
+  path: "/services",
+  title: "Services",
   description:
-    "Intelligence systems, growth architecture, automation design, and digital estates—delivered as one operating layer.",
-}
+    "PxlBrief services: AI growth systems, AI automation consulting, business automation, performance marketing systems, and AI workflows for brands—intelligence architecture delivered as one operating layer.",
+})
 
 const icons = [Brain, Palette, TrendingUp, Target, Workflow, LayoutGrid] as const
 

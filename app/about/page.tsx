@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "About | PxlBrief",
+export const metadata: Metadata = pageMetadata({
+  path: "/about",
+  title: "About",
   description:
-    "PxlBrief is a premium AI-native consultancy — Diagnose, Strategize, Build, Scale.",
-}
+    "About PxlBrief: an AI strategy consultant and AI consulting practice—AI consulting India and globally, AI automation consulting, Diagnose · Strategize · Build · Scale.",
+})
 
 export default function AboutPage() {
   return (
