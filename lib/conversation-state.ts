@@ -494,26 +494,28 @@ function derivePotentialClientStructuredStage(
       t
     )
 
-  if (verticalOrCategory) s = Math.max(s, 1 as PotentialClientStructuredStage)
+  if (verticalOrCategory) {
+    s = Math.max(s, 1) as PotentialClientStructuredStage
+  }
 
   /* Stage 2: business stage language or enough back-and-forth */
   if (sig2 || (assistantCount >= 1 && userCount >= 2)) {
-    s = Math.max(s, 2 as PotentialClientStructuredStage)
+    s = Math.max(s, 2) as PotentialClientStructuredStage
   }
   /* Stage 3: pressure / challenge surfaced */
   if (sig3 || (assistantCount >= 2 && userCount >= 3)) {
-    s = Math.max(s, 3 as PotentialClientStructuredStage)
+    s = Math.max(s, 3) as PotentialClientStructuredStage
   }
   /* Stage 4: channels */
   if (sig4 || (assistantCount >= 3 && userCount >= 4)) {
-    s = Math.max(s, 4 as PotentialClientStructuredStage)
+    s = Math.max(s, 4) as PotentialClientStructuredStage
   }
 
   /* Stage 5: long thread → lead capture */
   const deep = messages.length >= 12 || assistantCount >= 5
   const veryLong = messages.length >= 18 || assistantCount >= 8
   if ((s >= 4 && deep) || veryLong || (assistantCount >= 6 && userCount >= 5)) {
-    s = Math.max(s, 5 as PotentialClientStructuredStage)
+    s = Math.max(s, 5) as PotentialClientStructuredStage
   }
 
   const clamped = Math.min(5, Math.max(1, s))

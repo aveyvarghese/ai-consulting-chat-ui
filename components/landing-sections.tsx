@@ -192,7 +192,7 @@ export function FinalCtaSection() {
             href="#consulting-chat"
             className="mt-10 inline-flex min-h-[3rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors sm:mt-12 sm:w-auto sm:min-h-[3rem] sm:px-12"
           >
-            Start a session
+            Talk to PxlBrief AI
           </a>
         </div>
       </div>

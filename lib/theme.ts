@@ -22,8 +22,9 @@ export const THEME_OPTIONS: { id: ThemeId; label: string; short: string }[] = [
 
 export const THEME_STORAGE_KEY = "pxl-theme"
 
-/** First paint + invalid localStorage; user choice still wins when stored. */
-export const DEFAULT_THEME = "executive-sunrise" satisfies ThemeId
+/** Fixed production theme direction. */
+export const DEFAULT_THEME = "luxury" satisfies ThemeId
+export const DEFAULT_THEME_VARIANT = "luminous-tech"
 
 export function isThemeId(value: string | null | undefined): value is ThemeId {
   return (
@@ -71,7 +72,9 @@ export function applyThemeWithTransition(id: ThemeId): void {
 }
 
 /** Minified boot snippet for `next/script` `beforeInteractive`. */
-export const THEME_BOOT_SCRIPT = `(function(){var r=document.documentElement;try{var k=${JSON.stringify(THEME_STORAGE_KEY)},v=localStorage.getItem(k),t=${JSON.stringify(DEFAULT_THEME)},a=${JSON.stringify([...THEME_IDS])},L=${JSON.stringify("executive-light")},S=${JSON.stringify("executive-sunrise")};if(a.indexOf(v)>-1)t=v;r.dataset.theme=t;if(t===L||t===S){r.classList.remove("dark");}else{r.classList.add("dark");}}catch(e){r.dataset.theme=${JSON.stringify(DEFAULT_THEME)};r.classList.remove("dark");}})();`
+export const THEME_BOOT_SCRIPT = `(function(){var r=document.documentElement;r.dataset.theme=${JSON.stringify(DEFAULT_THEME)};r.classList.add("dark");})();`
+
+export const THEME_VARIANT_BOOT_SCRIPT = `(function(){document.documentElement.dataset.themeVariant=${JSON.stringify(DEFAULT_THEME_VARIANT)};})();`
 
 export function readStoredTheme(): ThemeId {
   if (typeof window === "undefined") return DEFAULT_THEME
@@ -83,3 +86,4 @@ export function readStoredTheme(): ThemeId {
   }
   return DEFAULT_THEME
 }
+

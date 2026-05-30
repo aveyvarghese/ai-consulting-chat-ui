@@ -100,18 +100,38 @@ function uploadButtonLabel(messages: Message[]): string {
 }
 
 const placeholderPrompts = [
-  "Where is operational drag hiding?",
-  "Map our automation architecture.",
-  "Pressure-test our growth plan.",
-  "What should leadership see weekly?",
+  "We are a B2B services company and need more qualified leads.",
+  "Our marketing is scattered and we want clearer priorities.",
+  "We want to use AI but do not know where to start.",
+  "Our website is not converting enough enquiries.",
 ]
 
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
-  { label: "Find operational drag", prompt: "Where is operational drag hiding?" },
-  { label: "Automation map", prompt: "Map our automation architecture." },
-  { label: "Growth pressure-test", prompt: "Pressure-test our growth plan." },
-  { label: "Leadership view", prompt: "What should leadership see weekly?" },
+  {
+    label: "I need more leads",
+    prompt: "I need more leads for my business.",
+  },
+  {
+    label: "My marketing is scattered",
+    prompt: "My marketing is scattered and I need a clearer growth system.",
+  },
+  {
+    label: "I want to use AI",
+    prompt: "I want to use AI in my business but do not know where to start.",
+  },
+  {
+    label: "My website is not converting",
+    prompt: "My website is not converting enough visitors into enquiries.",
+  },
+  {
+    label: "Leads are not tracked",
+    prompt: "Leads are not tracked properly across our website, CRM, and follow-up.",
+  },
+  {
+    label: "I need better dashboards",
+    prompt: "I need better dashboards and reporting for founder-level decisions.",
+  },
 ]
 
 interface Message {
@@ -136,9 +156,12 @@ export function HeroSection() {
   const [error, setError] = useState<string | null>(null)
   const [attachedFile, setAttachedFile] = useState<File | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const diagnosticPanelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
   const chatFileInputRef = useRef<HTMLInputElement>(null)
+  const [isLandingHighlighted, setIsLandingHighlighted] = useState(false)
 
   const [conversationState, setConversationState] =
     useState<ConversationStatePayload>(createInitialConversationState)
@@ -221,6 +244,42 @@ export function HeroSection() {
   useEffect(() => {
     scrollToBottom()
   }, [messages, attachedFile])
+
+  useEffect(() => {
+    const focusDiagnosticInput = () => {
+      if (window.location.hash !== "#consulting-chat") return
+
+      const section = sectionRef.current
+      if (section) {
+        const offset = window.matchMedia("(max-width: 767px)").matches ? 72 : 88
+        const top = section.getBoundingClientRect().top + window.scrollY - offset
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" })
+      }
+
+      setIsLandingHighlighted(true)
+      window.setTimeout(() => {
+        const target = chatInputRef.current ?? inputRef.current
+        target?.focus({ preventScroll: true })
+      }, 450)
+      window.setTimeout(() => setIsLandingHighlighted(false), 1800)
+    }
+
+    const handleDiagnosticLinkClick = (event: MouseEvent) => {
+      const link = (event.target as Element | null)?.closest?.("a[href]")
+      const href = link?.getAttribute("href")
+      if (href === "#consulting-chat" || href === "/#consulting-chat") {
+        window.setTimeout(focusDiagnosticInput, 80)
+      }
+    }
+
+    focusDiagnosticInput()
+    window.addEventListener("hashchange", focusDiagnosticInput)
+    document.addEventListener("click", handleDiagnosticLinkClick)
+    return () => {
+      window.removeEventListener("hashchange", focusDiagnosticInput)
+      document.removeEventListener("click", handleDiagnosticLinkClick)
+    }
+  }, [])
 
   useEffect(() => {
     if (!hasMessages) return
@@ -542,57 +601,99 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[min(82vh,880px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-24 pt-14 sm:px-4 sm:pb-28 sm:pt-16 md:min-h-[min(84vh,920px)] md:pb-32 md:pt-24 lg:pt-28"
-      aria-label="PxlBrief — strategic intelligence and consulting"
+      ref={sectionRef}
+      className="section-hero-dark relative flex min-h-[min(70vh,700px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-9 pt-6 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
+      aria-label="Run your AI growth diagnostic"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
-          className="absolute left-1/2 top-[26%] h-[min(90vw,720px)] w-[min(95vw,920px)] -translate-x-1/2 rounded-full bg-primary/[0.055] blur-[128px]"
+          className="absolute left-1/2 top-[18%] h-[min(92vw,420px)] w-[min(98vw,520px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[72px] md:top-[22%] md:h-[min(92vw,760px)] md:w-[min(98vw,980px)] md:bg-primary/[0.06] md:blur-[136px]"
           style={{ animation: "pxl-breathe 14s ease-in-out infinite" }}
         />
         <div
-          className="absolute bottom-[16%] right-[10%] h-[min(70vw,520px)] w-[min(70vw,520px)] rounded-full bg-accent/[0.06] blur-[110px]"
+          className="hidden md:absolute md:-top-[18%] md:right-[8%] md:block md:h-[min(64vw,520px)] md:w-[min(64vw,520px)] md:rounded-full md:bg-[color-mix(in_oklab,var(--primary)_28%,transparent)] md:opacity-[0.16] md:blur-[120px]"
+          aria-hidden
+        />
+        <div
+          className="absolute bottom-[16%] right-[4%] h-[min(56vw,260px)] w-[min(56vw,260px)] rounded-full bg-accent/[0.045] blur-[72px] md:bottom-[13%] md:right-[8%] md:h-[min(70vw,520px)] md:w-[min(70vw,520px)] md:bg-accent/[0.065] md:blur-[118px]"
           style={{
             animation: "pxl-breathe 18s ease-in-out infinite 2s",
           }}
         />
         <div
-          className="absolute inset-0 opacity-[0.28] pxl-data-grid pxl-data-grid-shift"
+          className="absolute inset-0 opacity-[0.16] pxl-data-grid md:opacity-[0.23] md:pxl-data-grid-shift"
           aria-hidden
         />
-        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-background/85 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background/90 to-transparent md:h-44" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent via-background/35 to-section-tint/55 md:h-40" />
       </div>
 
       {!hasMessages ? (
         <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
-          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_min(400px,38%)] lg:gap-14 xl:gap-20">
+          <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
             <div className="text-center lg:text-left">
-              <div className="mb-8 md:mb-10 lg:mb-12">
-                <span className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+              <div className="mb-3 md:mb-8 lg:mb-9">
+                <span className="inline-flex max-w-full rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-primary/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[0.6875rem] sm:tracking-[0.22em]">
+                  PxlBrief AI diagnostic
+                </span>
+                <span className="mt-3 block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:mt-6 md:text-2xl">
                   Pxl<span className="text-primary">Brief</span>
                 </span>
               </div>
 
-              <h1 className="mx-auto mb-6 max-w-4xl text-balance text-[1.8125rem] font-semibold leading-[1.08] tracking-[-0.03em] text-foreground sm:text-[2.125rem] md:mb-8 md:text-5xl md:leading-[1.06] md:tracking-[-0.035em] lg:mx-0 lg:text-[3.125rem] xl:text-[3.35rem]">
-                Systems for serious leverage, not experiments.
+              <h1 className="mx-auto mb-3 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
+                Run Your AI Growth Diagnostic
               </h1>
 
-              <p className="mx-auto mb-12 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.7] text-muted-foreground/90 md:mb-14 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
-                We architect AI systems, automation, and growth infrastructure your
-                operators can run. Founders get signal, not noise.
+              <p className="mx-auto mb-4 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
+                <span className="md:hidden">
+                  Answer a few focused questions and PxlBrief AI will identify
+                  your likely bottleneck, AI opportunity, and next step.
+                </span>
+                <span className="hidden md:inline">
+                  Answer a few focused questions and PxlBrief AI will identify
+                  your likely growth bottleneck, AI opportunity, and recommended
+                  next step.
+                </span>
               </p>
 
-              <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80 lg:text-left">
-                Strategic session
+              <div className="mx-auto mb-4 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-9 lg:mx-0">
+                <button
+                  type="button"
+                  onClick={() => inputRef.current?.focus()}
+                  className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
+                >
+                  <span>Run My Growth Diagnostic</span>
+                </button>
+                <a
+                  href="#ai-lab"
+                  className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/14 bg-card/62 px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/34 hover:bg-primary/[0.06] hover:text-foreground hover:shadow-[0_14px_40px_-28px_var(--glow-primary)] sm:w-auto sm:flex-1 lg:flex-none"
+                >
+                  <span className="md:hidden">Explore AI Lab</span>
+                  <span className="hidden md:inline">Enter AI Lab</span>
+                </a>
+              </div>
+
+              <div className="relative mx-auto mb-4 w-full max-w-sm lg:hidden">
+                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
+                <ExecutiveIntelligencePanel compact />
+              </div>
+
+              <p className="mb-2 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
+                Start here: tell us what kind of business you run and what you
+                want to improve.
               </p>
               <div
-                className={`relative mx-auto mb-6 w-full min-w-0 max-w-2xl transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:mx-0 ${
-                  isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
+                ref={diagnosticPanelRef}
+                className={`relative mx-auto mb-4 w-full min-w-0 max-w-2xl rounded-[1.125rem] transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:mb-6 lg:mx-0 ${
+                  isFocused || isLandingHighlighted
+                    ? "drop-shadow-[0_0_28px_var(--glow-ambient)]"
+                    : ""
                 }`}
               >
                 <div
                   className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-primary/25 via-primary/[0.12] to-primary/25 blur-md transition-opacity duration-500 ease-out ${
-                    isFocused ? "opacity-90" : "opacity-35"
+                    isFocused || isLandingHighlighted ? "opacity-90" : "opacity-35"
                   }`}
                   style={{
                     animation: "pulse-glow 4s ease-in-out infinite",
@@ -603,8 +704,8 @@ export function HeroSection() {
                   <div
                     className={`relative flex min-w-0 items-center rounded-[1.125rem] border bg-card/95 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-card/[0.72] ${
                       isFocused
-                        ? "border-primary/45 shadow-lg shadow-primary/[0.08] ring-1 ring-primary/15"
-                        : "border-hairline hover:border-primary/28 hover:bg-card dark:hover:bg-card/[0.78]"
+                        ? "border-primary/45 shadow-[0_18px_48px_-30px_var(--glow-primary),inset_0_1px_0_0_var(--shine-inset)] ring-1 ring-primary/15"
+                        : "border-primary/14 hover:border-primary/28 hover:bg-card dark:hover:bg-card/[0.78]"
                     }`}
                   >
                     <input
@@ -615,12 +716,12 @@ export function HeroSection() {
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
                       placeholder={displayedPlaceholder}
-                      className="min-h-[3.25rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-4 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
+                      className="min-h-[3.125rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-3.5 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
                     />
                     <button
                       type="submit"
                       disabled={isLoading || !inputValue.trim()}
-                      className="mr-2 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg hover:shadow-primary/18 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 motion-reduce:transition-colors sm:mr-2.5 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
+                      className="mr-2 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] border border-primary/28 bg-gradient-to-b from-primary to-primary/82 text-primary-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_12px_32px_-20px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/44 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_18px_42px_-18px_var(--glow-primary)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:shadow-none disabled:active:scale-100 motion-reduce:transition-colors sm:mr-2.5 md:mr-3 md:h-[3.25rem] md:w-[3.25rem]"
                     >
                       <ArrowRight className="h-[1.125rem] w-[1.125rem] md:h-5 md:w-5" />
                     </button>
@@ -629,7 +730,7 @@ export function HeroSection() {
               </div>
 
               <div
-                className="mx-auto mb-10 grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2.5 gap-y-2.5 justify-items-stretch md:mb-12 md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
+                className="mx-auto mb-5 grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:mb-12 md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
                 role="group"
                 aria-label="Suggested prompts"
               >
@@ -638,29 +739,40 @@ export function HeroSection() {
                     key={prompt}
                     type="button"
                     disabled={isLoading}
-                    onClick={() => void submitMessage(prompt)}
-                    className="flex min-h-[2.5rem] w-full touch-manipulation items-center justify-center rounded-full border border-hairline bg-card/96 px-2.5 py-2 text-center text-[0.8125rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[0_2px_12px_-4px_rgba(40,48,64,0.07)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.07] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.35] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm md:shadow-sm motion-reduce:transition-colors"
+                    onClick={() => {
+                      setInputValue(prompt)
+                      inputRef.current?.focus()
+                    }}
+                    className="flex min-h-[2.35rem] w-full touch-manipulation items-center justify-center rounded-full border border-primary/12 bg-card/72 px-2 py-2 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.32] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm motion-reduce:transition-colors"
                   >
                     {label}
                   </button>
                 ))}
               </div>
 
-              <p className="mx-auto max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/65 md:text-sm lg:mx-0">
-                Same rigor we bring to boards and operating reviews—now at first
-                contact.
+              <p className="mx-auto max-w-xl text-[0.75rem] leading-relaxed text-muted-foreground/65 md:text-sm lg:mx-0">
+                A premium diagnostic layer for business bottlenecks, AI
+                opportunity, and the next system to build.
               </p>
             </div>
 
-            <div className="mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">
-              <ExecutiveIntelligencePanel />
+            <div className="relative mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">
+              <div className="pointer-events-none absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.06] blur-3xl" />
+              <div className="pointer-events-none absolute inset-0 translate-x-5 translate-y-5 rounded-[1.5rem] border border-primary/8 opacity-65 pxl-data-grid" />
+              <div className="relative">
+                <ExecutiveIntelligencePanel />
+              </div>
             </div>
           </div>
 
-          <div className="mx-auto mt-14 w-full max-w-md lg:hidden">
-            <ExecutiveIntelligencePanel compact />
-          </div>
         </div>
+      ) : null}
+
+      {!hasMessages ? (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-px bg-gradient-to-r from-transparent via-primary/28 to-transparent"
+          aria-hidden
+        />
       ) : null}
 
       {hasMessages && (

@@ -4,6 +4,42 @@
  */
 
 /* -------------------------------------------------------------------------- */
+/* Fixed Luminous Tech section colour direction                               */
+/* -------------------------------------------------------------------------- */
+html[data-theme][data-theme-variant="luminous-tech"] {
+  color-scheme: dark;
+  --section-hero: #101010;
+  --section-mid: #202020;
+  --section-alt: #151515;
+  --section-deep: #0a0a0a;
+  --section-cta: #181818;
+  --accent: #24b1b1;
+  --accent-soft: #f5f5f5;
+  --secondary-accent: #ff5722;
+  --border: rgba(36, 177, 177, 0.26);
+  --text-main: #f5f5f5;
+  --text-muted: #a7a7a7;
+  --glow: rgba(36, 177, 177, 0.2);
+  --card-bg: rgba(32, 32, 32, 0.76);
+  --card-border: rgba(36, 177, 177, 0.2);
+  --button-bg: #ff5722;
+  --button-text: #f5f5f5;
+  --background: #101010;
+  --card: var(--card-bg);
+  --card-foreground: var(--text-main);
+  --popover: #202020;
+  --popover-foreground: var(--text-main);
+  --primary: #ff5722;
+  --primary-foreground: var(--button-text);
+  --foreground: #f5f5f5;
+  --muted-foreground: #a7a7a7;
+  --ring: #24b1b1;
+  --hairline: var(--card-border);
+  --glow-primary: rgba(255, 87, 34, 0.2);
+  --glow-ambient: rgba(36, 177, 177, 0.18);
+}
+
+/* -------------------------------------------------------------------------- */
 /* Palantir Intelligence — cool slate, analytic teal, precision glow         */
 /* -------------------------------------------------------------------------- */
 html[data-theme="palantir"] {
@@ -193,7 +229,7 @@ html[data-theme="cinematic"] {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Executive Light — platinum editorial, graphite type, muted teal signal    */
+/* Executive Light — refined editorial, graphite type, muted teal signal     */
 /* Apple × McKinsey × Palantir: enterprise dashboard, not generic SaaS white */
 /* -------------------------------------------------------------------------- */
 html[data-theme="executive-light"] {
