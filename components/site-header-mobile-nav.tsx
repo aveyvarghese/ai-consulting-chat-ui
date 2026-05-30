@@ -14,6 +14,7 @@ import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 const nav = [
   { href: "/services", label: "Services" },
+  { href: "/ai-growth-audit", label: "AI Growth Audit" },
   { href: "/#ai-lab", label: "AI Lab" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -33,22 +34,33 @@ export function SiteHeaderMobileNav() {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="z-[60] w-[min(100%,19rem)] max-w-[calc(100vw-env(safe-area-inset-left)-env(safe-area-inset-right)-1rem)] gap-0 border-primary/12 bg-header-bg/95 p-0 pt-[max(0.75rem,env(safe-area-inset-top))] pr-[max(2.75rem,env(safe-area-inset-right))] shadow-2xl backdrop-blur-xl sm:max-w-sm sm:backdrop-blur-2xl"
+        className="z-[60] w-[min(100vw,22rem)] max-w-[calc(100vw-env(safe-area-inset-left))] gap-0 overflow-hidden border-l border-primary/18 bg-gradient-to-b from-header-bg/98 via-header-bg/96 to-background/96 p-0 pt-[max(0.75rem,env(safe-area-inset-top))] pr-[max(2.75rem,env(safe-area-inset-right))] shadow-[0_0_0_1px_rgba(255,255,255,0.035),-28px_0_80px_-44px_rgba(0,0,0,0.95)] backdrop-blur-2xl sm:max-w-sm"
       >
-        <SheetHeader className="border-b border-hairline px-4 pb-3 pt-1 text-left sm:px-5">
-          <SheetTitle className="text-sm font-semibold tracking-tight text-foreground">
-            Navigate
+        <div
+          className="pointer-events-none absolute -right-16 top-8 h-40 w-40 rounded-full bg-primary/[0.07] blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.14] pxl-data-grid"
+          aria-hidden
+        />
+        <SheetHeader className="relative border-b border-primary/10 px-4 pb-4 pt-2 text-left sm:px-5">
+          <SheetTitle className="text-base font-semibold tracking-tight text-foreground">
+            Pxl<span className="text-primary">Brief</span>
           </SheetTitle>
+          <p className="mt-1 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
+            Executive AI growth systems
+          </p>
         </SheetHeader>
         <nav
-          className="flex flex-col gap-0.5 px-3 py-3 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4 sm:py-4"
+          className="relative flex flex-col gap-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4"
           aria-label="Primary mobile"
         >
           {nav.map(({ href, label }) => (
             <SheetClose asChild key={href}>
               <Link
                 href={href}
-                className="touch-manipulation rounded-lg border border-transparent px-3 py-2.5 text-sm font-medium text-foreground/90 transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/12 hover:bg-primary/[0.055] active:bg-foreground/[0.08]"
+                className="touch-manipulation rounded-[0.85rem] border border-primary/10 bg-foreground/[0.025] px-3.5 py-3 text-sm font-semibold text-foreground/92 shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/22 hover:bg-primary/[0.055] active:bg-foreground/[0.08]"
               >
                 {label}
               </Link>
@@ -59,7 +71,7 @@ export function SiteHeaderMobileNav() {
               href={STRATEGY_CALL_BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 touch-manipulation rounded-lg border border-primary/30 bg-gradient-to-b from-primary/14 to-primary/[0.07] px-3 py-2.5 text-center text-sm font-semibold leading-snug tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 hover:bg-primary/12"
+              className="mt-3 touch-manipulation rounded-[0.85rem] border border-primary/32 bg-gradient-to-b from-primary/15 to-primary/[0.075] px-3.5 py-3 text-center text-sm font-semibold leading-snug tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 hover:bg-primary/12"
             >
               Strategic session
             </a>
