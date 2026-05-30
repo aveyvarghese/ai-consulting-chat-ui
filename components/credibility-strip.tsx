@@ -1,10 +1,10 @@
 const CAPABILITIES = [
-  "AI Strategy",
-  "Automation Systems",
-  "Executive Intelligence",
-  "Workflow Optimization",
-  "GTM Systems",
-  "Founder Advisory",
+  "AI Growth Consulting",
+  "Brand Strategy",
+  "Performance Growth",
+  "CRM Systems",
+  "Founder Dashboards",
+  "Market Intelligence",
 ] as const
 
 function CapabilityPill({ label }: { label: string }) {
@@ -29,7 +29,7 @@ export function CredibilityStrip() {
       />
       <div className="relative z-[1] mx-auto max-w-6xl px-3 sm:px-4 md:px-6">
         <p className="mb-5 text-center text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground/75 md:mb-6">
-          Trusted executive intelligence
+          AI-native growth systems for founder-led businesses
         </p>
 
         {/* Desktop: calm marquee */}

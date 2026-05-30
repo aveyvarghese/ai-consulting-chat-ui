@@ -17,74 +17,74 @@ type SystemCard = {
 
 const systems: readonly SystemCard[] = [
   {
-    title: "AI Sales Infrastructure",
+    title: "AI Implementation & Automation",
     description:
-      "Pipeline-grade qualification and routing—so revenue teams spend time on conversations that compound.",
+      "AI workflows, automation systems, internal copilots, customer support flows, reporting automation, and team productivity systems.",
     bullets: [
-      "Lead qualification & scoring",
-      "Enquiry intelligence",
-      "CRM automation & handoffs",
-      "Pipeline systems & hygiene",
-    ],
-    icon: ContactRound,
-  },
-  {
-    title: "Founder Intelligence Dashboards",
-    description:
-      "Executive visibility without noise—one surface for decisions, economics, and operating reality.",
-    bullets: [
-      "Business visibility layers",
-      "Decision & review systems",
-      "Performance intelligence",
-      "Operational insights",
-    ],
-    icon: LayoutDashboard,
-  },
-  {
-    title: "AI Brand Operations",
-    description:
-      "Brand and demand as repeatable systems—creative, content, and distribution wired to the same spine.",
-    bullets: [
-      "Content & narrative systems",
-      "Campaign workflows",
-      "Creative automation",
-      "Distribution architecture",
+      "AI workflows",
+      "Internal copilots",
+      "Support and reporting automation",
+      "Team productivity systems",
     ],
     icon: Sparkles,
   },
   {
-    title: "Conversion & Funnel Systems",
+    title: "Brand Strategy & Positioning",
     description:
-      "Journeys designed to convert and to learn—architecture, instrumentation, and iteration in lockstep.",
+      "Brand clarity, positioning, narrative, messaging, communication pillars, and premium market differentiation.",
     bullets: [
-      "Landing & page architecture",
-      "Funnel optimization loops",
-      "Conversion intelligence",
-      "Customer journey systems",
+      "Positioning strategy",
+      "Narrative architecture",
+      "Messaging systems",
+      "Premium differentiation",
     ],
-    icon: GitBranch,
+    icon: ContactRound,
   },
   {
-    title: "Strategic Growth Infrastructure",
+    title: "Digital Marketing & Performance Growth",
     description:
-      "Acquisition that scales with discipline—SEO, workflows, and audience intelligence as one program.",
+      "Campaign strategy, Meta, Google, LinkedIn, funnel planning, retargeting, content systems, and performance reporting.",
     bullets: [
-      "SEO & organic systems",
-      "Acquisition workflows",
-      "Growth automation",
-      "Audience intelligence",
+      "Campaign strategy",
+      "Performance funnels",
+      "Retargeting systems",
+      "Growth reporting",
     ],
     icon: LineChart,
   },
   {
-    title: "Workflow & Operations Automation",
+    title: "Website, SEO, AEO & GEO",
     description:
-      "Internal leverage where it matters—reporting, handoffs, and AI-assisted workflows your team will run.",
+      "Conversion-focused websites, search visibility, AI search readiness, landing pages, structured content, and lead capture.",
     bullets: [
-      "Internal automations",
-      "Reporting & signal systems",
-      "Operational leverage",
-      "AI-assisted workflows",
+      "Conversion websites",
+      "SEO and AI search readiness",
+      "Landing page systems",
+      "Structured lead capture",
+    ],
+    icon: GitBranch,
+  },
+  {
+    title: "Market Research & Business Intelligence",
+    description:
+      "Competitor analysis, category research, customer insights, market opportunity mapping, and strategic intelligence reports.",
+    bullets: [
+      "Competitor analysis",
+      "Category research",
+      "Customer insight systems",
+      "Opportunity mapping",
+    ],
+    icon: LayoutDashboard,
+  },
+  {
+    title: "CRM, Dashboards & Sales Enablement",
+    description:
+      "Lead tracking, CRM flows, sales scripts, dashboards, executive summaries, and follow-up systems.",
+    bullets: [
+      "Lead tracking",
+      "CRM flows",
+      "Executive dashboards",
+      "Follow-up systems",
     ],
     icon: Workflow,
   },
@@ -109,18 +109,18 @@ export function StrategicSystemsWeBuildSection() {
       <div className="relative mx-auto max-w-6xl">
         <header className="mx-auto mb-12 max-w-3xl text-center md:mb-20 md:text-left">
           <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
-            Infrastructure
+            Growth architecture
           </p>
           <h2
             id="strategic-systems-we-build-heading"
             className="text-balance text-3xl font-semibold leading-[1.12] tracking-[-0.02em] text-foreground md:text-[2.35rem]"
           >
-            Strategic Systems We Build
+            Strategic systems we build.
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:mx-0 md:text-lg md:leading-relaxed">
-            PxlBrief builds AI-powered operational and growth infrastructure for
-            modern businesses—designed to read like a consulting intelligence
-            stack, not a vendor brochure.
+            PxlBrief does not treat AI, marketing, branding, websites, CRM, and
+            dashboards as separate activities. We connect them into one
+            structured growth system.
           </p>
         </header>
 

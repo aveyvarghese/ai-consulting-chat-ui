@@ -23,7 +23,7 @@ export const THEME_OPTIONS: { id: ThemeId; label: string; short: string }[] = [
 export const THEME_STORAGE_KEY = "pxl-theme"
 
 /** First paint + invalid localStorage; user choice still wins when stored. */
-export const DEFAULT_THEME = "executive-sunrise" satisfies ThemeId
+export const DEFAULT_THEME = "luxury" satisfies ThemeId
 
 export function isThemeId(value: string | null | undefined): value is ThemeId {
   return (
