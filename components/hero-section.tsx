@@ -542,7 +542,7 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="relative flex min-h-[min(78vh,760px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-12 pt-8 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
+      className="section-hero-dark relative flex min-h-[min(78vh,760px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-12 pt-8 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
       aria-label="PxlBrief — strategic intelligence and consulting"
     >
       <div className="absolute inset-0 overflow-hidden">

@@ -21,9 +21,35 @@ export const THEME_OPTIONS: { id: ThemeId; label: string; short: string }[] = [
 ]
 
 export const THEME_STORAGE_KEY = "pxl-theme"
+export const THEME_VARIANT_STORAGE_KEY = "pxl-theme-variant"
 
 /** First paint + invalid localStorage; user choice still wins when stored. */
 export const DEFAULT_THEME = "luxury" satisfies ThemeId
+
+export const THEME_VARIANT_IDS = [
+  "luxury",
+  "bronze",
+  "emerald",
+  "minimalist-luxe",
+  "deep-emerald",
+  "aurora-pastel",
+  "luminous-tech",
+] as const
+
+export type ThemeVariantId = (typeof THEME_VARIANT_IDS)[number]
+
+export const THEME_VARIANT_OPTIONS: {
+  id: ThemeVariantId
+  label: string
+}[] = [
+  { id: "luxury", label: "Luxury" },
+  { id: "bronze", label: "Bronze" },
+  { id: "emerald", label: "Emerald" },
+  { id: "minimalist-luxe", label: "Minimalist Luxe" },
+  { id: "deep-emerald", label: "Deep Emerald" },
+  { id: "aurora-pastel", label: "Aurora Pastel" },
+  { id: "luminous-tech", label: "Luminous Tech" },
+]
 
 export function isThemeId(value: string | null | undefined): value is ThemeId {
   return (
@@ -32,6 +58,20 @@ export function isThemeId(value: string | null | undefined): value is ThemeId {
     value === "cinematic" ||
     value === "executive-light" ||
     value === "executive-sunrise"
+  )
+}
+
+export function isThemeVariantId(
+  value: string | null | undefined
+): value is ThemeVariantId {
+  return (
+    value === "luxury" ||
+    value === "bronze" ||
+    value === "emerald" ||
+    value === "minimalist-luxe" ||
+    value === "deep-emerald" ||
+    value === "aurora-pastel" ||
+    value === "luminous-tech"
   )
 }
 
@@ -48,6 +88,17 @@ export function commitThemeToDocument(id: ThemeId): void {
   root.classList.toggle("dark", isDarkAppearanceTheme(id))
   try {
     window.localStorage.setItem(THEME_STORAGE_KEY, id)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function commitThemeVariantToDocument(id: ThemeVariantId): void {
+  if (typeof document === "undefined") return
+  const root = document.documentElement
+  root.dataset.themeVariant = id
+  try {
+    window.localStorage.setItem(THEME_VARIANT_STORAGE_KEY, id)
   } catch {
     /* ignore */
   }
@@ -71,7 +122,9 @@ export function applyThemeWithTransition(id: ThemeId): void {
 }
 
 /** Minified boot snippet for `next/script` `beforeInteractive`. */
-export const THEME_BOOT_SCRIPT = `(function(){var r=document.documentElement;try{var k=${JSON.stringify(THEME_STORAGE_KEY)},v=localStorage.getItem(k),t=${JSON.stringify(DEFAULT_THEME)},a=${JSON.stringify([...THEME_IDS])},L=${JSON.stringify("executive-light")},S=${JSON.stringify("executive-sunrise")};if(a.indexOf(v)>-1)t=v;r.dataset.theme=t;if(t===L||t===S){r.classList.remove("dark");}else{r.classList.add("dark");}}catch(e){r.dataset.theme=${JSON.stringify(DEFAULT_THEME)};r.classList.remove("dark");}})();`
+export const THEME_BOOT_SCRIPT = `(function(){var r=document.documentElement;r.dataset.theme=${JSON.stringify(DEFAULT_THEME)};r.classList.add("dark");})();`
+
+export const THEME_VARIANT_BOOT_SCRIPT = `(function(){var r=document.documentElement;try{var k=${JSON.stringify(THEME_VARIANT_STORAGE_KEY)},v=localStorage.getItem(k),d=${JSON.stringify("luxury")},a=${JSON.stringify([...THEME_VARIANT_IDS])};if(a.indexOf(v)>-1)d=v;r.dataset.themeVariant=d;}catch(e){r.dataset.themeVariant=${JSON.stringify("luxury")};}})();`
 
 export function readStoredTheme(): ThemeId {
   if (typeof window === "undefined") return DEFAULT_THEME
@@ -82,4 +135,15 @@ export function readStoredTheme(): ThemeId {
     /* ignore */
   }
   return DEFAULT_THEME
+}
+
+export function readStoredThemeVariant(): ThemeVariantId {
+  if (typeof window === "undefined") return "luxury"
+  try {
+    const raw = window.localStorage.getItem(THEME_VARIANT_STORAGE_KEY)
+    if (isThemeVariantId(raw)) return raw
+  } catch {
+    /* ignore */
+  }
+  return "luxury"
 }

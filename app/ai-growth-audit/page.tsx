@@ -229,7 +229,7 @@ export default function AIGrowthAuditPage() {
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
+    <section className="section-hero-dark relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-8 h-[min(88vw,420px)] w-[min(96vw,560px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[70px] md:top-10 md:h-[680px] md:w-[900px] md:bg-primary/[0.05] md:blur-[130px]" />
         <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-accent/[0.035] blur-[58px] md:h-96 md:w-96 md:bg-accent/[0.04] md:blur-[118px]" />
@@ -298,7 +298,7 @@ function HeroSection() {
 
 function WhatItSolvesSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-10 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative border-y border-hairline/70 px-3 py-10 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="What it solves"
@@ -325,7 +325,7 @@ function WhatItSolvesSection() {
 
 function AuditCoverageSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Audit coverage"
@@ -353,7 +353,7 @@ function AuditCoverageSection() {
 
 function DeliverablesSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Deliverables"
@@ -381,7 +381,7 @@ function DeliverablesSection() {
 
 function ScorecardSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Scorecard preview"
@@ -444,7 +444,7 @@ function ScorecardSection() {
 
 function WhoItIsForSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-espresso relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Who it is for"
@@ -469,7 +469,7 @@ function WhoItIsForSection() {
 
 function ProcessSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader eyebrow="Process" title="How the audit works." />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-4 md:gap-4">
@@ -494,7 +494,7 @@ function ProcessSection() {
 
 function CommercialSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto grid max-w-6xl gap-5 md:grid-cols-[minmax(0,1fr)_minmax(280px,0.46fr)] md:items-center md:gap-8">
         <GlassCard className="p-5 sm:p-7 md:p-9">
           <SectionHeader
@@ -526,8 +526,8 @@ function CommercialSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="relative px-3 pb-14 pt-8 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
-      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline bg-card/94 px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.42] sm:rounded-[1.75rem] sm:px-10 sm:py-16 md:px-14">
+    <section className="section-cta-glow relative px-3 pb-14 pt-8 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
+      <div className="cta-glass-panel relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 md:px-14">
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.07] blur-3xl" />
         <div className="relative z-10">

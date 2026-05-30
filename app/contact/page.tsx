@@ -231,7 +231,7 @@ export default function ContactPage() {
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
+    <section className="section-hero-dark relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-8 h-[min(88vw,420px)] w-[min(96vw,560px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[70px] md:top-10 md:h-[680px] md:w-[900px] md:bg-primary/[0.05] md:blur-[130px]" />
         <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-accent/[0.035] blur-[58px] md:h-96 md:w-96 md:bg-accent/[0.04] md:blur-[118px]" />
@@ -293,7 +293,7 @@ function HeroSection() {
 
 function DiagnosisSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -322,7 +322,7 @@ function DiagnosisSection() {
 
 function IntakeCaptureSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Intake signals"
@@ -346,7 +346,7 @@ function IntakeCaptureSection() {
 
 function BeginOptionsSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader eyebrow="Entry routes" title="Choose how to begin." center />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-4">
@@ -400,7 +400,7 @@ function BeginOptionsSection() {
 
 function AfterSubmitSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Routing logic"
@@ -428,7 +428,7 @@ function AfterSubmitSection() {
 
 function BestFitSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader eyebrow="Service fit" title="Best fit engagements." center />
@@ -456,12 +456,12 @@ function BestFitSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="relative overflow-hidden px-3 py-12 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-cta-glow relative overflow-hidden px-3 py-12 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[min(92vw,520px)] w-[min(96vw,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.05] blur-[82px] md:blur-[128px]" />
         <div className="absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
       </div>
-      <GlassCard className="mx-auto max-w-5xl p-5 text-center sm:p-8 md:p-12">
+      <GlassCard className="cta-glass-panel mx-auto max-w-5xl p-5 text-center sm:p-8 md:p-12">
         <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.08] text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)]">
           <CheckCircle2 className="h-5 w-5" strokeWidth={1.7} aria-hidden />
         </div>

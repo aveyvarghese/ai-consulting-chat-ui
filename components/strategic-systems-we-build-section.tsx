@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import type { LucideIcon } from "lucide-react"
 import {
   ContactRound,
@@ -93,7 +94,7 @@ const systems: readonly SystemCard[] = [
 export function StrategicSystemsWeBuildSection() {
   return (
     <section
-      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-3 py-16 sm:px-4 sm:py-24 md:py-32"
+      className="section-bronze relative border-y border-hairline/70 px-3 py-16 sm:px-4 sm:py-24 md:py-32"
       aria-labelledby="strategic-systems-we-build-heading"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
@@ -124,53 +125,64 @@ export function StrategicSystemsWeBuildSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
-          {systems.map((item) => (
-            <article
-              key={item.title}
-              className="group relative flex min-w-0 flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-7 dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
-            >
-              <div
-                className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-gradient-to-br from-primary/[0.12] via-primary/[0.04] to-ring/[0.08] opacity-0 blur-3xl transition-opacity duration-700 ease-out group-hover:opacity-100"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-ring/[0.04] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"
-                aria-hidden
-              />
-
-              <div className="relative z-10 flex flex-1 flex-col">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-[0.625rem] border border-primary/22 bg-primary/[0.08] text-primary shadow-sm transition-all duration-500 group-hover:border-primary/38 group-hover:bg-primary/[0.12] group-hover:shadow-[0_0_28px_-6px_var(--glow-primary)]">
-                  <item.icon className="h-5 w-5" strokeWidth={1.6} aria-hidden />
+        <div className="relative overflow-hidden rounded-[1.35rem] border border-hairline bg-card/70 p-4 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.28] sm:rounded-[2rem] sm:p-7 md:p-9">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[min(72vw,34rem)] w-[min(72vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.065] blur-3xl" />
+          <div className="relative z-10 space-y-3 sm:space-y-4">
+            {systems.map((item, index) => (
+              <article
+                key={item.title}
+                className="group relative min-w-0 overflow-hidden rounded-[1rem] border border-hairline/80 bg-background/35 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[border-color,background-color,transform] duration-500 hover:border-primary/28 hover:bg-primary/[0.045] md:ml-[calc(var(--layer-offset)*1rem)]"
+                style={
+                  {
+                    "--layer-offset": index,
+                  } as CSSProperties
+                }
+              >
+                <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary/20 via-primary to-primary/20" />
+                <div className="grid gap-4 p-4 sm:p-5 md:grid-cols-[0.34fr_0.66fr] md:items-center md:gap-6">
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[0.85rem] border border-primary/22 bg-primary/[0.08] font-mono text-sm font-semibold text-primary">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
+                        {item.title.includes("AI")
+                          ? "AI Layer"
+                          : item.title.includes("Brand")
+                            ? "Brand Layer"
+                            : item.title.includes("Marketing")
+                              ? "Marketing Layer"
+                              : item.title.includes("Website")
+                                ? "Website & Search Layer"
+                                : item.title.includes("Market")
+                                  ? "Intelligence Layer"
+                                  : "CRM & Sales Layer"}
+                      </p>
+                      <h3 className="mt-1 text-base font-semibold tracking-tight text-foreground md:text-lg">
+                        {item.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+                    <p className="text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
+                      {item.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 md:max-w-[14rem] md:justify-end">
+                      {item.bullets.slice(0, 2).map((b) => (
+                        <span
+                          key={b}
+                          className="rounded-full border border-primary/14 bg-primary/[0.055] px-2.5 py-1 text-[0.6875rem] font-medium text-primary/90"
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-
-                <h3 className="text-lg font-semibold tracking-tight text-foreground md:text-[1.0625rem]">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm md:leading-relaxed">
-                  {item.description}
-                </p>
-
-                <ul
-                  className="mt-6 space-y-2.5 border-t border-hairline/50 pt-6"
-                  aria-label={`${item.title} capabilities`}
-                >
-                  {item.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="flex gap-3 text-[0.8125rem] leading-snug text-muted-foreground/95 md:text-sm"
-                    >
-                      <span
-                        className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary/50 ring-1 ring-primary/15"
-                        aria-hidden
-                      />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

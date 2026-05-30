@@ -133,6 +133,105 @@
   background-size: 28px 28px;
 }
 
+/* Premium section rhythm: subtle dark tonal shifts for long mobile scrolls. */
+.section-hero-dark {
+  background:
+    radial-gradient(circle at 50% 4%, color-mix(in oklch, var(--accent) 9%, transparent) 0, transparent min(62vw, 30rem)),
+    radial-gradient(circle at 82% 18%, color-mix(in oklch, var(--secondary-accent) 6%, transparent) 0, transparent min(60vw, 26rem)),
+    linear-gradient(180deg, var(--section-hero) 0%, color-mix(in oklch, var(--section-hero) 82%, var(--section-deep)) 100%);
+}
+
+.section-mid,
+.section-graphite,
+.section-bronze,
+.section-espresso,
+.section-cta-glow {
+  isolation: isolate;
+}
+
+.section-mid::before,
+.section-graphite::before,
+.section-bronze::before,
+.section-espresso::before,
+.section-cta-glow::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklch, var(--accent) 42%, transparent),
+    transparent
+  );
+  opacity: 0.62;
+}
+
+.section-mid {
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--glow) 34%, transparent), transparent min(72vw, 24rem)),
+    linear-gradient(180deg, var(--section-mid) 0%, var(--section-deep) 100%);
+}
+
+.section-graphite {
+  background:
+    radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--glow) 58%, transparent), transparent min(70vw, 26rem)),
+    linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 72%, #101010) 0%, var(--section-deep) 100%);
+}
+
+.section-bronze {
+  background:
+    radial-gradient(circle at 18% 12%, color-mix(in oklch, var(--glow) 72%, transparent), transparent min(74vw, 28rem)),
+    linear-gradient(180deg, var(--section-alt) 0%, var(--section-mid) 100%);
+}
+
+.section-espresso {
+  background:
+    radial-gradient(circle at 78% 18%, color-mix(in oklch, var(--accent-soft) 7%, transparent), transparent min(68vw, 24rem)),
+    linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 62%, var(--section-mid)) 0%, var(--section-deep) 100%);
+}
+
+.section-cta-glow {
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in oklch, var(--glow) 82%, transparent), transparent min(74vw, 34rem)),
+    linear-gradient(180deg, var(--section-mid) 0%, var(--section-cta) 100%);
+}
+
+.cta-glass-panel {
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--accent) 12%, transparent), color-mix(in oklch, var(--secondary-accent) 7%, transparent) 36%, color-mix(in oklch, var(--accent-soft) 4%, transparent) 54%, color-mix(in oklch, var(--section-deep) 88%, transparent)),
+    color-mix(in oklch, var(--card) 78%, var(--section-alt));
+  border-color: color-mix(in oklch, var(--accent) 28%, var(--hairline));
+}
+
+@media (max-width: 767px) {
+  .section-mid {
+    background:
+      radial-gradient(circle at 18% 10%, color-mix(in oklch, var(--glow) 48%, transparent), transparent 18rem),
+      linear-gradient(180deg, var(--section-mid) 0%, var(--section-deep) 100%);
+  }
+
+  .section-graphite {
+    background:
+      radial-gradient(circle at 86% 8%, color-mix(in oklch, var(--glow) 70%, transparent), transparent 19rem),
+      linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 72%, #101010) 0%, var(--section-deep) 100%);
+  }
+
+  .section-bronze {
+    background:
+      radial-gradient(circle at 16% 10%, color-mix(in oklch, var(--glow) 90%, transparent), transparent 20rem),
+      linear-gradient(180deg, var(--section-alt) 0%, var(--section-mid) 100%);
+  }
+
+  .section-espresso {
+    background:
+      radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--accent-soft) 9%, transparent), transparent 18rem),
+      linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 62%, var(--section-mid)) 0%, var(--section-deep) 100%);
+  }
+}
+
 @keyframes pxl-grid-shift {
   0% {
     background-position: 0 0;

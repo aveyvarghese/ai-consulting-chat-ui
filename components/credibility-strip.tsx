@@ -20,7 +20,7 @@ export function CredibilityStrip() {
 
   return (
     <section
-      className="relative border-y border-hairline/80 bg-section-tint/80 py-8 sm:py-10"
+      className="section-graphite relative border-y border-hairline/80 py-8 sm:py-10"
       aria-label="Practice areas"
     >
       <div
