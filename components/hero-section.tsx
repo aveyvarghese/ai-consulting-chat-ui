@@ -156,6 +156,7 @@ export function HeroSection() {
   const [error, setError] = useState<string | null>(null)
   const [attachedFile, setAttachedFile] = useState<File | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const diagnosticPanelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -182,6 +183,16 @@ export function HeroSection() {
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
+  const userTurnCount = useMemo(
+    () => messages.filter((message) => message.role === "user").length,
+    [messages]
+  )
+  const diagnosticStage =
+    userTurnCount <= 1
+      ? "Growth context"
+      : userTurnCount === 2
+        ? "Bottleneck mapping"
+        : "System recommendation"
 
   const serviceRecommendation = useMemo(
     () =>
@@ -238,6 +249,15 @@ export function HeroSection() {
   }, [displayedPlaceholder, isTyping, placeholderIndex, hasMessages])
 
   const scrollToBottom = () => {
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      })
+      return
+    }
+
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
@@ -302,8 +322,7 @@ export function HeroSection() {
       setExecSignalsBusy(false)
       return
     }
-    const userTurns = messages.filter((m) => m.role === "user").length
-    if (userTurns < 2) {
+    if (userTurnCount < 2) {
       setExecutiveSignals(null)
       setExecSignalsBusy(false)
       return
@@ -351,6 +370,7 @@ export function HeroSection() {
     hasMessages,
     enquirySubmitSuccess,
     messages,
+    userTurnCount,
     conversationState.visitorType,
   ])
 
@@ -776,25 +796,25 @@ export function HeroSection() {
       ) : null}
 
       {hasMessages && (
-        <div className="relative z-10 mx-auto mt-8 w-full min-w-0 max-w-3xl px-2 sm:mt-10 sm:px-3 md:mt-12 md:px-0">
+        <div className="relative z-10 mx-auto mt-4 w-full min-w-0 max-w-3xl px-1.5 sm:mt-10 sm:px-3 md:mt-12 md:px-0">
           <div className="relative overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.25rem] dark:bg-card/[0.55]">
-            <div className="flex min-w-0 items-center justify-between gap-2 border-b border-hairline bg-chrome-bar px-4 py-3 sm:px-5 sm:py-3.5 md:px-6 md:py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12]">
-                  <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
+            <div className="flex min-w-0 items-center justify-between gap-2 border-b border-hairline bg-chrome-bar px-3 py-2.5 sm:px-5 sm:py-3.5 md:px-6 md:py-4">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="flex h-7 w-7 items-center justify-center rounded-[0.5rem] border border-primary/20 bg-primary/[0.12] sm:h-8 sm:w-8">
+                  <Sparkles className="h-3.5 w-3.5 text-primary sm:h-4 sm:w-4" strokeWidth={1.5} />
                 </div>
                 <div className="text-left">
-                  <span className="block text-sm font-medium tracking-tight text-foreground">
-                    PxlBrief
+                  <span className="block text-[0.8125rem] font-medium tracking-tight text-foreground sm:text-sm">
+                    PxlBrief Diagnostic
                   </span>
-                  <span className="text-[0.6875rem] text-muted-foreground/75">
-                    Intelligence layer
+                  <span className="text-[0.625rem] text-muted-foreground/75 sm:text-[0.6875rem]">
+                    Guided growth engine
                   </span>
                 </div>
               </div>
               <button
                 onClick={handleClose}
-                className="inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors duration-200 hover:bg-foreground/[0.06] hover:text-foreground"
+                className="inline-flex size-10 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors duration-200 hover:bg-foreground/[0.06] hover:text-foreground sm:size-11"
                 aria-label="Close chat"
               >
                 <X className="h-4 w-4" strokeWidth={1.5} />
@@ -812,16 +832,19 @@ export function HeroSection() {
               </div>
             )}
 
-            <div className="max-h-[min(50vh,480px)] space-y-6 overflow-y-auto overscroll-contain px-4 py-5 sm:max-h-[min(52vh,520px)] sm:space-y-7 sm:px-5 sm:py-6 md:space-y-8 md:px-6 md:py-7">
+            <div
+              ref={messagesContainerRef}
+              className="max-h-[min(42vh,360px)] space-y-3.5 overflow-y-auto overscroll-contain px-3 py-3.5 sm:max-h-[min(50vh,500px)] sm:space-y-5 sm:px-5 sm:py-5 md:max-h-[min(54vh,540px)] md:space-y-6 md:px-6 md:py-6"
+            >
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex min-w-0 gap-2.5 sm:gap-3 md:gap-3.5 ${
+                  className={`flex min-w-0 gap-2 sm:gap-3 md:gap-3.5 ${
                     message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   {message.role === "assistant" && (
-                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.08]">
+                    <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-primary/15 bg-primary/[0.08] sm:h-8 sm:w-8">
                       <Sparkles
                         className="h-3.5 w-3.5 text-primary"
                         strokeWidth={1.5}
@@ -829,20 +852,20 @@ export function HeroSection() {
                     </div>
                   )}
                   <div
-                    className={`max-w-[min(calc(100vw-5.5rem),28rem)] rounded-[1.05rem] px-3.5 py-3 sm:max-w-[min(85%,28rem)] sm:px-4 md:px-[1.125rem] md:py-3.5 ${
+                    className={`rounded-[0.9rem] px-3 py-2.5 sm:px-4 md:px-[1.125rem] md:py-3.5 ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground shadow-md shadow-black/10"
-                        : "border border-hairline bg-muted/[0.35] text-foreground shadow-sm"
+                        ? "max-w-[min(calc(100vw-5rem),27rem)] border border-accent/28 bg-[#17191d]/92 text-foreground shadow-[0_0_24px_-18px_var(--glow-accent),inset_0_1px_0_0_rgba(255,255,255,0.08)] sm:max-w-[min(84%,28rem)]"
+                        : "max-w-[min(calc(100vw-5.25rem),25.5rem)] border border-primary/16 bg-muted/[0.31] text-foreground shadow-sm sm:max-w-[min(78%,26rem)]"
                     }`}
                   >
-                    <div className="break-words whitespace-pre-wrap text-[0.8125rem] leading-[1.62] md:text-[0.9375rem] md:leading-relaxed">
+                    <div className="break-words whitespace-pre-wrap text-[0.8125rem] leading-[1.5] md:text-[0.9375rem] md:leading-[1.58]">
                       {message.content}
                     </div>
                   </div>
                   {message.role === "user" && (
-                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-hairline bg-foreground/[0.04]">
+                    <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-accent/18 bg-accent/[0.05] sm:h-8 sm:w-8">
                       <User
-                        className="h-3.5 w-3.5 text-muted-foreground"
+                        className="h-3.5 w-3.5 text-accent/85"
                         strokeWidth={1.5}
                       />
                     </div>
@@ -851,15 +874,15 @@ export function HeroSection() {
               ))}
 
               {isLoading && (
-                <div className="flex min-w-0 justify-start gap-2.5 sm:gap-3 md:gap-3.5">
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.08]">
+                <div className="flex min-w-0 justify-start gap-2 sm:gap-3 md:gap-3.5">
+                  <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-primary/15 bg-primary/[0.08] sm:h-8 sm:w-8">
                     <Sparkles
                       className="h-3.5 w-3.5 text-primary"
                       strokeWidth={1.5}
                     />
                   </div>
-                  <div className="rounded-[1.05rem] border border-hairline bg-muted/[0.35] px-4 py-3.5 shadow-sm md:px-5">
-                    <div className="mb-2 flex items-center gap-2">
+                  <div className="rounded-[0.9rem] border border-primary/16 bg-muted/[0.31] px-3 py-2.5 shadow-sm md:px-4 md:py-3">
+                    <div className="mb-1.5 flex items-center gap-2">
                       <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
                         Synthesizing
                       </span>
@@ -884,12 +907,12 @@ export function HeroSection() {
               )}
 
               {error && (
-                <div className="flex min-w-0 justify-start gap-2.5 sm:gap-3 md:gap-3.5">
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-red-500/20 bg-red-500/[0.08]">
+                <div className="flex min-w-0 justify-start gap-2 sm:gap-3 md:gap-3.5">
+                  <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-red-500/20 bg-red-500/[0.08] sm:h-8 sm:w-8">
                     <AlertCircle className="h-3.5 w-3.5 text-red-400" />
                   </div>
-                  <div className="max-w-[min(calc(100vw-5.5rem),28rem)] rounded-[1.05rem] border border-red-500/20 bg-red-500/[0.07] px-3.5 py-3 text-red-200/90 sm:max-w-[min(85%,28rem)] sm:px-4 md:px-[1.125rem] md:py-3.5">
-                    <p className="text-[0.8125rem] leading-relaxed md:text-sm">
+                  <div className="max-w-[min(calc(100vw-5.25rem),25.5rem)] rounded-[0.9rem] border border-red-500/20 bg-red-500/[0.07] px-3 py-2.5 text-red-200/90 sm:max-w-[min(78%,26rem)] sm:px-4 md:px-[1.125rem] md:py-3.5">
+                    <p className="text-[0.8125rem] leading-[1.5] md:text-sm md:leading-relaxed">
                       {error}
                     </p>
                   </div>
@@ -897,9 +920,9 @@ export function HeroSection() {
               )}
 
               {attachedFile && (
-                <div className="flex min-w-0 justify-end gap-2.5 sm:gap-3 md:gap-3.5">
-                  <div className="flex max-w-[min(calc(100vw-5.5rem),28rem)] items-center gap-2.5 rounded-[1.05rem] border border-hairline bg-muted/[0.28] px-3.5 py-2.5 text-left shadow-sm backdrop-blur-sm sm:max-w-[min(85%,28rem)] sm:gap-3 sm:px-4">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-primary/15 bg-primary/[0.1]">
+                <div className="flex min-w-0 justify-end gap-2 sm:gap-3 md:gap-3.5">
+                  <div className="flex max-w-[min(calc(100vw-5rem),27rem)] items-center gap-2 rounded-[0.9rem] border border-accent/22 bg-[#17191d]/88 px-3 py-2 text-left shadow-sm backdrop-blur-sm sm:max-w-[min(84%,28rem)] sm:gap-3 sm:px-4">
+                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-primary/15 bg-primary/[0.1] sm:h-8 sm:w-8">
                       <Paperclip className="h-3.5 w-3.5 text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -916,14 +939,14 @@ export function HeroSection() {
                     <button
                       type="button"
                       onClick={removeAttachedFile}
-                      className="inline-flex size-10 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground"
+                      className="inline-flex size-9 shrink-0 touch-manipulation items-center justify-center rounded-[0.5rem] text-muted-foreground transition-colors hover:bg-foreground/[0.06] hover:text-foreground sm:size-10"
                       aria-label="Remove attachment"
                     >
                       <X className="h-4 w-4" strokeWidth={1.5} />
                     </button>
                   </div>
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[0.5rem] border border-hairline bg-foreground/[0.04]">
-                    <User className="h-3.5 w-3.5 text-muted-foreground" />
+                  <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[0.45rem] border border-accent/18 bg-accent/[0.05] sm:h-8 sm:w-8">
+                    <User className="h-3.5 w-3.5 text-accent/85" />
                   </div>
                 </div>
               )}
@@ -940,7 +963,7 @@ export function HeroSection() {
 
             <form
               onSubmit={handleSubmit}
-              className="border-t border-hairline bg-chrome-bar p-3.5 sm:p-4 md:p-5"
+              className="border-t border-hairline bg-chrome-bar p-2.5 sm:p-4 md:p-5"
             >
               <input
                 ref={chatFileInputRef}
@@ -952,18 +975,26 @@ export function HeroSection() {
               />
               {serviceRecommendation &&
                 !routingCardDismissed &&
-                messages.filter((m) => m.role === "user").length >= 2 && (
+                userTurnCount >= 2 && (
                   <ServiceRecommendationCard
                     recommendation={serviceRecommendation}
                     onDismiss={() => setRoutingCardDismissed(true)}
                   />
                 )}
-              <div className="mb-3 flex min-w-0 justify-start">
+              <div className="mb-2 flex items-center justify-between gap-2 rounded-[0.75rem] border border-primary/12 bg-primary/[0.045] px-3 py-2 text-left shadow-[inset_0_1px_0_0_var(--shine-inset)]">
+                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
+                  Diagnostic stage
+                </span>
+                <span className="truncate text-[0.75rem] font-medium text-foreground/88">
+                  {diagnosticStage}
+                </span>
+              </div>
+              <div className="mb-2.5 flex min-w-0 justify-start sm:mb-3">
                 <button
                   type="button"
                   disabled={isLoading}
                   onClick={() => chatFileInputRef.current?.click()}
-                  className="inline-flex min-h-11 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2.5 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:text-[0.8125rem]"
+                  className="inline-flex min-h-10 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:min-h-11 md:text-[0.8125rem]"
                 >
                   <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
                   <span className="text-left leading-snug">
@@ -1016,7 +1047,7 @@ export function HeroSection() {
                   {leadSubmitMessage}
                 </p>
               ) : null}
-              <div className="flex min-w-0 items-center gap-2 rounded-[0.875rem] border border-hairline bg-card/35 px-2.5 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 sm:px-3 md:gap-3 md:px-4 md:py-2">
+              <div className="flex min-w-0 items-center gap-2 rounded-[0.75rem] border border-hairline bg-card/45 px-2 py-1.5 shadow-inner transition-all duration-200 focus-within:border-primary/35 focus-within:ring-1 focus-within:ring-primary/15 sm:px-3 md:gap-3 md:rounded-[0.875rem] md:px-4 md:py-2">
                 <input
                   ref={chatInputRef}
                   type="text"
@@ -1024,17 +1055,17 @@ export function HeroSection() {
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Add detail or your next move…"
                   disabled={isLoading}
-                  className="min-h-11 min-w-0 flex-1 touch-manipulation bg-transparent py-2 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:text-[0.9375rem]"
+                  className="min-h-10 min-w-0 flex-1 touch-manipulation bg-transparent py-1.5 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:min-h-11 md:py-2 md:text-[0.9375rem]"
                 />
                 <button
                   type="submit"
                   disabled={isLoading || !inputValue.trim()}
-                  className="flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none motion-reduce:transition-colors"
+                  className="flex size-10 shrink-0 touch-manipulation items-center justify-center rounded-[0.625rem] bg-primary text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-lg active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none md:size-11 motion-reduce:transition-colors"
                 >
                   <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
                 </button>
               </div>
-              <div className="mt-3">
+              <div className="mt-2.5 sm:mt-3">
                 <button
                   type="button"
                   disabled={
@@ -1043,7 +1074,7 @@ export function HeroSection() {
                     conversationState.visitorType === "unknown"
                   }
                   onClick={handleSubmitEnquiry}
-                  className="flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.875rem] border border-hairline bg-foreground/[0.04] px-4 py-3.5 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:text-sm"
+                  className="flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] border border-hairline bg-foreground/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:min-h-12 md:rounded-[0.875rem] md:py-3.5 md:text-sm"
                 >
                   <Send className="h-4 w-4 shrink-0 text-primary/90" />
                   {leadSubmitBusy ? "Sending…" : "Send brief"}
