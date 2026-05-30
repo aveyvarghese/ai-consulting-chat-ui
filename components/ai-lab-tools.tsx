@@ -87,6 +87,30 @@ type PositioningState = {
 
 type ActiveTool = "scorecard" | "recommender" | "roi" | "campaign" | "positioning"
 
+type AiReadoutSection = {
+  label: string
+  value?: string
+  items?: string[]
+}
+
+type AiReadout = {
+  sections: AiReadoutSection[]
+}
+
+type AiReadoutState = {
+  loading: boolean
+  error: string | null
+  readout: AiReadout | null
+}
+
+const createAiReadoutState = (): Record<ActiveTool, AiReadoutState> => ({
+  scorecard: { loading: false, error: null, readout: null },
+  recommender: { loading: false, error: null, readout: null },
+  roi: { loading: false, error: null, readout: null },
+  campaign: { loading: false, error: null, readout: null },
+  positioning: { loading: false, error: null, readout: null },
+})
+
 const toolTabs: readonly {
   id: ActiveTool
   label: string
@@ -456,6 +480,10 @@ function formatCurrency(value: number) {
   return `₹${Math.round(value).toLocaleString("en-IN")}`
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {}
+}
+
 function SelectField<T extends string>({
   label,
   value,
@@ -646,6 +674,93 @@ function PreviewDisclaimer() {
   )
 }
 
+function AiStrategyPanel({
+  state,
+  onGenerate,
+}: {
+  state: AiReadoutState
+  onGenerate: () => void
+}) {
+  return (
+    <div className="mt-4 rounded-[0.9rem] border border-primary/18 bg-background/35 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:p-3.5">
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+            Optional AI layer
+          </p>
+          <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground/82">
+            Generate a concise strategic readout from the current inputs.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onGenerate}
+          disabled={state.loading}
+          className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.7rem] border border-primary/30 bg-primary/[0.1] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.16] disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
+        >
+          <Sparkles className="h-3.5 w-3.5" aria-hidden />
+          {state.loading ? "Generating..." : "Generate AI Strategy"}
+        </button>
+      </div>
+
+      {state.loading ? (
+        <p className="mt-3 rounded-[0.75rem] border border-hairline/70 bg-card/45 px-3 py-2.5 text-[0.75rem] font-medium text-muted-foreground/85">
+          Generating strategic readout...
+        </p>
+      ) : null}
+
+      {state.error ? (
+        <p className="mt-3 rounded-[0.75rem] border border-destructive/20 bg-destructive/[0.06] px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/88">
+          Unable to generate AI readout right now. You can still use the
+          directional result.
+        </p>
+      ) : null}
+
+      {state.readout ? (
+        <div className="mt-3 rounded-[0.85rem] border border-primary/20 bg-primary/[0.055] p-3">
+          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/90">
+            AI Strategic Readout
+          </p>
+          <div className="mt-3 grid gap-2.5">
+            {state.readout.sections.map((section) => (
+              <div
+                key={section.label}
+                className="rounded-[0.75rem] border border-hairline/70 bg-background/35 px-3 py-2.5"
+              >
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground/70">
+                  {section.label}
+                </p>
+                {section.value ? (
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-foreground/90">
+                    {section.value}
+                  </p>
+                ) : null}
+                {section.items && section.items.length > 0 ? (
+                  <ul className="mt-2 grid gap-1.5">
+                    {section.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-2 text-[0.8125rem] leading-relaxed text-foreground/90"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/75" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[0.6875rem] leading-relaxed text-muted-foreground/75">
+            Directional strategic readout only. A full diagnosis requires deeper
+            business and market review.
+          </p>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function AILabTools() {
   const [scorecard, setScorecard] = useState<ScorecardState>(initialScorecard)
   const [recommender, setRecommender] =
@@ -655,6 +770,58 @@ export function AILabTools() {
   const [positioning, setPositioning] =
     useState<PositioningState>(initialPositioning)
   const [activeTool, setActiveTool] = useState<ActiveTool>("scorecard")
+  const [aiReadouts, setAiReadouts] =
+    useState<Record<ActiveTool, AiReadoutState>>(createAiReadoutState)
+
+  const generateAiReadout = async (
+    tool: ActiveTool,
+    inputs: Record<string, unknown>,
+    directionalOutput: Record<string, unknown>
+  ) => {
+    setAiReadouts((state) => ({
+      ...state,
+      [tool]: { loading: true, error: null, readout: state[tool].readout },
+    }))
+
+    try {
+      const response = await fetch("/api/ai-lab", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tool, inputs, directionalOutput }),
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok || !data || !Array.isArray(data.sections)) {
+        throw new Error("Invalid AI readout response")
+      }
+
+      setAiReadouts((state) => ({
+        ...state,
+        [tool]: {
+          loading: false,
+          error: null,
+          readout: {
+            sections: data.sections
+              .filter((section: unknown): section is AiReadoutSection => {
+                if (!section || typeof section !== "object") return false
+                const candidate = section as AiReadoutSection
+                return typeof candidate.label === "string"
+              })
+              .slice(0, 10),
+          },
+        },
+      }))
+    } catch {
+      setAiReadouts((state) => ({
+        ...state,
+        [tool]: {
+          loading: false,
+          error:
+            "Unable to generate AI readout right now. You can still use the directional result.",
+          readout: state[tool].readout,
+        },
+      }))
+    }
+  }
 
   const scorecardOutput = useMemo(() => {
     const areas = [
@@ -1125,6 +1292,16 @@ export function AILabTools() {
             <p className="mt-3 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
               {scorecardOutput.serviceReason}
             </p>
+            <AiStrategyPanel
+              state={aiReadouts.scorecard}
+              onGenerate={() =>
+                generateAiReadout(
+                  "scorecard",
+                  asRecord(scorecard),
+                  asRecord(scorecardOutput)
+                )
+              }
+            />
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <Link
                 href="/ai-growth-audit"
@@ -1212,6 +1389,16 @@ export function AILabTools() {
             >
               {recommenderOutput.ctaLabel}
             </Link>
+            <AiStrategyPanel
+              state={aiReadouts.recommender}
+              onGenerate={() =>
+                generateAiReadout(
+                  "recommender",
+                  asRecord(recommender),
+                  asRecord(recommenderOutput)
+                )
+              }
+            />
           </div>
           </div>
         </ToolShell>
@@ -1308,6 +1495,12 @@ export function AILabTools() {
             <p className="mt-4 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
               This is a directional estimate, not a guaranteed saving.
             </p>
+            <AiStrategyPanel
+              state={aiReadouts.roi}
+              onGenerate={() =>
+                generateAiReadout("roi", asRecord(roi), asRecord(roiOutput))
+              }
+            />
             <Link
               href="/ai-growth-audit"
               className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
@@ -1400,6 +1593,16 @@ export function AILabTools() {
                 />
               </div>
               <PreviewDisclaimer />
+              <AiStrategyPanel
+                state={aiReadouts.campaign}
+                onGenerate={() =>
+                  generateAiReadout(
+                    "campaign",
+                    asRecord(campaign),
+                    asRecord(campaignOutput)
+                  )
+                }
+              />
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 <Link
                   href="/ai-growth-audit"
@@ -1520,6 +1723,16 @@ export function AILabTools() {
                 />
               </div>
               <PreviewDisclaimer />
+              <AiStrategyPanel
+                state={aiReadouts.positioning}
+                onGenerate={() =>
+                  generateAiReadout(
+                    "positioning",
+                    asRecord(positioning),
+                    asRecord(positioningOutput)
+                  )
+                }
+              />
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 <Link
                   href="/services"
