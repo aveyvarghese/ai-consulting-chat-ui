@@ -15,7 +15,7 @@ import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 const nav = [
   { href: "/services", label: "Services" },
   { href: "/ai-growth-audit", label: "AI Growth Audit" },
-  { href: "/#ai-lab", label: "AI Lab" },
+  { href: "/ai-lab", label: "AI Lab" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const

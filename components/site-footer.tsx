@@ -61,7 +61,7 @@ export function SiteFooter() {
               href="/#consulting-chat"
               className="inline-flex min-h-11 touch-manipulation items-center text-sm font-medium text-primary transition-colors duration-300 hover:text-primary/88"
             >
-              PxlBrief AI
+              Start Diagnostic
             </Link>
             <a
               href={STRATEGY_CALL_BOOKING_URL}
