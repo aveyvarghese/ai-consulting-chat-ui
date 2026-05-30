@@ -208,8 +208,8 @@ function SectionHeader({
     <header
       className={
         align === "center"
-          ? "mx-auto mb-8 max-w-3xl text-center sm:mb-12 md:mb-16"
-          : "mb-8 max-w-3xl sm:mb-12 md:mb-16"
+          ? "mx-auto mb-6 max-w-3xl text-center sm:mb-12 md:mb-16"
+          : "mb-6 max-w-3xl sm:mb-12 md:mb-16"
       }
     >
       <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85 sm:mb-4 sm:text-[0.6875rem] sm:tracking-[0.22em]">
@@ -254,7 +254,7 @@ function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
 
 export function ProblemSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -262,10 +262,10 @@ export function ProblemSection() {
           title="Most businesses do not have a marketing problem. They have a disconnected growth system."
           text="PxlBrief starts by finding where growth signal breaks: campaign to website, website to CRM, CRM to sales, sales to founder-level decisions."
         />
-        <div className="grid grid-cols-1 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2.5 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
           {problems.map((problem, index) => (
-            <MetallicCard key={problem.title} className="p-4 sm:p-6">
-              <div className="mb-3 flex items-center justify-between gap-3 sm:mb-5">
+            <MetallicCard key={problem.title} className="p-3 sm:p-6">
+              <div className="mb-2.5 flex items-center justify-between gap-3 sm:mb-5">
                 <span className="font-mono text-[0.6875rem] text-primary/80">
                   {String(index + 1).padStart(2, "0")}
                 </span>
@@ -276,7 +276,7 @@ export function ProblemSection() {
               <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
                 {problem.title}
               </h3>
-              <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm">
+              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm">
                 {problem.signal}
               </p>
             </MetallicCard>
@@ -289,7 +289,7 @@ export function ProblemSection() {
 
 export function AIGrowthDiagnosticPreviewSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.22]" />
       <div className="relative mx-auto grid max-w-6xl gap-7 sm:gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center lg:gap-14">
         <SectionHeader
@@ -297,8 +297,8 @@ export function AIGrowthDiagnosticPreviewSection() {
           title="Start with a live AI diagnosis of your growth system."
           text="Answer a few focused questions and receive a directional readout of your growth bottleneck, AI opportunity, and recommended next step."
         />
-        <MetallicCard className="p-4 sm:p-6 md:p-7">
-          <div className="mb-4 flex items-center justify-between border-b border-hairline/70 pb-4 sm:mb-5">
+        <MetallicCard className="p-3 sm:p-6 md:p-7">
+          <div className="mb-3 flex items-center justify-between border-b border-hairline/70 pb-3 sm:mb-5 sm:pb-4">
             <div>
               <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground/75">
                 Diagnostic interface
@@ -311,31 +311,31 @@ export function AIGrowthDiagnosticPreviewSection() {
               Preview
             </span>
           </div>
-          <div className="grid gap-4 sm:gap-5 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="space-y-2.5 sm:space-y-3">
+          <div className="grid gap-3 sm:gap-5 md:grid-cols-[0.9fr_1.1fr]">
+            <div className="space-y-1.5 sm:space-y-3">
               {diagnosticInputs.map((item) => (
                 <div
                   key={item}
-                  className="rounded-[0.875rem] border border-hairline/80 bg-background/35 px-3.5 py-2.5 sm:px-4 sm:py-3"
+                  className="rounded-[0.875rem] border border-hairline/80 bg-background/35 px-3 py-2 sm:px-4 sm:py-3"
                 >
                   <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
                     {item}
                   </span>
-                  <div className="mt-2 h-2 rounded-full bg-muted/55">
+                  <div className="mt-1.5 h-1.5 rounded-full bg-muted/55 sm:mt-2 sm:h-2">
                     <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-primary/40 to-primary/80" />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="rounded-[1rem] border border-primary/20 bg-primary/[0.045] p-4">
-              <div className="mb-4 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <div className="rounded-[1rem] border border-primary/20 bg-primary/[0.045] p-3 sm:p-4">
+              <div className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground sm:mb-4">
                 <Brain className="h-4 w-4 text-primary" />
                 Output preview
               </div>
-              <div className="space-y-2.5 sm:space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {diagnosticOutputs.map((item) => (
                   <div key={item} className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary sm:h-4 sm:w-4" />
                     <div>
                       <p className="text-[0.8125rem] font-semibold text-foreground">
                         {item}
@@ -351,7 +351,7 @@ export function AIGrowthDiagnosticPreviewSection() {
                 href="#consulting-chat"
                 className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
               >
-                Start Diagnostic
+                Run My Growth Diagnostic
               </a>
             </div>
           </div>
@@ -363,7 +363,7 @@ export function AIGrowthDiagnosticPreviewSection() {
 
 export function AILabPreviewSection() {
   return (
-    <section id="ai-lab" className="relative scroll-mt-20 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section id="ai-lab" className="relative scroll-mt-20 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="AI Lab"
@@ -371,9 +371,9 @@ export function AILabPreviewSection() {
           text="The AI Lab demonstrates how PxlBrief turns business inputs into diagnosis, recommendations, scores, campaigns, and growth systems."
           align="center"
         />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-3">
           {labCards.map((card) => (
-            <MetallicCard key={card.title} className="p-4 sm:p-6">
+            <MetallicCard key={card.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-6">
               <div className="flex items-start justify-between gap-4">
                 <IconBadge icon={card.icon} />
                 <span
@@ -393,10 +393,10 @@ export function AILabPreviewSection() {
                 {card.description}
               </p>
               <a
-                href={card.status === "Available" ? "#consulting-chat" : "#ai-lab"}
+                href={card.status === "Available" ? "/ai-lab#lab-tools" : "#ai-lab"}
                 className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-[0.7rem] border border-primary/18 bg-primary/[0.055] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/32 hover:bg-primary/[0.09] sm:w-auto"
               >
-                {card.status === "Available" ? "Open tool" : "Preview"}
+                {card.status === "Available" ? "Open in AI Lab" : "Preview"}
               </a>
             </MetallicCard>
           ))}
@@ -408,7 +408,7 @@ export function AILabPreviewSection() {
 
 export function ExecutiveDashboardShowcaseSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/60 to-background px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/60 to-background px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute left-1/2 top-1/3 hidden h-[min(80vw,620px)] w-[min(90vw,760px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[110px] md:block" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -417,7 +417,7 @@ export function ExecutiveDashboardShowcaseSection() {
           text="PxlBrief helps founders see what is working, what is leaking, and what needs action across marketing, sales, CRM, website, and AI workflows."
           align="center"
         />
-        <MetallicCard className="p-4 sm:p-6 md:p-8">
+        <MetallicCard className="p-3.5 sm:p-6 md:p-8">
           <div className="mb-4 flex flex-col gap-3 border-b border-hairline/70 pb-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
             <div>
               <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground/75">
@@ -460,20 +460,20 @@ export function ExecutiveDashboardShowcaseSection() {
 
 export function IndustryPlaybooksPreviewSection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Industry playbooks"
           title="AI growth systems designed for real business categories."
           text="Each category has its own acquisition constraints, trust markers, operational drag, and automation opportunity."
         />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
           {industryPlaybooks.map((playbook) => (
-            <MetallicCard key={playbook.title} className="p-4 sm:p-5">
+            <MetallicCard key={playbook.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-5">
               <h3 className="text-base font-semibold tracking-tight text-foreground">
                 {playbook.title}
               </h3>
-              <dl className="mt-4 space-y-2.5 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
+              <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
                 <div>
                   <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
                     Common challenge
@@ -509,7 +509,7 @@ export function IndustryPlaybooksPreviewSection() {
 
 export function CaseIntelligencePreviewSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.2]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -518,10 +518,10 @@ export function CaseIntelligencePreviewSection() {
           text="These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system."
           align="center"
         />
-        <div className="grid grid-cols-1 gap-3 sm:gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2.5 sm:gap-5 lg:grid-cols-3">
           {caseScenarios.map((item, index) => (
-            <MetallicCard key={item.title} className="p-4 sm:p-6">
-              <div className="mb-4 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            <MetallicCard key={item.title} className="p-3.5 sm:p-6">
+              <div className="mb-3 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <span className="font-mono text-[0.6875rem] text-primary/80">
                   Case {index + 1}
                 </span>
@@ -532,7 +532,7 @@ export function CaseIntelligencePreviewSection() {
               <h3 className="text-lg font-semibold tracking-tight text-foreground">
                 {item.title}
               </h3>
-              <dl className="mt-4 space-y-3 text-[0.8125rem] leading-relaxed sm:mt-6 sm:space-y-4 md:text-sm">
+              <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-6 sm:space-y-4 md:text-sm">
                 <div>
                   <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
                     Problem
@@ -562,8 +562,8 @@ export function CaseIntelligencePreviewSection() {
 
 export function FounderCredibilitySection() {
   return (
-    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
-      <div className="relative mx-auto grid max-w-6xl gap-7 rounded-[1.1rem] border border-hairline bg-card/82 p-5 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.34] sm:rounded-[1.25rem] sm:p-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-10 md:p-10">
+    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+      <div className="relative mx-auto grid max-w-6xl gap-5 rounded-[1.1rem] border border-hairline bg-card/82 p-4 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.34] sm:rounded-[1.25rem] sm:p-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-10 md:p-10">
         <div className="pointer-events-none absolute -right-20 -top-24 hidden h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl sm:block" />
         <div className="relative">
           <p className="mb-4 text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-primary/85">
@@ -578,11 +578,11 @@ export function FounderCredibilitySection() {
             to connect decisions, systems, and execution into measurable growth.
           </p>
         </div>
-        <div className="relative grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="relative grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
           {credibilityPoints.map((point) => (
             <div
               key={point}
-              className="flex items-center gap-3 rounded-[0.95rem] border border-hairline/80 bg-background/35 px-4 py-3"
+              className="flex items-center gap-2.5 rounded-[0.95rem] border border-hairline/80 bg-background/35 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3"
             >
               <LockKeyhole className="h-4 w-4 shrink-0 text-primary/85" />
               <span className="text-[0.8125rem] font-medium leading-snug text-foreground/90 md:text-sm">
@@ -599,7 +599,7 @@ export function FounderCredibilitySection() {
 export function FinalGrowthCtaSection() {
   return (
     <section className="relative px-3 pb-14 pt-6 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
-      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline bg-card/94 px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 dark:bg-card/[0.42] md:px-14 md:py-20">
+      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline bg-card/94 px-4 py-7 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 dark:bg-card/[0.42] md:px-14 md:py-20">
         <div className="pointer-events-none absolute -left-20 top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl pxl-ambient-glow-drift sm:block" />
         <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-52 w-52 rounded-full bg-accent/[0.08] blur-2xl pxl-ambient-glow-drift-reverse sm:block" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
@@ -616,7 +616,7 @@ export function FinalGrowthCtaSection() {
               href="#consulting-chat"
               className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
-              Start AI Growth Diagnostic
+              Run My Growth Diagnostic
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"

@@ -93,7 +93,7 @@ const systems: readonly SystemCard[] = [
 export function StrategicSystemsWeBuildSection() {
   return (
     <section
-      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-3 py-16 sm:px-4 sm:py-24 md:py-32"
+      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-3 py-10 sm:px-4 sm:py-24 md:py-32"
       aria-labelledby="strategic-systems-we-build-heading"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
@@ -107,7 +107,7 @@ export function StrategicSystemsWeBuildSection() {
       />
 
       <div className="relative mx-auto max-w-6xl">
-        <header className="mx-auto mb-12 max-w-3xl text-center md:mb-20 md:text-left">
+        <header className="mx-auto mb-7 max-w-3xl text-center sm:mb-12 md:mb-20 md:text-left">
           <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
             Growth architecture
           </p>
@@ -124,11 +124,11 @@ export function StrategicSystemsWeBuildSection() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
           {systems.map((item) => (
             <article
               key={item.title}
-              className="group relative flex min-w-0 flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-7 dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
+              className="group relative flex min-w-0 flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-4 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-7 dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
             >
               <div
                 className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-gradient-to-br from-primary/[0.12] via-primary/[0.04] to-ring/[0.08] opacity-0 blur-3xl transition-opacity duration-700 ease-out group-hover:opacity-100"
@@ -140,19 +140,19 @@ export function StrategicSystemsWeBuildSection() {
               />
 
               <div className="relative z-10 flex flex-1 flex-col">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-[0.625rem] border border-primary/22 bg-primary/[0.08] text-primary shadow-sm transition-all duration-500 group-hover:border-primary/38 group-hover:bg-primary/[0.12] group-hover:shadow-[0_0_28px_-6px_var(--glow-primary)]">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-[0.625rem] border border-primary/22 bg-primary/[0.08] text-primary shadow-sm transition-all duration-500 group-hover:border-primary/38 group-hover:bg-primary/[0.12] group-hover:shadow-[0_0_28px_-6px_var(--glow-primary)] sm:mb-6 sm:h-12 sm:w-12">
                   <item.icon className="h-5 w-5" strokeWidth={1.6} aria-hidden />
                 </div>
 
                 <h3 className="text-lg font-semibold tracking-tight text-foreground md:text-[1.0625rem]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm md:leading-relaxed">
+                <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm md:leading-relaxed">
                   {item.description}
                 </p>
 
                 <ul
-                  className="mt-6 space-y-2.5 border-t border-hairline/50 pt-6"
+                  className="mt-4 space-y-2 border-t border-hairline/50 pt-4 sm:mt-6 sm:space-y-2.5 sm:pt-6"
                   aria-label={`${item.title} capabilities`}
                 >
                   {item.bullets.map((b) => (

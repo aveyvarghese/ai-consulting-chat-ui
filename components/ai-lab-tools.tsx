@@ -99,19 +99,36 @@ const businessTypeOptions = [
   ["traditional", "Traditional business"],
 ] as const
 
+const businessTypeLabels: Record<RecommenderState["businessType"], string> = {
+  startup: "Startup",
+  sme: "SME",
+  consumer: "Consumer brand",
+  b2b: "B2B company",
+  traditional: "Traditional business",
+}
+
 const urgencyOptions = [
   ["exploring", "Exploring"],
   ["clarity", "Need clarity this month"],
   ["ready", "Ready to act now"],
 ] as const
 
-const areaScores = {
-  aiUsage: { none: 24, basic: 46, moderate: 72, advanced: 90 },
-  marketing: { scattered: 34, structured: 62, strong: 84 },
-  website: { weak: 30, average: 58, strong: 82 },
-  crm: { none: 24, manual: 48, crm: 78 },
-  reporting: { manual: 28, basic: 56, executive: 86 },
-  stage: { startup: 56, sme: 64, established: 74 },
+const scoreWeights = {
+  stage: { startup: 8, sme: 12, established: 15 },
+  aiUsage: { none: 0, basic: 8, moderate: 14, advanced: 18 },
+  marketing: { scattered: 4, structured: 12, strong: 18 },
+  website: { weak: 4, average: 10, strong: 16 },
+  crm: { none: 0, manual: 8, crm: 16 },
+  reporting: { manual: 2, basic: 10, executive: 17 },
+} as const
+
+const scoreAreas = {
+  stage: { label: "Business maturity", max: 15 },
+  aiUsage: { label: "AI readiness", max: 18 },
+  marketing: { label: "Marketing maturity", max: 18 },
+  website: { label: "Website conversion", max: 16 },
+  crm: { label: "CRM maturity", max: 16 },
+  reporting: { label: "Reporting intelligence", max: 17 },
 } as const
 
 const serviceMap: Record<
@@ -162,6 +179,24 @@ const serviceMap: Record<
   },
 }
 
+const urgencyPriority: Record<
+  RecommenderState["urgency"],
+  { level: "Low" | "Medium" | "High"; context: string }
+> = {
+  exploring: {
+    level: "Low",
+    context: "Use the audit to clarify the priority before committing budget.",
+  },
+  clarity: {
+    level: "Medium",
+    context: "This should be clarified this month before execution expands.",
+  },
+  ready: {
+    level: "High",
+    context: "This is ready for a focused diagnostic and implementation conversation.",
+  },
+}
+
 const initialScorecard: ScorecardState = {
   stage: "sme",
   aiUsage: "basic",
@@ -188,6 +223,10 @@ const initialRoi: RoiState = {
 function toNumber(value: string) {
   const parsed = Number(value)
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 0
+}
+
+function formatCurrency(value: number) {
+  return `₹${Math.round(value).toLocaleString("en-IN")}`
 }
 
 function SelectField<T extends string>({
@@ -331,82 +370,183 @@ export function AILabTools() {
   const [activeTool, setActiveTool] = useState<ActiveTool>("scorecard")
 
   const scorecardOutput = useMemo(() => {
-    const scores = {
-      "AI readiness": areaScores.aiUsage[scorecard.aiUsage],
-      "Brand clarity": areaScores.stage[scorecard.stage],
-      "Marketing maturity": areaScores.marketing[scorecard.marketing],
-      "Website conversion": areaScores.website[scorecard.website],
-      "CRM maturity": areaScores.crm[scorecard.crm],
-      "Reporting intelligence": areaScores.reporting[scorecard.reporting],
+    const areas = [
+      {
+        key: "stage",
+        label: scoreAreas.stage.label,
+        score: scoreWeights.stage[scorecard.stage],
+        max: scoreAreas.stage.max,
+      },
+      {
+        key: "aiUsage",
+        label: scoreAreas.aiUsage.label,
+        score: scoreWeights.aiUsage[scorecard.aiUsage],
+        max: scoreAreas.aiUsage.max,
+      },
+      {
+        key: "marketing",
+        label: scoreAreas.marketing.label,
+        score: scoreWeights.marketing[scorecard.marketing],
+        max: scoreAreas.marketing.max,
+      },
+      {
+        key: "website",
+        label: scoreAreas.website.label,
+        score: scoreWeights.website[scorecard.website],
+        max: scoreAreas.website.max,
+      },
+      {
+        key: "crm",
+        label: scoreAreas.crm.label,
+        score: scoreWeights.crm[scorecard.crm],
+        max: scoreAreas.crm.max,
+      },
+      {
+        key: "reporting",
+        label: scoreAreas.reporting.label,
+        score: scoreWeights.reporting[scorecard.reporting],
+        max: scoreAreas.reporting.max,
+      },
+    ] as const
+
+    const score = areas.reduce((total, area) => total + area.score, 0)
+    const strongest = areas.reduce((best, current) =>
+      current.score / current.max > best.score / best.max ? current : best,
+    )
+    const weakest = areas.reduce((lowest, current) =>
+      current.score / current.max < lowest.score / lowest.max ? current : lowest,
+    )
+
+    const candidates: {
+      area: string
+      service: string
+      nextStep: string
+      severity: number
+    }[] = []
+
+    if (scorecard.aiUsage === "none" || scorecard.aiUsage === "basic") {
+      candidates.push({
+        area: "AI readiness",
+        service:
+          scorecard.aiUsage === "none"
+            ? "AI Growth Audit"
+            : "AI Implementation & Automation",
+        nextStep:
+          "Map repeatable workflows and create a practical AI implementation roadmap.",
+        severity: 1 - scoreWeights.aiUsage[scorecard.aiUsage] / scoreAreas.aiUsage.max,
+      })
     }
 
-    const entries = Object.entries(scores)
-    const score = Math.round(
-      entries.reduce((total, [, value]) => total + value, 0) / entries.length,
-    )
-    const strongest = entries.reduce((best, current) =>
-      current[1] > best[1] ? current : best,
-    )
-    const weakest = entries.reduce((lowest, current) =>
-      current[1] < lowest[1] ? current : lowest,
-    )
-
-    const recommendedSteps: Record<string, string> = {
-      "AI readiness": "Create a practical AI implementation roadmap around repeatable workflows.",
-      "Brand clarity": "Clarify positioning before scaling campaigns or website traffic.",
-      "Marketing maturity": "Build a connected campaign, content, and performance operating system.",
-      "Website conversion": "Fix the website journey, search structure, and lead capture path.",
-      "CRM maturity": "Connect lead capture, follow-up ownership, and sales visibility.",
-      "Reporting intelligence": "Create a founder-ready dashboard that turns activity into decisions.",
+    if (scorecard.marketing === "scattered") {
+      candidates.push({
+        area: "Marketing maturity",
+        service: "Digital Marketing & Performance Growth",
+        nextStep:
+          "Diagnose the campaign, content, funnel, and reporting gaps before adding more activity.",
+        severity:
+          1 - scoreWeights.marketing[scorecard.marketing] / scoreAreas.marketing.max,
+      })
     }
+
+    if (scorecard.website === "weak") {
+      candidates.push({
+        area: "Website conversion",
+        service: "Website, SEO, AEO & GEO",
+        nextStep:
+          "Fix conversion paths, search structure, AI-search readiness, and lead capture.",
+        severity: 1 - scoreWeights.website[scorecard.website] / scoreAreas.website.max,
+      })
+    }
+
+    if (scorecard.crm === "none" || scorecard.crm === "manual") {
+      candidates.push({
+        area: "CRM maturity",
+        service: "CRM, Dashboards & Sales Enablement",
+        nextStep:
+          "Connect lead capture, ownership, follow-up discipline, and pipeline visibility.",
+        severity: 1 - scoreWeights.crm[scorecard.crm] / scoreAreas.crm.max,
+      })
+    }
+
+    if (scorecard.reporting === "manual") {
+      candidates.push({
+        area: "Reporting intelligence",
+        service: "CRM, Dashboards & Sales Enablement",
+        nextStep:
+          "Create a founder-ready dashboard that turns activity into clear next actions.",
+        severity:
+          1 - scoreWeights.reporting[scorecard.reporting] / scoreAreas.reporting.max,
+      })
+    }
+
+    const recommended =
+      candidates.sort((a, b) => b.severity - a.severity)[0] ??
+      ({
+        area: strongest.label,
+        service: "Monthly AI Growth Partner",
+        nextStep:
+          "Move into an optimization review cadence to improve the full growth system.",
+        severity: 0,
+      } as const)
 
     return {
       score,
-      strongest: strongest[0],
-      weakest: weakest[0],
-      nextStep: recommendedSteps[weakest[0]],
+      strongest: strongest.label,
+      weakest: weakest.label,
+      nextStep: recommended.nextStep,
+      service: recommended.service,
+      serviceReason:
+        recommended.service === "Monthly AI Growth Partner"
+          ? "Most core signals are already relatively strong, so the next gain is optimization."
+          : `${recommended.area} is the clearest constraint in this directional readout.`,
     }
   }, [scorecard])
 
   const recommenderOutput = useMemo(() => {
     const base = serviceMap[recommender.challenge]
-    const urgency =
-      recommender.urgency === "ready"
-        ? "This is ready for an implementation conversation."
-        : recommender.urgency === "clarity"
-          ? "This should be clarified inside the month before spend expands."
-          : "This is a good starting point for exploration."
+    const priority = urgencyPriority[recommender.urgency]
 
     return {
       ...base,
-      step: `${base.step} ${urgency}`,
+      priority: priority.level,
+      businessContext: `${businessTypeLabels[recommender.businessType]} context`,
+      step: `${base.step} ${priority.context}`,
+      ctaHref: priority.level === "High" ? "/#consulting-chat" : "/ai-growth-audit",
+      ctaLabel:
+        priority.level === "High"
+          ? "Start Diagnostic Chat"
+          : "View AI Growth Audit",
     }
   }, [recommender])
 
   const roiOutput = useMemo(() => {
-    const teamSize = toNumber(roi.teamSize)
-    const weeklyHours =
-      toNumber(roi.reportingHours) +
-      toNumber(roi.contentHours) +
-      toNumber(roi.followupHours)
+    const reportingHours = toNumber(roi.reportingHours)
+    const contentHours = toNumber(roi.contentHours)
+    const followupHours = toNumber(roi.followupHours)
+    const weeklyHours = reportingHours + contentHours + followupHours
     const monthlyHours = weeklyHours * 4.33
-    const hourlyCost =
-      teamSize > 0 ? toNumber(roi.monthlyCost) / (teamSize * 173) : 0
+    const hourlyCost = toNumber(roi.monthlyCost) / 176
     const monthlyCost = monthlyHours * hourlyCost
+    const highestHours = Math.max(reportingHours, contentHours, followupHours)
     const priority =
-      toNumber(roi.reportingHours) >=
-        Math.max(toNumber(roi.contentHours), toNumber(roi.followupHours))
-        ? "Reporting automation and executive dashboards"
-        : toNumber(roi.contentHours) >= toNumber(roi.followupHours)
-          ? "AI-assisted content, research, and campaign intelligence"
-          : "Lead follow-up automation and CRM workflow support"
+      weeklyHours < 5
+        ? "Start with AI Growth Audit"
+        : reportingHours === highestHours
+          ? "Reporting automation"
+          : contentHours === highestHours
+            ? "AI content and research workflow"
+            : "Sales follow-up automation"
 
     return {
+      teamSize: toNumber(roi.teamSize),
+      weeklyHours,
       monthlyHours,
       monthlyCost,
+      hourlyCost,
       recoverable: [0.25, 0.35, 0.45].map((rate) => ({
         rate,
         hours: monthlyHours * rate,
+        value: monthlyHours * rate * hourlyCost,
       })),
       priority,
     }
@@ -522,17 +662,32 @@ export function AILabTools() {
               <MetricCard label="Strongest area" value={scorecardOutput.strongest} />
               <MetricCard label="Weakest area" value={scorecardOutput.weakest} />
               <MetricCard
+                label="Recommended PxlBrief service"
+                value={scorecardOutput.service}
+              />
+              <MetricCard
                 label="Recommended first step"
                 value={scorecardOutput.nextStep}
                 tone="primary"
               />
             </div>
-            <Link
-              href="/ai-growth-audit"
-              className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-            >
-              Start AI Growth Audit
-            </Link>
+            <p className="mt-3 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
+              {scorecardOutput.serviceReason}
+            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <Link
+                href="/ai-growth-audit"
+                className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+              >
+                View AI Growth Audit
+              </Link>
+              <Link
+                href="/#consulting-chat"
+                className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+              >
+                Run My Growth Diagnostic
+              </Link>
+            </div>
           </div>
           </div>
         </ToolShell>
@@ -584,6 +739,15 @@ export function AILabTools() {
               {recommenderOutput.service}
             </h4>
             <div className="mt-4 grid gap-2.5">
+              <MetricCard
+                label="Priority level"
+                value={recommenderOutput.priority}
+                tone={recommenderOutput.priority === "High" ? "primary" : "default"}
+              />
+              <MetricCard
+                label="Business context"
+                value={recommenderOutput.businessContext}
+              />
               <MetricCard label="Why this fits" value={recommenderOutput.reason} />
               <MetricCard
                 label="Suggested next step"
@@ -592,10 +756,10 @@ export function AILabTools() {
               />
             </div>
             <Link
-              href="/#consulting-chat"
+              href={recommenderOutput.ctaHref}
               className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
             >
-              Start Diagnostic
+              {recommenderOutput.ctaLabel}
             </Link>
           </div>
           </div>
@@ -656,20 +820,32 @@ export function AILabTools() {
             </p>
             <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
               <MetricCard
+                label="Team size"
+                value={`${Math.round(roiOutput.teamSize)} people`}
+              />
+              <MetricCard
+                label="Weekly manual hours"
+                value={`${Math.round(roiOutput.weeklyHours)} hrs`}
+              />
+              <MetricCard
                 label="Monthly manual hours"
                 value={`${Math.round(roiOutput.monthlyHours)} hrs`}
               />
               <MetricCard
                 label="Manual work cost"
-                value={`₹${Math.round(roiOutput.monthlyCost).toLocaleString("en-IN")}`}
+                value={formatCurrency(roiOutput.monthlyCost)}
+              />
+              <MetricCard
+                label="Estimated hourly cost"
+                value={formatCurrency(roiOutput.hourlyCost)}
               />
             </div>
             <div className="mt-3 grid gap-2.5">
-              {roiOutput.recoverable.map(({ rate, hours }) => (
+              {roiOutput.recoverable.map(({ rate, hours, value }) => (
                 <MetricCard
                   key={rate}
-                  label={`Potential hours recoverable at ${Math.round(rate * 100)}%`}
-                  value={`${Math.round(hours)} hrs / month`}
+                  label={`${Math.round(rate * 100)}% recoverable estimate`}
+                  value={`${Math.round(hours)} hrs / ${formatCurrency(value)}`}
                 />
               ))}
               <MetricCard
@@ -679,9 +855,14 @@ export function AILabTools() {
               />
             </div>
             <p className="mt-4 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
-              This is a directional estimate, not a guaranteed productivity or
-              financial outcome.
+              This is a directional estimate, not a guaranteed saving.
             </p>
+            <Link
+              href="/ai-growth-audit"
+              className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+            >
+              Start AI Growth Audit
+            </Link>
           </div>
           </div>
         </ToolShell>

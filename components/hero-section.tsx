@@ -100,18 +100,38 @@ function uploadButtonLabel(messages: Message[]): string {
 }
 
 const placeholderPrompts = [
-  "Diagnose our growth system.",
-  "Where are we leaking leads?",
-  "Map our AI growth opportunities.",
-  "What should the founder see weekly?",
+  "We are a B2B services company and need more qualified leads.",
+  "Our marketing is scattered and we want clearer priorities.",
+  "We want to use AI but do not know where to start.",
+  "Our website is not converting enough enquiries.",
 ]
 
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
-  { label: "AI growth diagnostic", prompt: "Diagnose our growth system." },
-  { label: "Lead leakage", prompt: "Where are we leaking leads?" },
-  { label: "AI opportunity map", prompt: "Map our AI growth opportunities." },
-  { label: "Founder dashboard", prompt: "What should the founder see weekly?" },
+  {
+    label: "I need more leads",
+    prompt: "I need more leads for my business.",
+  },
+  {
+    label: "My marketing is scattered",
+    prompt: "My marketing is scattered and I need a clearer growth system.",
+  },
+  {
+    label: "I want to use AI",
+    prompt: "I want to use AI in my business but do not know where to start.",
+  },
+  {
+    label: "My website is not converting",
+    prompt: "My website is not converting enough visitors into enquiries.",
+  },
+  {
+    label: "Leads are not tracked",
+    prompt: "Leads are not tracked properly across our website, CRM, and follow-up.",
+  },
+  {
+    label: "I need better dashboards",
+    prompt: "I need better dashboards and reporting for founder-level decisions.",
+  },
 ]
 
 interface Message {
@@ -136,9 +156,12 @@ export function HeroSection() {
   const [error, setError] = useState<string | null>(null)
   const [attachedFile, setAttachedFile] = useState<File | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const diagnosticPanelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
   const chatFileInputRef = useRef<HTMLInputElement>(null)
+  const [isLandingHighlighted, setIsLandingHighlighted] = useState(false)
 
   const [conversationState, setConversationState] =
     useState<ConversationStatePayload>(createInitialConversationState)
@@ -221,6 +244,42 @@ export function HeroSection() {
   useEffect(() => {
     scrollToBottom()
   }, [messages, attachedFile])
+
+  useEffect(() => {
+    const focusDiagnosticInput = () => {
+      if (window.location.hash !== "#consulting-chat") return
+
+      const section = sectionRef.current
+      if (section) {
+        const offset = window.matchMedia("(max-width: 767px)").matches ? 72 : 88
+        const top = section.getBoundingClientRect().top + window.scrollY - offset
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" })
+      }
+
+      setIsLandingHighlighted(true)
+      window.setTimeout(() => {
+        const target = chatInputRef.current ?? inputRef.current
+        target?.focus({ preventScroll: true })
+      }, 450)
+      window.setTimeout(() => setIsLandingHighlighted(false), 1800)
+    }
+
+    const handleDiagnosticLinkClick = (event: MouseEvent) => {
+      const link = (event.target as Element | null)?.closest?.("a[href]")
+      const href = link?.getAttribute("href")
+      if (href === "#consulting-chat" || href === "/#consulting-chat") {
+        window.setTimeout(focusDiagnosticInput, 80)
+      }
+    }
+
+    focusDiagnosticInput()
+    window.addEventListener("hashchange", focusDiagnosticInput)
+    document.addEventListener("click", handleDiagnosticLinkClick)
+    return () => {
+      window.removeEventListener("hashchange", focusDiagnosticInput)
+      document.removeEventListener("click", handleDiagnosticLinkClick)
+    }
+  }, [])
 
   useEffect(() => {
     if (!hasMessages) return
@@ -542,8 +601,9 @@ export function HeroSection() {
   return (
     <section
       id="consulting-chat"
-      className="section-hero-dark relative flex min-h-[min(78vh,760px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-12 pt-8 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
-      aria-label="PxlBrief — strategic intelligence and consulting"
+      ref={sectionRef}
+      className="section-hero-dark relative flex min-h-[min(70vh,700px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-9 pt-6 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
+      aria-label="Run your AI growth diagnostic"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -570,67 +630,70 @@ export function HeroSection() {
 
       {!hasMessages ? (
         <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
-          <div className="grid items-center gap-7 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
+          <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
             <div className="text-center lg:text-left">
-              <div className="mb-4 md:mb-8 lg:mb-9">
+              <div className="mb-3 md:mb-8 lg:mb-9">
                 <span className="inline-flex max-w-full rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-primary/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[0.6875rem] sm:tracking-[0.22em]">
-                  AI Growth Consulting for Founder-Led Businesses
+                  PxlBrief AI diagnostic
                 </span>
-                <span className="mt-4 block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:mt-6 md:text-2xl">
+                <span className="mt-3 block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:mt-6 md:text-2xl">
                   Pxl<span className="text-primary">Brief</span>
                 </span>
               </div>
 
-              <h1 className="mx-auto mb-4 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
-                From scattered growth to AI-powered business intelligence.
+              <h1 className="mx-auto mb-3 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
+                Run Your AI Growth Diagnostic
               </h1>
 
-              <p className="mx-auto mb-5 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
+              <p className="mx-auto mb-4 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
                 <span className="md:hidden">
-                  Connect AI, marketing, websites, CRM, dashboards, and sales
-                  into one measurable growth engine.
+                  Answer a few focused questions and PxlBrief AI will identify
+                  your likely bottleneck, AI opportunity, and next step.
                 </span>
                 <span className="hidden md:inline">
-                  PxlBrief helps founder-led businesses connect AI, brand
-                  strategy, digital marketing, websites, CRM, dashboards, and
-                  sales systems into one measurable growth engine.
+                  Answer a few focused questions and PxlBrief AI will identify
+                  your likely growth bottleneck, AI opportunity, and recommended
+                  next step.
                 </span>
               </p>
 
-              <div className="mx-auto mb-5 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-9 lg:mx-0">
+              <div className="mx-auto mb-4 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-9 lg:mx-0">
                 <button
                   type="button"
                   onClick={() => inputRef.current?.focus()}
                   className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
                 >
-                  <span className="md:hidden">Start Diagnostic</span>
-                  <span className="hidden md:inline">Start AI Growth Diagnostic</span>
+                  <span>Run My Growth Diagnostic</span>
                 </button>
                 <a
                   href="#ai-lab"
                   className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/14 bg-card/62 px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/34 hover:bg-primary/[0.06] hover:text-foreground hover:shadow-[0_14px_40px_-28px_var(--glow-primary)] sm:w-auto sm:flex-1 lg:flex-none"
                 >
-                  <span className="md:hidden">AI Lab</span>
+                  <span className="md:hidden">Explore AI Lab</span>
                   <span className="hidden md:inline">Enter AI Lab</span>
                 </a>
               </div>
 
-              <div className="relative mx-auto mb-5 w-full max-w-md lg:hidden">
+              <div className="relative mx-auto mb-4 w-full max-w-sm lg:hidden">
                 <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
                 <ExecutiveIntelligencePanel compact />
               </div>
 
               <p className="mb-2 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
-                Live AI diagnostic
+                Start here: tell us what kind of business you run and what you
+                want to improve.
               </p>
               <div
-                className={`relative mx-auto mb-4 w-full min-w-0 max-w-2xl transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:mb-6 lg:mx-0 ${
-                  isFocused ? "drop-shadow-[0_0_28px_var(--glow-ambient)]" : ""
+                ref={diagnosticPanelRef}
+                className={`relative mx-auto mb-4 w-full min-w-0 max-w-2xl rounded-[1.125rem] transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:mb-6 lg:mx-0 ${
+                  isFocused || isLandingHighlighted
+                    ? "drop-shadow-[0_0_28px_var(--glow-ambient)]"
+                    : ""
                 }`}
               >
                 <div
                   className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-primary/25 via-primary/[0.12] to-primary/25 blur-md transition-opacity duration-500 ease-out ${
-                    isFocused ? "opacity-90" : "opacity-35"
+                    isFocused || isLandingHighlighted ? "opacity-90" : "opacity-35"
                   }`}
                   style={{
                     animation: "pulse-glow 4s ease-in-out infinite",
@@ -676,7 +739,10 @@ export function HeroSection() {
                     key={prompt}
                     type="button"
                     disabled={isLoading}
-                    onClick={() => void submitMessage(prompt)}
+                    onClick={() => {
+                      setInputValue(prompt)
+                      inputRef.current?.focus()
+                    }}
                     className="flex min-h-[2.35rem] w-full touch-manipulation items-center justify-center rounded-full border border-primary/12 bg-card/72 px-2 py-2 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.32] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm motion-reduce:transition-colors"
                   >
                     {label}

@@ -72,8 +72,8 @@ function SectionHeader({
     <header
       className={
         center
-          ? "mx-auto mb-8 max-w-3xl text-center sm:mb-12 md:mb-16"
-          : "mb-8 max-w-3xl sm:mb-12 md:mb-16"
+          ? "mx-auto mb-6 max-w-3xl text-center sm:mb-12 md:mb-16"
+          : "mb-6 max-w-3xl sm:mb-12 md:mb-16"
       }
     >
       <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85 sm:text-[0.6875rem] sm:tracking-[0.22em]">
@@ -158,7 +158,7 @@ export default function AILabPage() {
 
 function HeroSection() {
   return (
-    <section className="section-hero-dark relative overflow-hidden px-3 pb-8 pt-6 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
+    <section className="section-hero-dark relative overflow-hidden px-3 pb-7 pt-5 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-8 h-[min(88vw,420px)] w-[min(96vw,560px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[70px] md:top-10 md:h-[680px] md:w-[900px] md:bg-primary/[0.05] md:blur-[130px]" />
         <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-accent/[0.035] blur-[58px] md:h-96 md:w-96 md:bg-accent/[0.04] md:blur-[118px]" />
@@ -178,14 +178,14 @@ function HeroSection() {
             A live preview of how PxlBrief turns business inputs into scores,
             recommendations, automation priorities, and growth system decisions.
           </p>
-          <div className="mx-auto mt-5 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
+            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
             <SecondaryCta href="#lab-tools">Explore Tools</SecondaryCta>
           </div>
         </div>
 
-        <GlassCard className="p-3.5 sm:p-5 md:p-6">
-          <div className="mb-3.5 flex items-center justify-between border-b border-hairline/70 pb-3.5 sm:mb-4 sm:pb-4">
+        <GlassCard className="p-3 sm:p-5 md:p-6">
+          <div className="mb-3 flex items-center justify-between border-b border-hairline/70 pb-3 sm:mb-4 sm:pb-4">
             <div>
               <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
                 AI Lab Console
@@ -198,11 +198,11 @@ function HeroSection() {
               Live
             </span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             {consoleItems.map((item) => (
               <div
                 key={item.label}
-                className="flex min-w-0 items-center justify-between gap-3 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-3 py-2.5 sm:px-3.5 sm:py-3"
+                className="flex min-w-0 items-center justify-between gap-2.5 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-2.5 py-2 sm:gap-3 sm:px-3.5 sm:py-3"
               >
                 <span className="min-w-0 truncate text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground/75">
                   {item.label}
@@ -227,7 +227,7 @@ function HeroSection() {
 
 function PrinciplesSection() {
   return (
-    <section className="section-graphite relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -238,7 +238,7 @@ function PrinciplesSection() {
         />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {principles.map((principle) => (
-            <GlassCard key={principle.title} className="p-4 sm:p-5">
+            <GlassCard key={principle.title} className="p-3.5 sm:p-5">
               <IconBox icon={principle.icon} />
               <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">
                 {principle.title}
@@ -258,7 +258,7 @@ function ToolsSection() {
   return (
     <section
       id="lab-tools"
-      className="section-mid relative scroll-mt-20 px-3 py-11 sm:px-4 sm:py-20 md:py-28"
+      className="section-mid relative scroll-mt-20 px-3 py-8 sm:px-4 sm:py-20 md:py-28"
     >
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -274,20 +274,20 @@ function ToolsSection() {
 
 function RevealsSection() {
   return (
-    <section className="section-graphite relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="What these tools reveal"
           title="A clearer view of the system behind growth."
           center
         />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-5">
           {revealCards.map((item, index) => (
-            <GlassCard key={item} className="px-4 py-3.5 sm:p-5">
-              <span className="mb-4 inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.6875rem] text-primary">
+            <GlassCard key={item} className="px-3 py-2.5 sm:p-5">
+              <span className="mb-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.625rem] text-[var(--secondary-accent)] sm:mb-4 sm:h-8 sm:w-8 sm:text-[0.6875rem]">
                 {index + 1}
               </span>
-              <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground">
+              <h3 className="text-[0.8125rem] font-semibold leading-snug tracking-tight text-foreground sm:text-[0.9375rem]">
                 {item}
               </h3>
             </GlassCard>
@@ -300,9 +300,9 @@ function RevealsSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="section-cta-glow relative px-3 pb-14 pt-8 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
+    <section className="section-cta-glow relative px-3 pb-10 pt-6 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
       <div className="relative mx-auto grid max-w-6xl gap-4 md:grid-cols-[minmax(0,1fr)_minmax(280px,0.42fr)] md:items-stretch">
-        <div className="cta-glass-panel relative min-w-0 overflow-hidden rounded-[1.15rem] border border-hairline px-5 py-10 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-14 md:px-12">
+        <div className="cta-glass-panel relative min-w-0 overflow-hidden rounded-[1.15rem] border border-hairline px-4 py-7 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-14 md:px-12">
           <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.07] blur-3xl" />
           <div className="relative z-10">
@@ -317,13 +317,13 @@ function FinalCtaSection() {
               gives you a structured review across AI, marketing, website, CRM,
               dashboards, and sales systems.
             </p>
-            <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
-              <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+            <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
+              <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
               <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
             </div>
           </div>
         </div>
-        <GlassCard className="p-5 sm:p-7">
+        <GlassCard className="p-4 sm:p-7">
           <div className="flex h-full flex-col justify-between gap-6">
             <div>
               <LockKeyhole className="h-5 w-5 text-primary" aria-hidden />

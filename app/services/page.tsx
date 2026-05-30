@@ -220,8 +220,8 @@ function SectionHeader({
     <header
       className={
         center
-          ? "mx-auto mb-8 max-w-3xl text-center sm:mb-12 md:mb-16"
-          : "mb-8 max-w-3xl sm:mb-12 md:mb-16"
+          ? "mx-auto mb-6 max-w-3xl text-center sm:mb-12 md:mb-16"
+          : "mb-6 max-w-3xl sm:mb-12 md:mb-16"
       }
     >
       <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85 sm:text-[0.6875rem] sm:tracking-[0.22em]">
@@ -307,7 +307,7 @@ export default function ServicesPage() {
 
 function HeroSection() {
   return (
-    <section className="section-hero-dark relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
+    <section className="section-hero-dark relative overflow-hidden px-3 pb-7 pt-5 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-8 h-[min(88vw,420px)] w-[min(96vw,560px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[70px] md:top-10 md:h-[680px] md:w-[900px] md:bg-primary/[0.05] md:blur-[130px]" />
         <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-accent/[0.035] blur-[58px] md:h-96 md:w-96 md:bg-accent/[0.04] md:blur-[118px]" />
@@ -328,14 +328,14 @@ function HeroSection() {
             marketing, websites, CRM, dashboards, and business intelligence into
             one structured growth system.
           </p>
-          <div className="mx-auto mt-5 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
+            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
             <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
           </div>
         </div>
 
-        <GlassCard className="p-3.5 sm:p-5 md:p-6">
-          <div className="mb-3.5 flex items-center justify-between border-b border-hairline/70 pb-3.5 sm:mb-4 sm:pb-4">
+        <GlassCard className="p-3 sm:p-5 md:p-6">
+          <div className="mb-3 flex items-center justify-between border-b border-hairline/70 pb-3 sm:mb-4 sm:pb-4">
             <div>
               <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
                 Growth Systems Stack
@@ -346,11 +346,11 @@ function HeroSection() {
             </div>
             <Layers3 className="h-5 w-5 text-primary" aria-hidden />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             {stackLayers.map((layer, index) => (
               <div
                 key={layer}
-                className="flex min-w-0 items-center gap-3 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-3 py-2.5 sm:px-3.5 sm:py-3"
+                className="flex min-w-0 items-center gap-2.5 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-2.5 py-2 sm:gap-3 sm:px-3.5 sm:py-3"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.07] font-mono text-[0.625rem] text-primary">
                   {index + 1}
@@ -369,7 +369,7 @@ function HeroSection() {
 
 function InfrastructureSection() {
   return (
-    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -380,7 +380,7 @@ function InfrastructureSection() {
         />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {principles.map((principle) => (
-            <GlassCard key={principle.title} className="p-4 sm:p-5">
+            <GlassCard key={principle.title} className="p-3.5 sm:p-5">
               <IconBox icon={principle.icon} />
               <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">
                 {principle.title}
@@ -398,19 +398,19 @@ function InfrastructureSection() {
 
 function ServiceSystemsSection() {
   return (
-    <section className="section-graphite relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Six service pillars"
           title="The six systems we build."
           text="Each pillar can stand alone, but the highest leverage comes when they operate as one connected growth system."
         />
-        <div className="mb-4 grid grid-cols-3 gap-1.5 rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:mb-6 sm:grid-cols-6 sm:gap-2 sm:rounded-[1.1rem] sm:p-2">
+        <div className="mb-3 flex gap-1.5 overflow-x-auto rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl [-webkit-overflow-scrolling:touch] dark:bg-card/[0.34] sm:mb-6 sm:grid sm:grid-cols-6 sm:gap-2 sm:rounded-[1.1rem] sm:p-2">
           {services.map((service) => (
             <a
               key={service.id}
               href={`#service-${service.id}`}
-              className="min-w-0 touch-manipulation rounded-[0.75rem] border border-transparent bg-transparent px-2.5 py-2.5 text-center text-[0.8125rem] font-semibold tracking-tight text-muted-foreground transition-all duration-300 [-webkit-tap-highlight-color:transparent] hover:border-primary/18 hover:bg-primary/[0.065] hover:text-foreground sm:px-3 sm:py-3 sm:text-sm"
+              className="min-w-max touch-manipulation rounded-[0.75rem] border border-transparent bg-transparent px-3 py-2 text-center text-[0.75rem] font-semibold tracking-tight text-muted-foreground transition-all duration-300 [-webkit-tap-highlight-color:transparent] hover:border-primary/18 hover:bg-primary/[0.065] hover:text-foreground sm:min-w-0 sm:px-3 sm:py-3 sm:text-sm"
             >
               {service.shortLabel}
             </a>
@@ -425,7 +425,7 @@ function ServiceSystemsSection() {
               className="group relative scroll-mt-24 overflow-hidden rounded-[0.95rem] border border-hairline bg-card/86 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:rounded-[1.125rem]"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 hidden h-40 w-40 rounded-full bg-primary/[0.07] blur-2xl sm:block" />
-              <summary className="relative z-10 flex cursor-pointer list-none items-start gap-3 px-3.5 py-3.5 outline-none transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-primary/[0.035] focus-visible:ring-2 focus-visible:ring-ring/35 group-open:border-b group-open:border-hairline/70 sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
+              <summary className="relative z-10 flex cursor-pointer list-none items-start gap-2.5 px-3 py-3 outline-none transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-primary/[0.035] focus-visible:ring-2 focus-visible:ring-ring/35 group-open:border-b group-open:border-hairline/70 sm:gap-3 sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
                 <IconBox icon={service.icon} />
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center justify-between gap-3">
@@ -436,24 +436,24 @@ function ServiceSystemsSection() {
                       {index === 0 ? "Open" : "View"}
                     </span>
                   </div>
-                  <h3 className="mt-1.5 text-balance text-base font-semibold leading-tight tracking-tight text-foreground sm:text-lg">
+                  <h3 className="mt-1 text-balance text-[0.9375rem] font-semibold leading-tight tracking-tight text-foreground sm:mt-1.5 sm:text-lg">
                     {service.title}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground/88 md:text-sm">
+                  <p className="mt-1.5 line-clamp-1 text-[0.75rem] leading-snug text-muted-foreground/88 sm:mt-2 sm:line-clamp-2 md:text-sm">
                     {service.outcome}
                   </p>
                 </div>
               </summary>
-              <div className="relative z-10 grid gap-2.5 px-3.5 py-3.5 sm:gap-3.5 sm:px-6 sm:py-5">
+              <div className="relative z-10 grid gap-2 px-3 py-3 sm:gap-3.5 sm:px-6 sm:py-5">
                 <ServiceBlock label="Problem" text={service.problem} />
                 <ServiceBlock label="What we build" text={service.build} />
-                <div className="rounded-[0.85rem] border border-hairline/70 bg-background/30 p-3 sm:rounded-[0.9rem] sm:p-3.5">
-                  <p className="mb-2.5 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 sm:mb-3">
+                <div className="border-l border-primary/18 pl-3 sm:rounded-[0.9rem] sm:border sm:border-hairline/70 sm:bg-background/30 sm:p-3.5">
+                  <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 sm:mb-3">
                     Use cases
                   </p>
-                  <div className="grid gap-1.5 sm:grid-cols-2 sm:gap-2">
+                  <div className="grid gap-1 sm:grid-cols-2 sm:gap-2">
                     {service.useCases.map((useCase) => (
-                      <div key={useCase} className="flex min-w-0 items-start gap-2.5">
+                      <div key={useCase} className="flex min-w-0 items-start gap-2">
                         <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                         <span className="text-[0.8125rem] leading-relaxed text-foreground/88">
                           {useCase}
@@ -483,16 +483,16 @@ function ServiceBlock({
 }) {
   return (
     <div
-      className={`rounded-[0.85rem] border p-3 sm:rounded-[0.9rem] sm:p-3.5 ${
+      className={`border-l py-0.5 pl-3 sm:rounded-[0.9rem] sm:border sm:p-3.5 ${
         highlight
-          ? "border-primary/22 bg-primary/[0.055]"
-          : "border-hairline/70 bg-background/30"
+          ? "border-primary/35 sm:border-primary/22 sm:bg-primary/[0.055]"
+          : "border-hairline/70 sm:bg-background/30"
       }`}
     >
       <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
         {label}
       </p>
-      <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground/92 sm:mt-2 md:text-sm">
+      <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground/92 sm:mt-2 md:text-sm">
         {text}
       </p>
     </div>
@@ -501,7 +501,7 @@ function ServiceBlock({
 
 function EntryOffersSection() {
   return (
-    <section className="section-mid relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Recommended entry"
@@ -510,7 +510,7 @@ function EntryOffersSection() {
         />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
           {entryOffers.map((offer) => (
-            <GlassCard key={offer.title} className="p-4 sm:p-5">
+            <GlassCard key={offer.title} className="p-3.5 sm:p-5">
               <IconBox icon={offer.icon} />
               <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
                 {offer.title}
@@ -526,7 +526,7 @@ function EntryOffersSection() {
               </Link>
             </GlassCard>
           ))}
-          <GlassCard className="p-4 sm:p-5">
+          <GlassCard className="p-3.5 sm:p-5">
             <IconBox icon={Target} />
             <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
               Strategic Session
@@ -549,7 +549,7 @@ function EntryOffersSection() {
 
 function ConnectionFlowSection() {
   return (
-    <section className="section-bronze relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Connected system"
@@ -557,25 +557,25 @@ function ConnectionFlowSection() {
           text="The strongest growth systems are not built from isolated vendors. They are built by connecting strategy, execution, automation, and intelligence."
           center
         />
-        <GlassCard className="p-3.5 sm:p-6 md:p-8">
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-6 md:gap-3">
+        <GlassCard className="p-3 sm:p-6 md:p-8">
+          <div className="grid grid-cols-1 gap-0 md:grid-cols-6 md:gap-3">
             {systemFlow.map((step, index) => (
               <div key={step} className="min-w-0">
-                <div className="rounded-[0.85rem] border border-hairline/70 bg-background/30 p-3 md:min-h-32 md:rounded-[0.9rem] md:p-3.5">
-                  <span className="mb-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.625rem] text-primary sm:mb-3 sm:h-8 sm:w-8 sm:text-[0.6875rem]">
+                <div className="flex min-h-14 items-center gap-3 rounded-[0.85rem] border border-primary/18 bg-background/30 px-3 py-2 md:block md:min-h-32 md:rounded-[0.9rem] md:border-hairline/70 md:p-3.5">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.625rem] text-[var(--secondary-accent)] sm:h-8 sm:w-8 sm:text-[0.6875rem] md:mb-3">
                     {index + 1}
                   </span>
-                  <h3 className="text-[0.8125rem] font-semibold leading-snug tracking-tight text-foreground sm:text-[0.875rem]">
+                  <h3 className="min-w-0 text-[0.8125rem] font-semibold leading-snug tracking-tight text-foreground sm:text-[0.875rem]">
                     {step}
                   </h3>
                 </div>
                 {index < systemFlow.length - 1 ? (
-                  <div className="mx-auto h-3 w-px bg-primary/20 md:hidden" />
+                  <div className="ml-6 h-2.5 w-px bg-primary/20 md:hidden" />
                 ) : null}
               </div>
             ))}
           </div>
-          <div className="mt-4 rounded-[0.95rem] border border-primary/20 bg-primary/[0.055] p-3.5 sm:mt-5 sm:p-4">
+          <div className="mt-3 rounded-[0.95rem] border border-primary/20 bg-primary/[0.055] p-3 sm:mt-5 sm:p-4">
             <div className="flex items-start gap-3">
               <Route className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
               <p className="text-[0.875rem] leading-relaxed text-foreground/90 md:text-base">
@@ -593,8 +593,8 @@ function ConnectionFlowSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="section-cta-glow relative px-3 pb-14 pt-8 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
-      <div className="cta-glass-panel relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 md:px-14">
+    <section className="section-cta-glow relative px-3 pb-10 pt-6 sm:px-4 sm:pb-24 sm:pt-12 md:pb-32">
+      <div className="cta-glass-panel relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline px-4 py-7 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 md:px-14">
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.07] blur-3xl" />
         <div className="relative z-10">
@@ -609,7 +609,7 @@ function FinalCtaSection() {
             business needs first.
           </p>
           <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
-            <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
             <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">

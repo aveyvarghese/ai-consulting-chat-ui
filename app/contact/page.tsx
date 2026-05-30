@@ -126,8 +126,8 @@ function SectionHeader({
     <header
       className={
         center
-          ? "mx-auto mb-8 max-w-3xl text-center sm:mb-12 md:mb-16"
-          : "mb-8 max-w-3xl sm:mb-12 md:mb-16"
+          ? "mx-auto mb-6 max-w-3xl text-center sm:mb-12 md:mb-16"
+          : "mb-6 max-w-3xl sm:mb-12 md:mb-16"
       }
     >
       <p className="mb-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85 sm:text-[0.6875rem] sm:tracking-[0.22em]">
@@ -231,7 +231,7 @@ export default function ContactPage() {
 
 function HeroSection() {
   return (
-    <section className="section-hero-dark relative overflow-hidden px-3 pb-9 pt-7 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
+    <section className="section-hero-dark relative overflow-hidden px-3 pb-7 pt-5 sm:px-4 sm:pb-20 sm:pt-14 md:pb-28 md:pt-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-8 h-[min(88vw,420px)] w-[min(96vw,560px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[70px] md:top-10 md:h-[680px] md:w-[900px] md:bg-primary/[0.05] md:blur-[130px]" />
         <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-accent/[0.035] blur-[58px] md:h-96 md:w-96 md:bg-accent/[0.04] md:blur-[118px]" />
@@ -252,14 +252,14 @@ function HeroSection() {
             The system helps identify your growth bottleneck, AI opportunity,
             and recommended next step before a deeper strategic conversation.
           </p>
-          <div className="mx-auto mt-5 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
+            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
             <BookingCta source="start_diagnostic_hero" />
           </div>
         </div>
 
-        <GlassCard className="p-3.5 sm:p-5 md:p-6">
-          <div className="mb-3.5 flex items-center justify-between border-b border-hairline/70 pb-3.5 sm:mb-4 sm:pb-4">
+        <GlassCard className="p-3 sm:p-5 md:p-6">
+          <div className="mb-3 flex items-center justify-between border-b border-hairline/70 pb-3 sm:mb-4 sm:pb-4">
             <div>
               <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
                 Intake Intelligence
@@ -270,11 +270,11 @@ function HeroSection() {
             </div>
             <ShieldCheck className="h-5 w-5 text-primary" aria-hidden />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             {intakeSignals.map((signal, index) => (
               <div
                 key={signal}
-                className="flex min-w-0 items-center gap-3 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-3 py-2.5 sm:px-3.5 sm:py-3"
+                className="flex min-w-0 items-center gap-2.5 rounded-[0.8rem] border border-hairline/70 bg-background/30 px-2.5 py-2 sm:gap-3 sm:px-3.5 sm:py-3"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.07] font-mono text-[0.625rem] text-primary">
                   {index + 1}
@@ -293,7 +293,7 @@ function HeroSection() {
 
 function DiagnosisSection() {
   return (
-    <section className="section-mid relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -304,7 +304,7 @@ function DiagnosisSection() {
         />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {diagnosisCards.map((card) => (
-            <GlassCard key={card.title} className="px-4 py-3.5 sm:p-5">
+            <GlassCard key={card.title} className="px-3.5 py-3 sm:p-5">
               <IconBox icon={card.icon} />
               <h3 className="mt-4 text-balance text-base font-semibold tracking-tight text-foreground">
                 {card.title}
@@ -322,7 +322,7 @@ function DiagnosisSection() {
 
 function IntakeCaptureSection() {
   return (
-    <section className="section-graphite relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-graphite relative px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Intake signals"
@@ -346,24 +346,24 @@ function IntakeCaptureSection() {
 
 function BeginOptionsSection() {
   return (
-    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader eyebrow="Entry routes" title="Choose how to begin." center />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-4">
-          <GlassCard className="px-4 py-3.5 sm:p-5">
+          <GlassCard className="px-3.5 py-3 sm:p-5">
             <IconBox icon={Brain} />
             <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
-              Start AI Growth Diagnostic
+              Run My Growth Diagnostic
             </h3>
             <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
               Best for founders who want a directional readout before speaking.
             </p>
             <div className="mt-5">
-              <PrimaryCta>Start Diagnostic</PrimaryCta>
+              <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
             </div>
           </GlassCard>
 
-          <GlassCard className="px-4 py-3.5 sm:p-5">
+          <GlassCard className="px-3.5 py-3 sm:p-5">
             <IconBox icon={Route} />
             <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
               Book Strategic Session
@@ -376,7 +376,7 @@ function BeginOptionsSection() {
             </div>
           </GlassCard>
 
-          <GlassCard className="px-4 py-3.5 sm:p-5">
+          <GlassCard className="px-3.5 py-3 sm:p-5">
             <IconBox icon={Mail} />
             <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
               Direct Enquiry
@@ -400,25 +400,28 @@ function BeginOptionsSection() {
 
 function AfterSubmitSection() {
   return (
-    <section className="section-mid relative px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-mid relative px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Routing logic"
           title="What happens after you submit."
           center
         />
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-5 sm:gap-3">
+        <div className="grid grid-cols-1 gap-0 sm:grid-cols-5 sm:gap-3">
           {processSteps.map((step, index) => (
-            <GlassCard key={step} className="px-3.5 py-3 sm:p-4">
-              <div className="flex items-start gap-3 sm:block">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.6875rem] text-primary">
+            <div key={step} className="min-w-0">
+              <div className="flex min-h-14 items-center gap-3 rounded-[0.85rem] border border-primary/18 bg-card/86 px-3 py-2 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:block sm:min-h-28 sm:rounded-[0.95rem] sm:border-hairline sm:bg-card/86 sm:p-4">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/22 bg-primary/[0.08] font-mono text-[0.625rem] text-[var(--secondary-accent)] sm:h-8 sm:w-8 sm:text-[0.6875rem]">
                   {index + 1}
                 </span>
                 <p className="min-w-0 text-[0.8125rem] font-semibold leading-snug text-foreground sm:mt-4">
                   {step}
                 </p>
               </div>
-            </GlassCard>
+              {index < processSteps.length - 1 ? (
+                <div className="ml-6 h-2.5 w-px bg-primary/20 sm:hidden" />
+              ) : null}
+            </div>
           ))}
         </div>
       </div>
@@ -428,20 +431,20 @@ function AfterSubmitSection() {
 
 function BestFitSection() {
   return (
-    <section className="section-bronze relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-bronze relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.18]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader eyebrow="Service fit" title="Best fit engagements." center />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-4">
           {fitEngagements.map((engagement) => (
-            <GlassCard key={engagement.title} className="p-4 sm:p-5">
-              <div className="flex min-w-0 items-start gap-3">
+            <GlassCard key={engagement.title} className="p-3 sm:p-5">
+              <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
                 <IconBox icon={engagement.icon} />
                 <div className="min-w-0">
-                  <h3 className="text-balance text-base font-semibold tracking-tight text-foreground">
+                  <h3 className="text-balance text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
                     {engagement.title}
                   </h3>
-                  <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-2 md:text-sm">
                     {engagement.description}
                   </p>
                 </div>
@@ -456,12 +459,12 @@ function BestFitSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="section-cta-glow relative overflow-hidden px-3 py-12 sm:px-4 sm:py-20 md:py-28">
+    <section className="section-cta-glow relative overflow-hidden px-3 py-9 sm:px-4 sm:py-20 md:py-28">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[min(92vw,520px)] w-[min(96vw,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.05] blur-[82px] md:blur-[128px]" />
         <div className="absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
       </div>
-      <GlassCard className="cta-glass-panel mx-auto max-w-5xl p-5 text-center sm:p-8 md:p-12">
+      <GlassCard className="cta-glass-panel mx-auto max-w-5xl p-4 text-center sm:p-8 md:p-12">
         <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.08] text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)]">
           <CheckCircle2 className="h-5 w-5" strokeWidth={1.7} aria-hidden />
         </div>
@@ -473,7 +476,7 @@ function FinalCtaSection() {
           bottleneck, AI opportunity, and recommended next step.
         </p>
         <div className="mx-auto mt-6 flex max-w-xl flex-col gap-2.5 sm:mt-8 sm:flex-row sm:justify-center">
-          <PrimaryCta>Start AI Growth Diagnostic</PrimaryCta>
+          <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
           <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
         </div>
       </GlassCard>
