@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 import {
+  ArrowRight,
   BarChart3,
   Brain,
   CheckCircle2,
@@ -253,7 +254,7 @@ function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
 
 export function ProblemSection() {
   return (
-    <section className="section-mid relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -261,71 +262,25 @@ export function ProblemSection() {
           title="Most businesses do not have a marketing problem. They have a disconnected growth system."
           text="PxlBrief starts by finding where growth signal breaks: campaign to website, website to CRM, CRM to sales, sales to founder-level decisions."
         />
-        <div className="relative overflow-hidden rounded-[1.35rem] border border-hairline bg-card/70 p-4 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.3] sm:rounded-[2rem] sm:p-8 md:p-10">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.13] pxl-data-grid md:opacity-[0.2]" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.08] blur-3xl" />
-          <div className="relative z-10 grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-10">
-            <div className="rounded-[1.1rem] border border-primary/18 bg-background/35 p-4 sm:p-6">
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
-                Disconnected growth system map
-              </p>
-              <h3 className="mt-4 text-2xl font-semibold leading-tight tracking-[-0.035em] text-foreground sm:text-3xl">
-                Signals are moving. The operating system is not.
+        <div className="grid grid-cols-1 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {problems.map((problem, index) => (
+            <MetallicCard key={problem.title} className="p-4 sm:p-6">
+              <div className="mb-3 flex items-center justify-between gap-3 sm:mb-5">
+                <span className="font-mono text-[0.6875rem] text-primary/80">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="rounded-full border border-primary/18 bg-primary/[0.06] px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/90">
+                  Signal gap
+                </span>
+              </div>
+              <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
+                {problem.title}
               </h3>
-              <p className="mt-4 text-[0.875rem] leading-relaxed text-muted-foreground/90 md:text-sm">
-                PxlBrief maps the broken connections between acquisition,
-                conversion, follow-up, reporting, and founder decisions before
-                recommending the first system to build.
+              <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm">
+                {problem.signal}
               </p>
-            </div>
-            <div className="relative mx-auto flex w-full max-w-3xl flex-col gap-3 py-1 md:min-h-[25rem] md:items-center md:justify-center">
-              <div className="absolute left-6 top-6 bottom-6 hidden w-px border-l border-dashed border-primary/24 md:hidden" />
-              <div className="absolute inset-8 hidden rounded-full border border-dashed border-primary/18 md:block" />
-              <div className="absolute inset-x-[18%] top-1/2 hidden border-t border-dashed border-primary/22 md:block" />
-              <div className="absolute inset-y-[18%] left-1/2 hidden border-l border-dashed border-primary/22 md:block" />
-              <div className="absolute left-[18%] right-[18%] top-[25%] hidden -rotate-12 border-t border-dashed border-primary/16 md:block" />
-              <div className="absolute left-[18%] right-[18%] bottom-[25%] hidden rotate-12 border-t border-dashed border-primary/16 md:block" />
-              <div className="relative order-1 mx-auto mb-2 flex h-28 w-28 flex-col items-center justify-center rounded-full border border-primary/32 bg-primary/[0.09] text-center shadow-[0_0_55px_-24px_var(--glow-primary),inset_0_1px_0_0_var(--shine-inset)] md:absolute md:left-1/2 md:top-1/2 md:z-20 md:-translate-x-1/2 md:-translate-y-1/2 md:h-36 md:w-36">
-                <span className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-primary/80">
-                  Core
-                </span>
-                <span className="mt-1 text-sm font-semibold leading-tight text-foreground md:text-base">
-                  Growth System
-                </span>
-              </div>
-              <div className="grid gap-3 md:grid-cols-3 md:gap-5">
-                {problems.map((problem, index) => (
-                  <div
-                    key={problem.title}
-                    className={`relative flex min-w-0 gap-3 rounded-[1rem] border border-dashed border-primary/22 bg-background/35 p-3.5 backdrop-blur-xl md:w-48 md:flex-col md:gap-2 md:p-4 ${
-                      index === 1 || index === 4 ? "md:translate-y-10" : ""
-                    } ${index === 2 || index === 3 ? "md:-translate-y-10" : ""}`}
-                  >
-                    <span className="mt-1 flex h-3 w-3 shrink-0 rounded-full bg-primary shadow-[0_0_18px_0_var(--glow-primary)] ring-4 ring-primary/10 md:mt-0" />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[0.62rem] text-primary/75">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <h3 className="truncate text-[0.875rem] font-semibold tracking-tight text-foreground md:text-sm">
-                          {problem.title
-                            .replace(" is active but scattered", "")
-                            .replace(" are being used randomly", "")
-                            .replace(" are not converting enough", "")
-                            .replace(" are not tracked properly", "")
-                            .replace(" do not produce decisions", "")
-                            .replace(" are still dependent on manual processes", "")}
-                        </h3>
-                      </div>
-                      <p className="mt-1.5 text-[0.75rem] leading-relaxed text-muted-foreground/85">
-                        {problem.signal}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+            </MetallicCard>
+          ))}
         </div>
       </div>
     </section>
@@ -334,7 +289,7 @@ export function ProblemSection() {
 
 export function AIGrowthDiagnosticPreviewSection() {
   return (
-    <section className="section-graphite relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.22]" />
       <div className="relative mx-auto grid max-w-6xl gap-7 sm:gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center lg:gap-14">
         <SectionHeader
@@ -407,10 +362,8 @@ export function AIGrowthDiagnosticPreviewSection() {
 }
 
 export function AILabPreviewSection() {
-  const [featuredTool, ...supportingTools] = labCards
-
   return (
-    <section id="ai-lab" className="section-graphite relative scroll-mt-20 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section id="ai-lab" className="relative scroll-mt-20 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="AI Lab"
@@ -418,92 +371,35 @@ export function AILabPreviewSection() {
           text="The AI Lab demonstrates how PxlBrief turns business inputs into diagnosis, recommendations, scores, campaigns, and growth systems."
           align="center"
         />
-        <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
-          <MetallicCard className="p-4 sm:p-6 md:p-8">
-            <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-              <div className="max-w-xl">
-                <div className="mb-4 flex items-center gap-3">
-                  <IconBadge icon={featuredTool.icon} />
-                  <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-3 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary">
-                    Featured tool
-                  </span>
-                </div>
-                <h3 className="text-2xl font-semibold tracking-[-0.035em] text-foreground md:text-3xl">
-                  {featuredTool.title}
-                </h3>
-                <p className="mt-3 text-[0.875rem] leading-relaxed text-muted-foreground/90 md:text-base">
-                  {featuredTool.description}
-                </p>
-              </div>
-              <a
-                href="#ai-lab"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary/28 bg-primary/[0.08] px-5 text-sm font-semibold text-primary transition-colors hover:bg-primary/[0.12]"
-              >
-                Explore AI Lab
-              </a>
-            </div>
-            <div className="mt-7 overflow-hidden rounded-[1.1rem] border border-primary/18 bg-background/42 p-4 sm:p-5 md:mt-10">
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
-                  Mock output
-                </span>
-                <span className="flex items-center gap-2 text-[0.75rem] font-medium text-primary">
-                  <CircleDot className="h-3.5 w-3.5" />
-                  Live-style preview
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          {labCards.map((card) => (
+            <MetallicCard key={card.title} className="p-4 sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <IconBadge icon={card.icon} />
+                <span
+                  className={`rounded-full border px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] ${
+                    card.status === "Available"
+                      ? "border-primary/25 bg-primary/[0.08] text-primary"
+                      : "border-hairline bg-foreground/[0.04] text-muted-foreground"
+                  }`}
+                >
+                  {card.status}
                 </span>
               </div>
-              <div className="grid gap-3 md:grid-cols-[0.72fr_1.28fr] md:gap-5">
-                <div className="rounded-[1rem] border border-primary/20 bg-primary/[0.07] p-4">
-                  <p className="text-[0.625rem] font-semibold uppercase tracking-[0.15em] text-primary/80">
-                    Readiness score
-                  </p>
-                  <div className="mt-4 flex items-end gap-2">
-                    <span className="font-mono text-5xl font-semibold tracking-[-0.06em] text-foreground">
-                      42
-                    </span>
-                    <span className="pb-1 text-sm text-muted-foreground/80">/ 100</span>
-                  </div>
-                  <div className="mt-4 h-2 rounded-full bg-background/60">
-                    <div className="h-full w-[42%] rounded-full bg-gradient-to-r from-primary/55 to-primary" />
-                  </div>
-                </div>
-                <div className="grid gap-3">
-                  {[
-                    ["Weakest signal", "Disconnected lead tracking"],
-                    ["Recommended next step", "AI Growth Audit"],
-                    ["Fastest unlock", "CRM follow-up + reporting"],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between gap-4 rounded-[0.9rem] border border-hairline/80 bg-card/60 px-4 py-3"
-                    >
-                      <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                        {label}
-                      </span>
-                      <span className="text-right text-[0.8125rem] font-semibold text-foreground">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </MetallicCard>
-          <div className="flex flex-wrap content-start gap-2.5 rounded-[1.15rem] border border-hairline bg-card/50 p-4 backdrop-blur-xl dark:bg-card/[0.22] sm:p-5 lg:flex-col lg:justify-center">
-            <p className="mb-1 w-full text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75">
-              Tool bench
-            </p>
-            {supportingTools.map((tool) => (
+              <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
+                {card.title}
+              </h3>
+              <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/88 md:text-sm">
+                {card.description}
+              </p>
               <a
-                key={tool.title}
-                href={tool.status === "Available" ? "#consulting-chat" : "#ai-lab"}
-                className="group inline-flex min-h-11 flex-1 items-center gap-2 rounded-full border border-primary/16 bg-background/35 px-3.5 py-2 text-[0.8125rem] font-semibold text-foreground transition-colors hover:border-primary/32 hover:bg-primary/[0.08] sm:flex-none"
+                href={card.status === "Available" ? "#consulting-chat" : "#ai-lab"}
+                className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-[0.7rem] border border-primary/18 bg-primary/[0.055] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/32 hover:bg-primary/[0.09] sm:w-auto"
               >
-                <tool.icon className="h-4 w-4 shrink-0 text-primary" strokeWidth={1.65} />
-                <span>{tool.title.replace("AI ", "").replace(" / Productivity", "")}</span>
+                {card.status === "Available" ? "Open tool" : "Preview"}
               </a>
-            ))}
-          </div>
+            </MetallicCard>
+          ))}
         </div>
       </div>
     </section>
@@ -512,7 +408,7 @@ export function AILabPreviewSection() {
 
 export function ExecutiveDashboardShowcaseSection() {
   return (
-    <section className="section-graphite relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/60 to-background px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute left-1/2 top-1/3 hidden h-[min(80vw,620px)] w-[min(90vw,760px)] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[110px] md:block" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -522,67 +418,39 @@ export function ExecutiveDashboardShowcaseSection() {
           align="center"
         />
         <MetallicCard className="p-4 sm:p-6 md:p-8">
-          <div className="grid gap-4 lg:grid-cols-[0.26fr_0.74fr] lg:gap-6">
-            <aside className="rounded-[1rem] border border-primary/18 bg-primary/[0.055] p-4">
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
-                Insight rail
+          <div className="mb-4 flex flex-col gap-3 border-b border-hairline/70 pb-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
+            <div>
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground/75">
+                Executive command view
               </p>
-              <div className="mt-5 space-y-3">
-                {[
-                  ["Signal", "Lead volume rising"],
-                  ["Risk", "Follow-ups delayed"],
-                  ["Opportunity", "Automate routing"],
-                  ["Next Action", "Audit CRM flow"],
-                ].map(([label, value]) => (
-                  <div key={label} className="border-l border-primary/32 pl-3">
-                    <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                      {label}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold leading-snug text-foreground">
-                      {value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-            <div className="overflow-hidden rounded-[1.1rem] border border-hairline/80 bg-background/35">
-              <div className="flex flex-col gap-3 border-b border-hairline/70 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5">
-                <div>
-                  <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground/75">
-                    Founder intelligence board
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
-                    Growth cockpit
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-xs font-medium text-primary">
-                  <CircleDot className="h-3.5 w-3.5" />
-                  Mock data
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-px bg-hairline/70 sm:grid-cols-4">
-                {dashboardKpis.map((kpi, index) => (
-                  <div
-                    key={kpi.label}
-                    className={`bg-card/66 p-3.5 sm:p-4 ${
-                      index === 7 ? "col-span-2 sm:col-span-1" : ""
-                    }`}
-                  >
-                    <p className="text-[0.625rem] font-medium uppercase tracking-[0.13em] text-muted-foreground/70">
-                      {kpi.label}
-                    </p>
-                    <div className="mt-4 flex items-end justify-between gap-3">
-                      <span className="font-mono text-2xl font-semibold tracking-tight text-foreground">
-                        {kpi.value}
-                      </span>
-                      <span className="rounded-full border border-primary/18 bg-primary/[0.06] px-2 py-1 text-[0.625rem] font-semibold text-primary/90">
-                        {kpi.trend}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+                Growth cockpit
+              </h3>
             </div>
+            <div className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-xs font-medium text-primary">
+              <CircleDot className="h-3.5 w-3.5" />
+              Mock data
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+            {dashboardKpis.map((kpi) => (
+              <div
+                key={kpi.label}
+                className="rounded-[0.95rem] border border-hairline/80 bg-background/35 p-3.5 sm:p-4"
+              >
+                <p className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
+                  {kpi.label}
+                </p>
+                <div className="mt-4 flex items-end justify-between gap-3">
+                  <span className="font-mono text-2xl font-semibold tracking-tight text-foreground">
+                    {kpi.value}
+                  </span>
+                  <span className="rounded-full border border-primary/18 bg-primary/[0.06] px-2 py-1 text-[0.625rem] font-semibold text-primary/90">
+                    {kpi.trend}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </MetallicCard>
       </div>
@@ -591,89 +459,47 @@ export function ExecutiveDashboardShowcaseSection() {
 }
 
 export function IndustryPlaybooksPreviewSection() {
-  const [featuredIndustry, ...supportingIndustries] = industryPlaybooks
-
   return (
-    <section className="section-bronze relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Industry playbooks"
           title="AI growth systems designed for real business categories."
           text="Each category has its own acquisition constraints, trust markers, operational drag, and automation opportunity."
         />
-        <div className="hidden gap-4 lg:grid lg:grid-cols-[1.1fr_0.9fr]">
-          <MetallicCard className="p-7">
-            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85">
-              Featured playbook
-            </p>
-            <h3 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground">
-              {featuredIndustry.title}
-            </h3>
-            <dl className="mt-8 grid gap-4">
-              {[
-                ["Common challenge", featuredIndustry.challenge],
-                ["AI opportunity", featuredIndustry.opportunity],
-                ["Recommended system", featuredIndustry.system],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-[1rem] border border-hairline/80 bg-background/35 p-4">
-                  <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                    {label}
-                  </dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-foreground/90">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </MetallicCard>
-          <div className="grid grid-cols-2 gap-3">
-            {supportingIndustries.map((playbook, index) => (
-              <div
-                key={playbook.title}
-                className={`rounded-[1rem] border border-hairline bg-card/62 p-4 backdrop-blur-xl ${
-                  index === 1 || index === 4 ? "translate-y-6" : ""
-                }`}
-              >
-                <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                  {playbook.title}
-                </h3>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground/88">
-                  {playbook.system}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="-mx-3 flex snap-x gap-3 overflow-x-auto px-3 pb-3 lg:hidden">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {industryPlaybooks.map((playbook) => (
-            <article
-              key={playbook.title}
-              className="min-w-[min(82vw,19rem)] snap-start rounded-[1.1rem] border border-hairline bg-card/70 p-4 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl"
-            >
+            <MetallicCard key={playbook.title} className="p-4 sm:p-5">
               <h3 className="text-base font-semibold tracking-tight text-foreground">
                 {playbook.title}
               </h3>
-              <dl className="mt-4 space-y-3 text-[0.8125rem] leading-relaxed">
+              <dl className="mt-4 space-y-2.5 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
                 <div>
                   <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
                     Common challenge
                   </dt>
-                  <dd className="mt-1 text-muted-foreground/90">{playbook.challenge}</dd>
+                  <dd className="mt-1 text-muted-foreground/90">
+                    {playbook.challenge}
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/80">
                     AI opportunity
                   </dt>
-                  <dd className="mt-1 text-foreground/88">{playbook.opportunity}</dd>
+                  <dd className="mt-1 text-foreground/88">
+                    {playbook.opportunity}
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
                     Recommended system
                   </dt>
-                  <dd className="mt-1 text-muted-foreground/90">{playbook.system}</dd>
+                  <dd className="mt-1 text-muted-foreground/90">
+                    {playbook.system}
+                  </dd>
                 </div>
               </dl>
-            </article>
+            </MetallicCard>
           ))}
         </div>
       </div>
@@ -683,7 +509,7 @@ export function IndustryPlaybooksPreviewSection() {
 
 export function CaseIntelligencePreviewSection() {
   return (
-    <section className="section-mid relative border-y border-hairline/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.2]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -692,49 +518,42 @@ export function CaseIntelligencePreviewSection() {
           text="These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system."
           align="center"
         />
-        <div className="relative mx-auto max-w-4xl">
-          <div className="absolute bottom-6 left-4 top-6 w-px bg-gradient-to-b from-primary/10 via-primary/42 to-primary/10 sm:left-1/2" />
-          <div className="space-y-5">
+        <div className="grid grid-cols-1 gap-3 sm:gap-5 lg:grid-cols-3">
           {caseScenarios.map((item, index) => (
-            <article
-              key={item.title}
-              className={`relative pl-10 sm:grid sm:grid-cols-[1fr_1fr] sm:gap-10 sm:pl-0 ${
-                index % 2 === 1 ? "sm:[&>div]:col-start-2" : ""
-              }`}
-            >
-              <span className="absolute left-[0.56rem] top-6 z-10 h-4 w-4 rounded-full border border-primary/40 bg-background shadow-[0_0_24px_-4px_var(--glow-primary)] sm:left-1/2 sm:-translate-x-1/2" />
-              <div className="rounded-[1.1rem] border border-hairline bg-card/70 p-4 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:p-5">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="font-mono text-[0.6875rem] text-primary/80">
-                    Scenario {index + 1}
-                  </span>
-                  <span className="rounded-full border border-hairline bg-foreground/[0.04] px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground/85">
-                    Timeline
-                  </span>
-                </div>
-                <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                  {item.title}
-                </h3>
-                <ol className="mt-5 space-y-3 text-[0.8125rem] leading-relaxed">
-                  {[
-                    ["Problem", item.problem],
-                    ["Diagnosis", "Growth signal is fragmented across teams and tools."],
-                    ["System Built", item.system],
-                    ["AI Layer", item.aiLayer],
-                    ["Business Impact", "Cleaner decisions, faster follow-up, and clearer next actions."],
-                  ].map(([label, value]) => (
-                    <li key={label} className="grid grid-cols-[6.5rem_1fr] gap-3">
-                      <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/78">
-                        {label}
-                      </span>
-                      <span className="text-muted-foreground/90">{value}</span>
-                    </li>
-                  ))}
-                </ol>
+            <MetallicCard key={item.title} className="p-4 sm:p-6">
+              <div className="mb-4 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                <span className="font-mono text-[0.6875rem] text-primary/80">
+                  Case {index + 1}
+                </span>
+                <span className="rounded-full border border-hairline bg-foreground/[0.04] px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground/85">
+                  Example transformation scenario
+                </span>
               </div>
-            </article>
+              <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                {item.title}
+              </h3>
+              <dl className="mt-4 space-y-3 text-[0.8125rem] leading-relaxed sm:mt-6 sm:space-y-4 md:text-sm">
+                <div>
+                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                    Problem
+                  </dt>
+                  <dd className="text-muted-foreground/90">{item.problem}</dd>
+                </div>
+                <div>
+                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/80">
+                    System
+                  </dt>
+                  <dd className="text-foreground/88">{item.system}</dd>
+                </div>
+                <div>
+                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                    AI Layer
+                  </dt>
+                  <dd className="text-muted-foreground/90">{item.aiLayer}</dd>
+                </div>
+              </dl>
+            </MetallicCard>
           ))}
-          </div>
         </div>
       </div>
     </section>
@@ -743,7 +562,7 @@ export function CaseIntelligencePreviewSection() {
 
 export function FounderCredibilitySection() {
   return (
-    <section className="section-espresso relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
+    <section className="relative px-3 py-11 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto grid max-w-6xl gap-7 rounded-[1.1rem] border border-hairline bg-card/82 p-5 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.34] sm:rounded-[1.25rem] sm:p-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-10 md:p-10">
         <div className="pointer-events-none absolute -right-20 -top-24 hidden h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl sm:block" />
         <div className="relative">
@@ -779,50 +598,36 @@ export function FounderCredibilitySection() {
 
 export function FinalGrowthCtaSection() {
   return (
-    <section className="section-cta-glow relative px-3 pb-14 pt-6 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
-      <div className="cta-glass-panel relative mx-auto max-w-5xl overflow-hidden rounded-[1.4rem] border border-hairline px-5 py-10 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[2rem] sm:px-10 sm:py-16 md:px-14 md:py-20">
+    <section className="relative px-3 pb-14 pt-6 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
+      <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline bg-card/94 px-5 py-10 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 dark:bg-card/[0.42] md:px-14 md:py-20">
         <div className="pointer-events-none absolute -left-20 top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl pxl-ambient-glow-drift sm:block" />
         <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-52 w-52 rounded-full bg-accent/[0.08] blur-2xl pxl-ambient-glow-drift-reverse sm:block" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.2]" />
-        <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_0.72fr] md:items-center">
-          <div>
-            <p className="mb-4 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-primary/85">
-              Growth leak diagnostic
-            </p>
-            <h2 className="text-balance text-[1.75rem] font-semibold leading-[1.08] tracking-[-0.035em] text-foreground sm:text-4xl md:text-[3rem]">
-              Ready to see where your growth system is leaking?
-            </h2>
-            <p className="mt-5 max-w-xl text-pretty text-[0.875rem] leading-relaxed text-muted-foreground/90 sm:text-[0.9375rem] md:mt-7 md:text-lg">
-              Start with an AI Growth Diagnostic and get a clearer view of your
-              business bottlenecks, AI opportunities, and recommended next step.
-            </p>
-            <div className="mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-10 sm:flex-row sm:gap-3">
-              <a
-                href="#consulting-chat"
-                className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
-              >
-                Start AI Growth Diagnostic
-              </a>
-              <StrategicSessionBookingLink
-                source="homepage_final_cta"
-                className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
-              >
-                Book Strategic Session
-              </StrategicSessionBookingLink>
-            </div>
+        <div className="relative z-10">
+          <h2 className="text-balance text-[1.55rem] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground sm:text-3xl md:text-[2.375rem]">
+            Ready to see where your growth system is leaking?
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-[0.875rem] leading-relaxed text-muted-foreground/90 sm:text-[0.9375rem] md:mt-8 md:text-lg">
+            Start with an AI Growth Diagnostic and get a clearer view of your
+            business bottlenecks, AI opportunities, and recommended next step.
+          </p>
+          <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-3">
+            <a
+              href="#consulting-chat"
+              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
+            >
+              Start AI Growth Diagnostic
+            </a>
+            <StrategicSessionBookingLink
+              source="homepage_final_cta"
+              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
+            >
+              Book Strategic Session
+            </StrategicSessionBookingLink>
           </div>
-          <div className="rounded-[1.1rem] border border-primary/18 bg-background/35 p-4">
-            {["Bottleneck mapped", "AI opportunity scored", "Next system recommended"].map((item, index) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 border-b border-hairline/60 py-4 last:border-b-0"
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary/24 bg-primary/[0.08] font-mono text-[0.75rem] text-primary">
-                  {index + 1}
-                </span>
-                <span className="text-sm font-semibold text-foreground">{item}</span>
-              </div>
-            ))}
+          <div className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70 sm:mt-8">
+            <ArrowRight className="h-3.5 w-3.5 text-primary/70" />
+            Founder-level diagnostic, then human strategic review.
           </div>
         </div>
       </div>

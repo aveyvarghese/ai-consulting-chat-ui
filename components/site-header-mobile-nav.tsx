@@ -10,7 +10,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ThemeVariantSwitcher } from "@/components/theme-variant-switcher"
 import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 const nav = [
@@ -77,9 +76,6 @@ export function SiteHeaderMobileNav() {
               Strategic session
             </a>
           </SheetClose>
-          <div className="mt-3 border-t border-primary/10 pt-3">
-            <ThemeVariantSwitcher className="w-full justify-between rounded-[0.85rem]" />
-          </div>
         </nav>
       </SheetContent>
     </Sheet>

@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { rootMetadata } from '@/lib/seo'
 import {
+  DEFAULT_THEME_VARIANT,
   DEFAULT_THEME,
   THEME_BOOT_SCRIPT,
   THEME_VARIANT_BOOT_SCRIPT,
@@ -28,7 +29,7 @@ export default function RootLayout({
       lang="en"
       className="dark scroll-smooth overflow-x-hidden bg-background"
       data-theme={DEFAULT_THEME}
-      data-theme-variant="luxury"
+      data-theme-variant={DEFAULT_THEME_VARIANT}
       suppressHydrationWarning
     >
       <body className="min-w-0 overflow-x-hidden font-sans antialiased">

@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { SiteHeaderMobileNav } from "@/components/site-header-mobile-nav"
-import { ThemeVariantSwitcher } from "@/components/theme-variant-switcher"
 import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
 
 const nav = [
@@ -44,7 +43,6 @@ export function SiteHeader() {
           >
             Strategic session
           </a>
-          <ThemeVariantSwitcher className="ml-1" />
         </nav>
         <div className="shrink-0 md:hidden">
           <SiteHeaderMobileNav />
