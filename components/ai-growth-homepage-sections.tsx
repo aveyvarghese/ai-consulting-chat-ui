@@ -82,13 +82,13 @@ const labCards = [
   },
   {
     title: "AI Campaign Idea Generator",
-    status: "Coming Soon",
+    status: "Available",
     icon: Sparkles,
     description: "Turn market inputs into sharper campaign angles.",
   },
   {
     title: "AI Brand Positioning Engine",
-    status: "Coming Soon",
+    status: "Available",
     icon: Landmark,
     description: "Clarify positioning, narrative, and premium differentiation.",
   },

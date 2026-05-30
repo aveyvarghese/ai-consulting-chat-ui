@@ -20,12 +20,12 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const consoleItems = [
-  { label: "Diagnostic Engine", status: "Active", tone: "active" },
-  { label: "Growth Scorecard", status: "Available", tone: "available" },
-  { label: "Service Recommender", status: "Available", tone: "available" },
-  { label: "ROI Calculator", status: "Available", tone: "available" },
-  { label: "Campaign Intelligence", status: "Coming Soon", tone: "soon" },
-  { label: "Brand Positioning Engine", status: "Coming Soon", tone: "soon" },
+  { label: "Diagnostic Engine", status: "Live", tone: "live" },
+  { label: "Growth Scorecard", status: "Live", tone: "live" },
+  { label: "Service Recommender", status: "Live", tone: "live" },
+  { label: "ROI Calculator", status: "Live", tone: "live" },
+  { label: "Campaign Intelligence", status: "Live", tone: "live" },
+  { label: "Brand Positioning Engine", status: "Live", tone: "live" },
 ] as const
 
 const principles = [
@@ -209,9 +209,9 @@ function HeroSection() {
                 </span>
                 <span
                   className={`shrink-0 rounded-full border px-2 py-0.5 text-[0.625rem] font-semibold ${
-                    item.tone === "soon"
-                      ? "border-hairline bg-foreground/[0.035] text-muted-foreground"
-                      : "border-primary/22 bg-primary/[0.07] text-primary"
+                    item.tone === "live"
+                      ? "border-primary/22 bg-primary/[0.07] text-primary"
+                      : "border-hairline bg-foreground/[0.035] text-muted-foreground"
                   }`}
                 >
                   {item.status}
