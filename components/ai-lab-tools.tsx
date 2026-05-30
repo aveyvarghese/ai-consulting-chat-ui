@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import type { ReactNode } from "react"
-import { useMemo, useState } from "react"
+import type { FormEvent, ReactNode } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { BarChart3, Gauge, Landmark, Megaphone, Route, Sparkles } from "lucide-react"
 
 type ScorecardState = {
@@ -103,6 +103,16 @@ type AiReadoutState = {
   readout: AiReadout | null
 }
 
+type LeadCaptureContext = {
+  tool: ActiveTool
+  toolLabel: string
+  inputs: Record<string, unknown>
+  directionalOutput: Record<string, unknown>
+  recommendedService: string
+}
+
+type LeadCaptureStatus = "idle" | "submitting" | "success" | "error"
+
 const createAiReadoutState = (): Record<ActiveTool, AiReadoutState> => ({
   scorecard: { loading: false, error: null, readout: null },
   recommender: { loading: false, error: null, readout: null },
@@ -122,6 +132,14 @@ const toolTabs: readonly {
   { id: "campaign", label: "Campaign", eyebrow: "Tool 04" },
   { id: "positioning", label: "Positioning", eyebrow: "Tool 05" },
 ]
+
+const toolLabels: Record<ActiveTool, string> = {
+  scorecard: "AI Growth Scorecard",
+  recommender: "AI Service Recommender",
+  roi: "AI ROI / Productivity Calculator",
+  campaign: "Campaign Intelligence",
+  positioning: "Brand Positioning Engine",
+}
 
 const scoreOptions = {
   stage: [
@@ -484,6 +502,43 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : {}
 }
 
+function compactJson(value: unknown, maxLength = 1600): string {
+  const text = JSON.stringify(value, null, 2)
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text
+}
+
+function formatReadout(readout: AiReadout): string {
+  return readout.sections
+    .map((section) => {
+      const lines = [
+        section.label,
+        section.value,
+        ...(section.items ?? []).map((item) => `- ${item}`),
+      ].filter(Boolean)
+      return lines.join("\n")
+    })
+    .join("\n\n")
+    .slice(0, 3000)
+}
+
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function isPhoneLike(value: string): boolean {
+  const digits = value.replace(/\D/g, "")
+  return digits.length >= 8 && digits.length <= 16 && /^[+\d\s().-]+$/.test(value)
+}
+
+function splitContact(value: string): { email: string; phone: string } | null {
+  const trimmed = value.trim()
+  if (!trimmed) return null
+  if (trimmed.includes("@")) {
+    return isValidEmail(trimmed) ? { email: trimmed, phone: "" } : null
+  }
+  return isPhoneLike(trimmed) ? { email: "", phone: trimmed } : null
+}
+
 function SelectField<T extends string>({
   label,
   value,
@@ -677,10 +732,168 @@ function PreviewDisclaimer() {
 function AiStrategyPanel({
   state,
   onGenerate,
+  leadContext,
 }: {
   state: AiReadoutState
   onGenerate: () => void
+  leadContext: LeadCaptureContext
 }) {
+  const [name, setName] = useState("")
+  const [contact, setContact] = useState("")
+  const [companyLink, setCompanyLink] = useState("")
+  const [status, setStatus] = useState<LeadCaptureStatus>("idle")
+  const [message, setMessage] = useState<string | null>(null)
+  const [dismissed, setDismissed] = useState(false)
+
+  useEffect(() => {
+    setDismissed(false)
+    setStatus("idle")
+    setMessage(null)
+  }, [state.readout])
+
+  const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!state.readout) return
+
+    const cleanName = name.trim()
+    const parsedContact = splitContact(contact)
+    const cleanCompanyLink = companyLink.trim()
+
+    if (!cleanName) {
+      setStatus("error")
+      setMessage("Please enter your name.")
+      return
+    }
+
+    if (!parsedContact) {
+      setStatus("error")
+      setMessage("Please enter a valid email or WhatsApp number.")
+      return
+    }
+
+    const readoutText = formatReadout(state.readout)
+    const directionalText = compactJson(leadContext.directionalOutput)
+    const inputsText = compactJson(leadContext.inputs)
+    const professionalSummary = [
+      "Lead source: AI Lab Tool.",
+      `Tool used: ${leadContext.toolLabel}.`,
+      `Tool ID: ${leadContext.tool}.`,
+      "Page path: /ai-lab.",
+      "Lead intent: AI Strategy Generated.",
+      "Lead priority: High.",
+      `Recommended service: ${leadContext.recommendedService}.`,
+      cleanCompanyLink && `Company / website / social link: ${cleanCompanyLink}.`,
+      "The visitor generated an AI Strategic Readout and requested a more detailed follow-up report.",
+    ]
+      .filter(Boolean)
+      .join(" ")
+
+    const conversationSummary = [
+      "AI LAB LEAD CAPTURE",
+      "",
+      "Lead source: AI Lab Tool",
+      `Tool used: ${leadContext.toolLabel}`,
+      `Tool ID: ${leadContext.tool}`,
+      "Page path: /ai-lab",
+      "Lead intent: AI Strategy Generated",
+      "Lead priority: High",
+      `Recommended service: ${leadContext.recommendedService}`,
+      cleanCompanyLink
+        ? `Company / website / social link: ${cleanCompanyLink}`
+        : "Company / website / social link: Not provided",
+      "",
+      "Tool inputs:",
+      inputsText,
+      "",
+      "Instant directional output:",
+      directionalText,
+      "",
+      "AI Strategic Readout:",
+      readoutText,
+    ].join("\n")
+
+    const messages = [
+      {
+        role: "user",
+        content: `AI Lab tool used: ${leadContext.toolLabel}\n\nInputs:\n${inputsText}`,
+      },
+      {
+        role: "assistant",
+        content: `Instant directional output:\n${directionalText}\n\nAI Strategic Readout:\n${readoutText}`,
+      },
+      {
+        role: "user",
+        content: `Detailed report requested by ${cleanName}. Contact: ${contact.trim()}${
+          cleanCompanyLink ? ` Company/link: ${cleanCompanyLink}` : ""
+        }`,
+      },
+    ]
+
+    const payload = {
+      messages,
+      snapshot: {
+        visitorType: "potential_client",
+        name: cleanName,
+        company: cleanCompanyLink,
+        email: parsedContact.email,
+        whatsapp: parsedContact.phone,
+        uploadedFileName: "",
+        conversationStage: "client_scheduling_focus",
+        potentialClientStage: 5,
+        clientCredibilityDelivered: true,
+        businessVertical: "AI Lab generated strategy lead",
+        businessStage: "AI Strategy Generated",
+        servicesInterested: leadContext.recommendedService,
+        currentChallenge: `${leadContext.toolLabel} strategic readout follow-up`,
+        acquisitionChannels: "AI Lab /ai-lab",
+        conversationSummary,
+      },
+      leadData: {
+        visitorType: "potential_client",
+        name: cleanName,
+        company: cleanCompanyLink,
+        website: cleanCompanyLink.startsWith("http") || cleanCompanyLink.includes(".")
+          ? cleanCompanyLink
+          : "",
+        instagram: cleanCompanyLink.startsWith("@") ? cleanCompanyLink : "",
+        service: leadContext.recommendedService,
+        email: parsedContact.email,
+        phone: parsedContact.phone,
+        notes: conversationSummary.slice(0, 3900),
+      },
+      professionalSummary,
+      serviceRecommendation: {
+        directionLabel: leadContext.recommendedService,
+        whyItMatters:
+          "The visitor generated an AI Strategic Readout and requested a detailed report.",
+        suggestedNextStep:
+          "Review the AI Lab inputs, readout, and service fit before following up.",
+      },
+      submitSource: `AI Lab Tool · ${leadContext.toolLabel}`,
+    }
+
+    setStatus("submitting")
+    setMessage(null)
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error("Lead submit failed")
+      }
+
+      setStatus("success")
+      setMessage("Report request received. We’ll review your readout and follow up shortly.")
+    } catch {
+      setStatus("error")
+      setMessage("We could not submit this right now. Please email info@pxlbrief.com.")
+    }
+  }
+
   return (
     <div className="mt-4 rounded-[0.9rem] border border-primary/18 bg-background/35 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:p-3.5">
       <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
@@ -755,6 +968,95 @@ function AiStrategyPanel({
             Directional strategic readout only. A full diagnosis requires deeper
             business and market review.
           </p>
+          {!dismissed ? (
+            <div className="mt-3 rounded-[0.85rem] border border-hairline bg-card/88 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:p-3.5">
+              {status === "success" ? (
+                <p className="rounded-[0.75rem] border border-primary/18 bg-primary/[0.06] px-3 py-2.5 text-[0.8125rem] leading-relaxed text-foreground/90">
+                  Report request received. We’ll review your readout and follow
+                  up shortly.
+                </p>
+              ) : (
+                <form onSubmit={handleLeadSubmit} className="grid min-w-0 gap-3">
+                  <div>
+                    <p className="text-sm font-semibold tracking-tight text-foreground">
+                      Want the detailed report?
+                    </p>
+                    <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground/82">
+                      Share your email or WhatsApp and we’ll send a more
+                      detailed version with recommended actions, service fit, and
+                      next-step roadmap.
+                    </p>
+                  </div>
+                  <div className="grid min-w-0 gap-2 sm:grid-cols-2">
+                    <label className="block min-w-0">
+                      <span className="mb-1.5 block text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground/72">
+                        Name
+                      </span>
+                      <input
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                        disabled={status === "submitting"}
+                        className="h-10 w-full min-w-0 rounded-[0.7rem] border border-hairline/80 bg-background/45 px-3 text-[0.8125rem] font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground/38 focus:border-primary/40 focus:ring-2 focus:ring-primary/10 disabled:opacity-60"
+                      />
+                    </label>
+                    <label className="block min-w-0">
+                      <span className="mb-1.5 block text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground/72">
+                        WhatsApp or email
+                      </span>
+                      <input
+                        value={contact}
+                        onChange={(event) => setContact(event.target.value)}
+                        disabled={status === "submitting"}
+                        className="h-10 w-full min-w-0 rounded-[0.7rem] border border-hairline/80 bg-background/45 px-3 text-[0.8125rem] font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground/38 focus:border-primary/40 focus:ring-2 focus:ring-primary/10 disabled:opacity-60"
+                      />
+                    </label>
+                    <label className="block min-w-0 sm:col-span-2">
+                      <span className="mb-1.5 block text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground/72">
+                        Company / website / social link, optional
+                      </span>
+                      <input
+                        value={companyLink}
+                        onChange={(event) => setCompanyLink(event.target.value)}
+                        disabled={status === "submitting"}
+                        placeholder="e.g. company.com or @brand"
+                        className="h-10 w-full min-w-0 rounded-[0.7rem] border border-hairline/80 bg-background/45 px-3 text-[0.8125rem] font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground/38 focus:border-primary/40 focus:ring-2 focus:ring-primary/10 disabled:opacity-60"
+                      />
+                    </label>
+                  </div>
+                  {message ? (
+                    <p
+                      className={`rounded-[0.7rem] border px-3 py-2 text-[0.75rem] leading-relaxed ${
+                        status === "error"
+                          ? "border-destructive/20 bg-destructive/[0.06] text-muted-foreground/90"
+                          : "border-primary/18 bg-primary/[0.06] text-foreground/90"
+                      }`}
+                    >
+                      {message}
+                    </p>
+                  ) : null}
+                  <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
+                    >
+                      {status === "submitting"
+                        ? "Submitting..."
+                        : "Send My Detailed Report"}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={status === "submitting"}
+                      onClick={() => setDismissed(true)}
+                      className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] border border-primary/18 bg-background/45 px-4 py-2 text-[0.8125rem] font-semibold text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
+                    >
+                      Continue Without Report
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -1294,6 +1596,13 @@ export function AILabTools() {
             </p>
             <AiStrategyPanel
               state={aiReadouts.scorecard}
+              leadContext={{
+                tool: "scorecard",
+                toolLabel: toolLabels.scorecard,
+                inputs: asRecord(scorecard),
+                directionalOutput: asRecord(scorecardOutput),
+                recommendedService: scorecardOutput.service,
+              }}
               onGenerate={() =>
                 generateAiReadout(
                   "scorecard",
@@ -1391,6 +1700,13 @@ export function AILabTools() {
             </Link>
             <AiStrategyPanel
               state={aiReadouts.recommender}
+              leadContext={{
+                tool: "recommender",
+                toolLabel: toolLabels.recommender,
+                inputs: asRecord(recommender),
+                directionalOutput: asRecord(recommenderOutput),
+                recommendedService: recommenderOutput.service,
+              }}
               onGenerate={() =>
                 generateAiReadout(
                   "recommender",
@@ -1497,6 +1813,13 @@ export function AILabTools() {
             </p>
             <AiStrategyPanel
               state={aiReadouts.roi}
+              leadContext={{
+                tool: "roi",
+                toolLabel: toolLabels.roi,
+                inputs: asRecord(roi),
+                directionalOutput: asRecord(roiOutput),
+                recommendedService: `AI Implementation & Automation (${roiOutput.priority})`,
+              }}
               onGenerate={() =>
                 generateAiReadout("roi", asRecord(roi), asRecord(roiOutput))
               }
@@ -1595,6 +1918,13 @@ export function AILabTools() {
               <PreviewDisclaimer />
               <AiStrategyPanel
                 state={aiReadouts.campaign}
+                leadContext={{
+                  tool: "campaign",
+                  toolLabel: toolLabels.campaign,
+                  inputs: asRecord(campaign),
+                  directionalOutput: asRecord(campaignOutput),
+                  recommendedService: campaignOutput.service,
+                }}
                 onGenerate={() =>
                   generateAiReadout(
                     "campaign",
@@ -1725,6 +2055,13 @@ export function AILabTools() {
               <PreviewDisclaimer />
               <AiStrategyPanel
                 state={aiReadouts.positioning}
+                leadContext={{
+                  tool: "positioning",
+                  toolLabel: toolLabels.positioning,
+                  inputs: asRecord(positioning),
+                  directionalOutput: asRecord(positioningOutput),
+                  recommendedService: positioningOutput.service,
+                }}
                 onGenerate={() =>
                   generateAiReadout(
                     "positioning",
