@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useEffect, useRef, useMemo } from "react"
 import {
   ArrowRight,
@@ -109,30 +110,282 @@ const placeholderPrompts = [
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
   {
-    label: "I need more leads",
-    prompt: "I need more leads for my business.",
+    label: "Startup",
+    prompt: "Startup",
   },
   {
-    label: "My marketing is scattered",
-    prompt: "My marketing is scattered and I need a clearer growth system.",
+    label: "SME",
+    prompt: "SME",
   },
   {
-    label: "I want to use AI",
-    prompt: "I want to use AI in my business but do not know where to start.",
+    label: "Consumer brand",
+    prompt: "Consumer brand",
   },
   {
-    label: "My website is not converting",
-    prompt: "My website is not converting enough visitors into enquiries.",
+    label: "B2B company",
+    prompt: "B2B company",
   },
   {
-    label: "Leads are not tracked",
-    prompt: "Leads are not tracked properly across our website, CRM, and follow-up.",
+    label: "Traditional business",
+    prompt: "Traditional business",
   },
   {
-    label: "I need better dashboards",
-    prompt: "I need better dashboards and reporting for founder-level decisions.",
+    label: "Local business",
+    prompt: "Local business",
   },
 ]
+
+type DiagnosticStepId =
+  | "businessType"
+  | "mainChallenge"
+  | "marketingSetup"
+  | "aiUsage"
+  | "systemsStatus"
+  | "urgency"
+  | "digitalLink"
+  | "contact"
+
+type DiagnosticAnswers = Partial<Record<DiagnosticStepId, string>>
+
+type DiagnosticSnapshot = {
+  likelyBottleneck: string
+  aiOpportunity: string
+  recommendedFirstSystem: string
+  recommendedService: string
+  leadPriority: "Low" | "Medium" | "High"
+  suggestedNextStep: string
+}
+
+type DiagnosticState = {
+  answers: DiagnosticAnswers
+  currentStepIndex: number
+  snapshot: DiagnosticSnapshot | null
+  leadStatus: "idle" | "submitting" | "success" | "error"
+  leadMessage: string | null
+}
+
+const diagnosticSteps: readonly {
+  id: DiagnosticStepId
+  question: string
+  options?: readonly string[]
+}[] = [
+  {
+    id: "businessType",
+    question: "What type of business are you running?",
+    options: [
+      "Startup",
+      "SME",
+      "Consumer brand",
+      "B2B company",
+      "Traditional business",
+      "Local business",
+      "Other",
+    ],
+  },
+  {
+    id: "mainChallenge",
+    question: "What is the main growth challenge you want to solve first?",
+    options: [
+      "Need more leads",
+      "Marketing is scattered",
+      "Want to use AI",
+      "Website not converting",
+      "Leads not tracked",
+      "Brand positioning weak",
+      "Need dashboards/reporting",
+      "Team doing too much manual work",
+    ],
+  },
+  {
+    id: "marketingSetup",
+    question: "What marketing channels are currently active?",
+    options: [
+      "Instagram/Facebook",
+      "Google Ads/Search",
+      "LinkedIn",
+      "WhatsApp",
+      "Website/SEO",
+      "Referrals",
+      "Offline sales",
+      "Not much yet",
+    ],
+  },
+  {
+    id: "aiUsage",
+    question: "How are you currently using AI?",
+    options: [
+      "Not using AI",
+      "Casual ChatGPT use",
+      "Content/research",
+      "Workflow support",
+      "Automation/CRM",
+      "Advanced internal systems",
+    ],
+  },
+  {
+    id: "systemsStatus",
+    question: "What systems do you currently have in place?",
+    options: [
+      "Website",
+      "CRM",
+      "Google Analytics",
+      "Dashboard",
+      "Lead tracking sheet",
+      "WhatsApp follow-up",
+      "None/basic",
+    ],
+  },
+  {
+    id: "urgency",
+    question: "How soon do you want to act on this?",
+    options: [
+      "Exploring",
+      "Need clarity this month",
+      "Ready to act now",
+      "Urgent intervention",
+    ],
+  },
+  {
+    id: "digitalLink",
+    question:
+      "Share your website, Instagram, LinkedIn, or any digital link we should review.",
+  },
+  {
+    id: "contact",
+    question:
+      "Please share your name and email or WhatsApp so we can send a more detailed diagnostic follow-up if relevant.",
+  },
+]
+
+function createInitialDiagnosticState(): DiagnosticState {
+  return {
+    answers: {},
+    currentStepIndex: 0,
+    snapshot: null,
+    leadStatus: "idle",
+    leadMessage: null,
+  }
+}
+
+function makeMessage(role: Message["role"], content: string): Message {
+  return {
+    id: `${Date.now()}-${role}-${Math.random().toString(36).slice(2, 8)}`,
+    role,
+    content,
+  }
+}
+
+function stageForStep(stepIndex: number, complete: boolean): string {
+  if (complete) return "Recommendation"
+  if (stepIndex <= 0) return "Business context"
+  if (stepIndex <= 2) return "Growth challenge"
+  if (stepIndex <= 6) return "Systems review"
+  return "Recommendation"
+}
+
+function extractEmail(text: string): string {
+  return text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] ?? ""
+}
+
+function extractPhone(text: string): string {
+  return (
+    text.match(/(?:\+?\d[\d\s().-]{8,18}\d)/)?.[0]?.replace(/\s+/g, " ").trim() ??
+    ""
+  )
+}
+
+function extractNameFromContact(text: string): string {
+  const email = extractEmail(text)
+  const phone = extractPhone(text)
+  let name = text
+    .replace(email, "")
+    .replace(phone, "")
+    .replace(/\b(my name is|i am|i'm|name is|email|whatsapp|phone|contact)\b/gi, "")
+    .replace(/[,:;|/]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+  if (name.length > 80) name = name.slice(0, 80).trim()
+  return name
+}
+
+function contactIsUsable(text: string): boolean {
+  return Boolean(extractNameFromContact(text) && (extractEmail(text) || extractPhone(text)))
+}
+
+function buildDiagnosticSnapshot(answers: DiagnosticAnswers): DiagnosticSnapshot {
+  const challenge = (answers.mainChallenge ?? "").toLowerCase()
+  const aiUsage = (answers.aiUsage ?? "").toLowerCase()
+  const systems = (answers.systemsStatus ?? "").toLowerCase()
+  const urgency = (answers.urgency ?? "").toLowerCase()
+
+  let likelyBottleneck = "The growth system needs clearer prioritisation before execution expands."
+  let aiOpportunity =
+    "Use AI to turn repeatable work into a clearer operating layer for follow-up, reporting, and decision support."
+  let recommendedFirstSystem = "AI Growth Audit"
+  let recommendedService = "AI Growth Audit"
+
+  if (challenge.includes("lead") && !challenge.includes("tracked")) {
+    likelyBottleneck = "Demand generation and campaign structure are the likely constraint."
+    recommendedFirstSystem = "Lead capture and campaign measurement system"
+    recommendedService = "Digital Marketing & Performance Growth"
+  } else if (challenge.includes("scattered")) {
+    likelyBottleneck = "Activity is scattered across channels without a clear growth operating system."
+    recommendedFirstSystem = "AI Growth Audit and priority roadmap"
+    recommendedService = "AI Growth Audit"
+  } else if (challenge.includes("website")) {
+    likelyBottleneck = "The website or landing journey is not converting enough demand into qualified enquiries."
+    recommendedFirstSystem = "Website conversion and search-readiness system"
+    recommendedService = "Website, SEO, AEO & GEO"
+  } else if (challenge.includes("tracked") || systems.includes("lead tracking")) {
+    likelyBottleneck = "Lead tracking, ownership, and follow-up visibility are likely leaking opportunities."
+    recommendedFirstSystem = "CRM, lead tracking, and follow-up system"
+    recommendedService = "CRM, Dashboards & Sales Enablement"
+  } else if (challenge.includes("positioning")) {
+    likelyBottleneck = "Positioning clarity is likely limiting premium perception and campaign quality."
+    recommendedFirstSystem = "Positioning and messaging system"
+    recommendedService = "Brand Strategy & Positioning"
+  } else if (challenge.includes("dashboard") || systems.includes("dashboard")) {
+    likelyBottleneck = "Decision visibility is weak; reporting needs to surface actions, not just data."
+    recommendedFirstSystem = "Founder dashboard and reporting cadence"
+    recommendedService = "CRM, Dashboards & Sales Enablement"
+  } else if (challenge.includes("manual") || challenge.includes("ai")) {
+    likelyBottleneck = "Too much growth work still depends on manual effort and inconsistent workflows."
+    recommendedFirstSystem = "AI workflow and automation roadmap"
+    recommendedService = "AI Implementation & Automation"
+  }
+
+  if (aiUsage.includes("not using") || aiUsage.includes("casual")) {
+    aiOpportunity =
+      "Start with practical AI use cases: enquiry qualification, content research, follow-up prompts, and weekly decision summaries."
+  } else if (aiUsage.includes("automation") || aiUsage.includes("advanced")) {
+    aiOpportunity =
+      "Move from isolated AI usage into governed workflows, CRM triggers, reporting, and team adoption."
+  } else if (aiUsage.includes("content") || aiUsage.includes("workflow")) {
+    aiOpportunity =
+      "Convert current AI usage into repeatable workflows with templates, ownership, and measurable outputs."
+  }
+
+  const leadPriority =
+    urgency.includes("urgent") || urgency.includes("ready")
+      ? "High"
+      : urgency.includes("clarity")
+        ? "Medium"
+        : "Low"
+
+  const suggestedNextStep =
+    leadPriority === "High"
+      ? "Book a strategic session so we can review the diagnostic and decide the first build priority."
+      : "Review the AI Growth Audit and use the diagnostic to clarify the first system before execution."
+
+  return {
+    likelyBottleneck,
+    aiOpportunity,
+    recommendedFirstSystem,
+    recommendedService,
+    leadPriority,
+    suggestedNextStep,
+  }
+}
 
 interface Message {
   id: string
@@ -143,6 +396,77 @@ interface Message {
 interface ChatRequestMessage {
   role: "user" | "assistant"
   content: string
+}
+
+function DiagnosticSnapshotPanel({
+  snapshot,
+  leadStatus,
+  leadMessage,
+}: {
+  snapshot: DiagnosticSnapshot
+  leadStatus: DiagnosticState["leadStatus"]
+  leadMessage: string | null
+}) {
+  return (
+    <div className="border-b border-hairline bg-gradient-to-b from-primary/[0.055] to-card/92 px-3 py-3.5 sm:px-5 sm:py-5 dark:to-card/[0.34]">
+      <div className="rounded-[0.95rem] border border-primary/18 bg-background/45 p-3.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:p-4">
+        <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
+          Diagnostic snapshot
+        </p>
+        <div className="mt-3 grid gap-2.5">
+          {[
+            ["Likely growth bottleneck", snapshot.likelyBottleneck],
+            ["AI opportunity", snapshot.aiOpportunity],
+            ["Recommended first system", snapshot.recommendedFirstSystem],
+            ["Recommended PxlBrief service", snapshot.recommendedService],
+            ["Lead priority", snapshot.leadPriority],
+            ["Suggested next step", snapshot.suggestedNextStep],
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="rounded-[0.75rem] border border-hairline/75 bg-card/45 px-3 py-2.5"
+            >
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground/72">
+                {label}
+              </p>
+              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-foreground/90">
+                {value}
+              </p>
+            </div>
+          ))}
+        </div>
+        {leadStatus === "submitting" ? (
+          <p className="mt-3 rounded-[0.75rem] border border-primary/14 bg-primary/[0.045] px-3 py-2 text-[0.75rem] leading-relaxed text-muted-foreground/88">
+            Sending diagnostic follow-up request…
+          </p>
+        ) : leadMessage ? (
+          <p
+            className={`mt-3 rounded-[0.75rem] border px-3 py-2 text-[0.75rem] leading-relaxed ${
+              leadStatus === "error"
+                ? "border-red-500/20 bg-red-500/[0.06] text-muted-foreground/90"
+                : "border-primary/16 bg-primary/[0.055] text-foreground/90"
+            }`}
+          >
+            {leadMessage}
+          </p>
+        ) : null}
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <StrategicSessionBookingLink
+            source="growth_diagnostic_snapshot"
+            className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+          >
+            Book Strategic Session
+          </StrategicSessionBookingLink>
+          <Link
+            href="/ai-growth-audit"
+            className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/24 bg-background/45 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/38 hover:bg-primary/[0.08]"
+          >
+            View AI Growth Audit
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export function HeroSection() {
@@ -180,6 +504,9 @@ export function HeroSection() {
     ExecutiveSignalItem[] | null
   >(null)
   const [execSignalsBusy, setExecSignalsBusy] = useState(false)
+  const [diagnosticState, setDiagnosticState] = useState<DiagnosticState>(
+    createInitialDiagnosticState
+  )
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
@@ -187,12 +514,14 @@ export function HeroSection() {
     () => messages.filter((message) => message.role === "user").length,
     [messages]
   )
-  const diagnosticStage =
-    userTurnCount <= 1
-      ? "Growth context"
-      : userTurnCount === 2
-        ? "Bottleneck mapping"
-        : "System recommendation"
+  const currentDiagnosticStep =
+    diagnosticState.snapshot === null
+      ? diagnosticSteps[diagnosticState.currentStepIndex]
+      : undefined
+  const diagnosticStage = stageForStep(
+    diagnosticState.currentStepIndex,
+    diagnosticState.snapshot !== null
+  )
 
   const serviceRecommendation = useMemo(
     () =>
@@ -374,6 +703,233 @@ export function HeroSection() {
     conversationState.visitorType,
   ])
 
+  const syncDiagnosticConversationState = (
+    thread: Message[],
+    answers: DiagnosticAnswers,
+    snapshot: DiagnosticSnapshot | null
+  ) => {
+    const contactText = answers.contact ?? ""
+    const email = extractEmail(contactText)
+    const phone = extractPhone(contactText)
+    const name = extractNameFromContact(contactText)
+    const summary = [
+      "AI GROWTH DIAGNOSTIC",
+      "",
+      `Source: AI Growth Diagnostic`,
+      `Business type: ${answers.businessType ?? "Not provided"}`,
+      `Main challenge: ${answers.mainChallenge ?? "Not provided"}`,
+      `Current marketing setup: ${answers.marketingSetup ?? "Not provided"}`,
+      `AI usage level: ${answers.aiUsage ?? "Not provided"}`,
+      `Systems status: ${answers.systemsStatus ?? "Not provided"}`,
+      `Urgency: ${answers.urgency ?? "Not provided"}`,
+      `Website/social link: ${answers.digitalLink ?? "Not provided"}`,
+      snapshot ? "" : null,
+      snapshot ? "Diagnostic snapshot:" : null,
+      snapshot ? `Likely growth bottleneck: ${snapshot.likelyBottleneck}` : null,
+      snapshot ? `AI opportunity: ${snapshot.aiOpportunity}` : null,
+      snapshot
+        ? `Recommended first system: ${snapshot.recommendedFirstSystem}`
+        : null,
+      snapshot ? `Recommended PxlBrief service: ${snapshot.recommendedService}` : null,
+      snapshot ? `Lead priority: ${snapshot.leadPriority}` : null,
+      snapshot ? `Suggested next step: ${snapshot.suggestedNextStep}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n")
+
+    const base = deriveConversationState(
+      thread.map((m) => ({ role: m.role, content: m.content })),
+      conversationState,
+      { attachedFileName: attachedFile?.name ?? null }
+    )
+
+    const nextState: ConversationStatePayload = {
+      ...base,
+      visitorType: "potential_client",
+      name: name || base.name,
+      company: answers.digitalLink ?? base.company,
+      email: email || base.email,
+      whatsapp: phone || base.whatsapp,
+      conversationStage: snapshot ? "client_scheduling_focus" : "client_discovery",
+      potentialClientStage: snapshot ? 5 : base.potentialClientStage,
+      businessVertical: answers.businessType ?? base.businessVertical,
+      businessStage: answers.urgency ?? base.businessStage,
+      servicesInterested:
+        snapshot?.recommendedService ?? base.servicesInterested,
+      currentChallenge: answers.mainChallenge ?? base.currentChallenge,
+      acquisitionChannels: answers.marketingSetup ?? base.acquisitionChannels,
+      conversationSummary: summary,
+    }
+
+    setConversationState(nextState)
+    setLeadData((prev) => ({
+      ...deriveLeadData(prev, thread, nextState),
+      visitorType: "potential_client",
+      name: name || prev.name,
+      company: answers.digitalLink ?? prev.company,
+      website: answers.digitalLink ?? prev.website,
+      service: snapshot?.recommendedService ?? prev.service,
+      email: email || prev.email,
+      phone: phone || prev.phone,
+      notes: summary.slice(0, 1500),
+    }))
+
+    return nextState
+  }
+
+  const submitDiagnosticLead = async (
+    thread: Message[],
+    answers: DiagnosticAnswers,
+    snapshot: DiagnosticSnapshot,
+    syncedState: ConversationStatePayload
+  ) => {
+    const contactText = answers.contact ?? ""
+    const email = extractEmail(contactText)
+    const phone = extractPhone(contactText)
+    const name = extractNameFromContact(contactText)
+    const leadPayload: LeadData = {
+      visitorType: "potential_client",
+      name,
+      company: answers.digitalLink ?? "",
+      website: answers.digitalLink ?? "",
+      instagram: answers.digitalLink?.startsWith("@") ? answers.digitalLink : "",
+      service: snapshot.recommendedService,
+      email,
+      phone,
+      notes: syncedState.conversationSummary.slice(0, 1500),
+    }
+
+    setDiagnosticState((state) => ({
+      ...state,
+      leadStatus: "submitting",
+      leadMessage: null,
+    }))
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: thread.map((m) => ({ role: m.role, content: m.content })),
+          snapshot: syncedState,
+          leadData: leadPayload,
+          professionalSummary: syncedState.conversationSummary,
+          submitSource: "AI Growth Diagnostic",
+          serviceRecommendation: {
+            directionLabel: snapshot.recommendedService,
+            whyItMatters: snapshot.likelyBottleneck,
+            suggestedNextStep: snapshot.suggestedNextStep,
+          },
+        }),
+      })
+      if (!res.ok) throw new Error("Diagnostic lead submit failed")
+      setDiagnosticState((state) => ({
+        ...state,
+        leadStatus: "success",
+        leadMessage:
+          "Diagnostic received. We’ll review your answers and follow up shortly.",
+      }))
+    } catch {
+      setDiagnosticState((state) => ({
+        ...state,
+        leadStatus: "error",
+        leadMessage:
+          "We could not submit this right now. Please email info@pxlbrief.com.",
+      }))
+    }
+  }
+
+  const submitDiagnosticAnswer = async (rawText: string) => {
+    const text = rawText.trim()
+    if (!text || isLoading) return
+
+    const step = diagnosticSteps[diagnosticState.currentStepIndex]
+    if (!step || diagnosticState.snapshot) {
+      await submitMessage(text)
+      return
+    }
+
+    if (messages.length === 0) {
+      trackAnalyticsEvent(AnalyticsEvent.START_AI_CONSULTATION, {
+        surface: "hero",
+      })
+      chatOpenedTrackedRef.current = true
+    }
+
+    const baseThread =
+      messages.length === 0 ? [makeMessage("assistant", step.question)] : messages
+
+    if (step.id === "contact" && !contactIsUsable(text)) {
+      const retryThread = [
+        ...baseThread,
+        makeMessage("user", text),
+        makeMessage(
+          "assistant",
+          "Please include your name and either an email or WhatsApp number in one line."
+        ),
+      ]
+      setMessages(retryThread)
+      setInputValue("")
+      syncDiagnosticConversationState(retryThread, diagnosticState.answers, null)
+      return
+    }
+
+    const nextAnswers: DiagnosticAnswers = {
+      ...diagnosticState.answers,
+      [step.id]: text,
+    }
+    const userMessage = makeMessage("user", text)
+    const nextStepIndex = diagnosticState.currentStepIndex + 1
+
+    if (nextStepIndex < diagnosticSteps.length) {
+      const nextStep = diagnosticSteps[nextStepIndex]!
+      const thread = [
+        ...baseThread,
+        userMessage,
+        makeMessage("assistant", nextStep.question),
+      ]
+      setMessages(thread)
+      setDiagnosticState((state) => ({
+        ...state,
+        answers: nextAnswers,
+        currentStepIndex: nextStepIndex,
+        leadMessage: null,
+      }))
+      setInputValue("")
+      syncDiagnosticConversationState(thread, nextAnswers, null)
+      return
+    }
+
+    const snapshot = buildDiagnosticSnapshot(nextAnswers)
+    const snapshotMessage = makeMessage(
+      "assistant",
+      `Here is your diagnostic snapshot.\n\nLikely growth bottleneck: ${snapshot.likelyBottleneck}\n\nAI opportunity: ${snapshot.aiOpportunity}\n\nRecommended first system: ${snapshot.recommendedFirstSystem}\n\nRecommended PxlBrief service: ${snapshot.recommendedService}\n\nLead priority: ${snapshot.leadPriority}\n\nSuggested next step: ${snapshot.suggestedNextStep}`
+    )
+    const thread = [...baseThread, userMessage, snapshotMessage]
+    setMessages(thread)
+    setDiagnosticState((state) => ({
+      ...state,
+      answers: nextAnswers,
+      currentStepIndex: nextStepIndex,
+      snapshot,
+      leadMessage: null,
+    }))
+    setInputValue("")
+    const syncedState = syncDiagnosticConversationState(thread, nextAnswers, snapshot)
+    await submitDiagnosticLead(thread, nextAnswers, snapshot, syncedState)
+  }
+
+  const startDiagnostic = () => {
+    if (messages.length > 0) return
+    const firstQuestion = diagnosticSteps[0]!.question
+    const firstThread = [makeMessage("assistant", firstQuestion)]
+    setMessages(firstThread)
+    setDiagnosticState(createInitialDiagnosticState())
+    setError(null)
+    setInputValue("")
+    syncDiagnosticConversationState(firstThread, {}, null)
+    window.setTimeout(() => chatInputRef.current?.focus({ preventScroll: true }), 120)
+  }
+
   const submitMessage = async (rawText: string) => {
     const text = rawText.trim()
     if (!text || isLoading) return
@@ -461,6 +1017,10 @@ export function HeroSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!diagnosticState.snapshot) {
+      await submitDiagnosticAnswer(inputValue)
+      return
+    }
     await submitMessage(inputValue)
   }
 
@@ -477,6 +1037,7 @@ export function HeroSection() {
     setStrategicBrief(null)
     setExecutiveSignals(null)
     setExecSignalsBusy(false)
+    setDiagnosticState(createInitialDiagnosticState())
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -680,7 +1241,7 @@ export function HeroSection() {
               <div className="mx-auto mb-4 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-9 lg:mx-0">
                 <button
                   type="button"
-                  onClick={() => inputRef.current?.focus()}
+                  onClick={startDiagnostic}
                   className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
                 >
                   <span>Run My Growth Diagnostic</span>
@@ -951,8 +1512,37 @@ export function HeroSection() {
                 </div>
               )}
 
+              {currentDiagnosticStep?.options &&
+              diagnosticState.snapshot === null ? (
+                <div
+                  className="ml-9 grid max-w-[min(calc(100vw-5.25rem),25.5rem)] grid-cols-1 gap-2 sm:ml-11 sm:max-w-[min(78%,26rem)] sm:grid-cols-2"
+                  role="group"
+                  aria-label={`${currentDiagnosticStep.question} quick replies`}
+                >
+                  {currentDiagnosticStep.options.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      disabled={isLoading}
+                      onClick={() => submitDiagnosticAnswer(option)}
+                      className="min-h-9 touch-manipulation rounded-full border border-primary/14 bg-primary/[0.055] px-3 py-2 text-left text-[0.75rem] font-medium leading-snug text-foreground/88 transition-colors hover:border-primary/32 hover:bg-primary/[0.095] disabled:pointer-events-none disabled:opacity-45"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
               <div ref={messagesEndRef} />
             </div>
+
+            {diagnosticState.snapshot ? (
+              <DiagnosticSnapshotPanel
+                snapshot={diagnosticState.snapshot}
+                leadStatus={diagnosticState.leadStatus}
+                leadMessage={diagnosticState.leadMessage}
+              />
+            ) : null}
 
             {!enquirySubmitSuccess ? (
               <ExecutiveSignalsPanel
@@ -975,6 +1565,7 @@ export function HeroSection() {
               />
               {serviceRecommendation &&
                 !routingCardDismissed &&
+                !diagnosticState.snapshot &&
                 userTurnCount >= 2 && (
                   <ServiceRecommendationCard
                     recommendation={serviceRecommendation}
@@ -1053,7 +1644,11 @@ export function HeroSection() {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Add detail or your next move…"
+                  placeholder={
+                    currentDiagnosticStep
+                      ? "Type your answer or choose below…"
+                      : "Add detail or your next move…"
+                  }
                   disabled={isLoading}
                   className="min-h-10 min-w-0 flex-1 touch-manipulation bg-transparent py-1.5 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:min-h-11 md:py-2 md:text-[0.9375rem]"
                 />
