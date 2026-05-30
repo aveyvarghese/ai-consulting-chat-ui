@@ -110,28 +110,28 @@ const placeholderPrompts = [
 /** Short labels for suggestion chips; full text is sent as the user message */
 const suggestionChips: { label: string; prompt: string }[] = [
   {
-    label: "Startup",
-    prompt: "Startup",
+    label: "I need social media",
+    prompt: "I need a social media agency.",
   },
   {
-    label: "SME",
-    prompt: "SME",
+    label: "I need website help",
+    prompt: "I need website development.",
   },
   {
-    label: "Consumer brand",
-    prompt: "Consumer brand",
+    label: "Run diagnostic",
+    prompt: "Run diagnostic.",
   },
   {
-    label: "B2B company",
-    prompt: "B2B company",
+    label: "I need AI automation",
+    prompt: "I need AI automation for my business.",
   },
   {
-    label: "Traditional business",
-    prompt: "Traditional business",
+    label: "I need SEO",
+    prompt: "I need SEO support.",
   },
   {
-    label: "Local business",
-    prompt: "Local business",
+    label: "I need dashboards",
+    prompt: "I need dashboards and better reporting.",
   },
 ]
 
@@ -160,6 +160,23 @@ type DiagnosticState = {
   answers: DiagnosticAnswers
   currentStepIndex: number
   snapshot: DiagnosticSnapshot | null
+  leadStatus: "idle" | "submitting" | "success" | "error"
+  leadMessage: string | null
+}
+
+type ChatFlowMode = "idle" | "service" | "diagnostic" | "clarify" | "chat"
+
+type ServiceStepId = "whatsapp" | "company" | "link" | "email" | "urgency"
+
+type ServiceIntakeAnswers = Partial<Record<ServiceStepId, string>>
+
+type ServiceIntakeState = {
+  initialMessage: string
+  requestedService: string
+  recommendedService: string
+  answers: ServiceIntakeAnswers
+  currentStepIndex: number
+  submitted: boolean
   leadStatus: "idle" | "submitting" | "success" | "error"
   leadMessage: string | null
 }
@@ -257,11 +274,58 @@ const diagnosticSteps: readonly {
   },
 ]
 
+const serviceSteps: readonly {
+  id: ServiceStepId
+  question: string
+  optional?: boolean
+}[] = [
+  {
+    id: "whatsapp",
+    question: "To help us route this properly, could you share your WhatsApp number?",
+  },
+  {
+    id: "company",
+    question: "What is the company or business name, and what does it do?",
+  },
+  {
+    id: "link",
+    question: "Share your website, Instagram, LinkedIn, or any live social link.",
+  },
+  {
+    id: "email",
+    question: "What email ID should we use to send a detailed AI-led report?",
+  },
+  {
+    id: "urgency",
+    question: "What timeline are you working with?",
+    optional: true,
+  },
+]
+
+const clarificationChoices = [
+  "I need a service",
+  "Run diagnostic",
+  "Talk to PxlBrief",
+] as const
+
 function createInitialDiagnosticState(): DiagnosticState {
   return {
     answers: {},
     currentStepIndex: 0,
     snapshot: null,
+    leadStatus: "idle",
+    leadMessage: null,
+  }
+}
+
+function createInitialServiceIntakeState(): ServiceIntakeState {
+  return {
+    initialMessage: "",
+    requestedService: "",
+    recommendedService: "",
+    answers: {},
+    currentStepIndex: 0,
+    submitted: false,
     leadStatus: "idle",
     leadMessage: null,
   }
@@ -310,6 +374,108 @@ function extractNameFromContact(text: string): string {
 
 function contactIsUsable(text: string): boolean {
   return Boolean(extractNameFromContact(text) && (extractEmail(text) || extractPhone(text)))
+}
+
+function isPhoneUsable(text: string): boolean {
+  return Boolean(extractPhone(text))
+}
+
+function isEmailUsable(text: string): boolean {
+  return Boolean(extractEmail(text))
+}
+
+function classifyServiceIntent(text: string):
+  | { requestedService: string; recommendedService: string }
+  | null {
+  const t = text.toLowerCase()
+
+  if (
+    /\b(social media|instagram|content|meta ads?|facebook ads?|performance marketing|lead generation|digital marketing|marketing agency|marketing support)\b/i.test(
+      t
+    )
+  ) {
+    return {
+      requestedService: "Social media / digital marketing",
+      recommendedService: "Digital Marketing & Performance Growth",
+    }
+  }
+  if (/\b(website|web development|website development|landing page|web design)\b/i.test(t)) {
+    return {
+      requestedService: "Website development",
+      recommendedService: "Website, SEO, AEO & GEO",
+    }
+  }
+  if (/\b(seo|aeo|geo|search engine|organic search)\b/i.test(t)) {
+    return {
+      requestedService: "SEO / search growth",
+      recommendedService: "Website, SEO, AEO & GEO",
+    }
+  }
+  if (/\b(branding|brand strategy|positioning|brand identity|rebrand)\b/i.test(t)) {
+    return {
+      requestedService: "Branding / positioning",
+      recommendedService: "Brand Strategy & Positioning",
+    }
+  }
+  if (/\b(ai automation|automation|workflow|ai implementation|ai system)\b/i.test(t)) {
+    return {
+      requestedService: "AI automation",
+      recommendedService: "AI Implementation & Automation",
+    }
+  }
+  if (/\b(crm|dashboard|dashboards|lead tracking|reporting|sales enablement)\b/i.test(t)) {
+    return {
+      requestedService: "CRM / dashboards / lead tracking",
+      recommendedService: "CRM, Dashboards & Sales Enablement",
+    }
+  }
+  if (/\b(market research|competitor|competition|business intelligence)\b/i.test(t)) {
+    return {
+      requestedService: "Market research / competitor intelligence",
+      recommendedService: "Market Research & Business Intelligence",
+    }
+  }
+
+  return null
+}
+
+function isDiagnosticIntent(text: string): boolean {
+  return /\b(run diagnostic|diagnose|audit|growth is stuck|marketing is not working|don't know what i need|dont know what i need|not sure what i need|understand what to fix|identify gaps|help me identify|what should i fix|growth diagnostic)\b/i.test(
+    text
+  )
+}
+
+function isJobIntent(text: string): boolean {
+  return /\b(job|internship|career|cv|resume|apply|hiring|open role|looking for work)\b/i.test(
+    text
+  )
+}
+
+function classifyInitialIntent(text: string):
+  | "service"
+  | "diagnostic"
+  | "job"
+  | "vendor"
+  | "clarify" {
+  if (isJobIntent(text)) return "job"
+  if (measureVendorSellerStrength(text.toLowerCase()) >= 2) return "vendor"
+  if (isDiagnosticIntent(text)) return "diagnostic"
+  if (classifyServiceIntent(text)) return "service"
+  return "clarify"
+}
+
+function serviceIntroCopy(requestedService: string): string {
+  if (/social|marketing/i.test(requestedService)) {
+    return "Great, we appreciate your interest. PxlBrief works with brands across social media strategy, content systems, campaign planning, paid amplification, and performance-led growth.\n\nTo help us route this properly, could you share your WhatsApp number?"
+  }
+  return `Thanks for reaching out. PxlBrief can help route this under ${requestedService} and match it to the right consulting track.\n\nTo help us route this properly, could you share your WhatsApp number?`
+}
+
+function serviceStageForStep(stepIndex: number, submitted: boolean): string {
+  if (submitted) return "Preparing next step"
+  if (stepIndex <= 1) return "Understanding requirement"
+  if (stepIndex <= 3) return "Capturing details"
+  return "Preparing next step"
 }
 
 function buildDiagnosticSnapshot(answers: DiagnosticAnswers): DiagnosticSnapshot {
@@ -469,6 +635,62 @@ function DiagnosticSnapshotPanel({
   )
 }
 
+function ServiceIntakeConfirmationPanel({
+  service,
+  leadStatus,
+  leadMessage,
+}: {
+  service: string
+  leadStatus: ServiceIntakeState["leadStatus"]
+  leadMessage: string | null
+}) {
+  return (
+    <div className="border-b border-hairline bg-gradient-to-b from-primary/[0.045] to-card/92 px-3 py-3.5 sm:px-5 sm:py-5 dark:to-card/[0.34]">
+      <div className="rounded-[0.95rem] border border-primary/18 bg-background/45 p-3.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:p-4">
+        <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
+          Intake captured
+        </p>
+        <p className="mt-2 text-[0.875rem] font-semibold leading-snug tracking-tight text-foreground">
+          Recommended service: {service}
+        </p>
+        <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/88">
+          We have enough context to review the requirement and route it to the
+          right PxlBrief track.
+        </p>
+        {leadStatus === "submitting" ? (
+          <p className="mt-3 rounded-[0.75rem] border border-primary/14 bg-primary/[0.045] px-3 py-2 text-[0.75rem] leading-relaxed text-muted-foreground/88">
+            Sending intake details…
+          </p>
+        ) : leadMessage ? (
+          <p
+            className={`mt-3 rounded-[0.75rem] border px-3 py-2 text-[0.75rem] leading-relaxed ${
+              leadStatus === "error"
+                ? "border-red-500/20 bg-red-500/[0.06] text-muted-foreground/90"
+                : "border-primary/16 bg-primary/[0.055] text-foreground/90"
+            }`}
+          >
+            {leadMessage}
+          </p>
+        ) : null}
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <StrategicSessionBookingLink
+            source="service_intake_confirmation"
+            className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+          >
+            Book Strategic Session
+          </StrategicSessionBookingLink>
+          <Link
+            href="/services"
+            className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/24 bg-background/45 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/38 hover:bg-primary/[0.08]"
+          >
+            View Services
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function HeroSection() {
   const [inputValue, setInputValue] = useState("")
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -507,6 +729,9 @@ export function HeroSection() {
   const [diagnosticState, setDiagnosticState] = useState<DiagnosticState>(
     createInitialDiagnosticState
   )
+  const [chatFlowMode, setChatFlowMode] = useState<ChatFlowMode>("idle")
+  const [serviceIntakeState, setServiceIntakeState] =
+    useState<ServiceIntakeState>(createInitialServiceIntakeState)
   const chatOpenedTrackedRef = useRef(false)
 
   const hasMessages = messages.length > 0 || error !== null
@@ -515,12 +740,20 @@ export function HeroSection() {
     [messages]
   )
   const currentDiagnosticStep =
-    diagnosticState.snapshot === null
+    chatFlowMode === "diagnostic" && diagnosticState.snapshot === null
       ? diagnosticSteps[diagnosticState.currentStepIndex]
+      : undefined
+  const currentServiceStep =
+    chatFlowMode === "service" && !serviceIntakeState.submitted
+      ? serviceSteps[serviceIntakeState.currentStepIndex]
       : undefined
   const diagnosticStage = stageForStep(
     diagnosticState.currentStepIndex,
     diagnosticState.snapshot !== null
+  )
+  const intakeStage = serviceStageForStep(
+    serviceIntakeState.currentStepIndex,
+    serviceIntakeState.submitted
   )
 
   const serviceRecommendation = useMemo(
@@ -539,11 +772,13 @@ export function HeroSection() {
       case "vendor":
         return "Upload Brochure / Deck"
       case "potential_client":
-        return "Share Brief / Reference"
+        return "Attach brief, deck, website audit, or reference"
       default:
-        return uploadButtonLabel(messages)
+        return chatFlowMode === "service"
+          ? "Attach brief, deck, website audit, or reference"
+          : uploadButtonLabel(messages)
     }
-  }, [conversationState.visitorType, messages])
+  }, [chatFlowMode, conversationState.visitorType, messages])
 
   useEffect(() => {
     if (hasMessages) return
@@ -645,6 +880,11 @@ export function HeroSection() {
     if (!hasMessages || enquirySubmitSuccess) {
       return
     }
+    if (chatFlowMode === "service" || chatFlowMode === "clarify") {
+      setExecutiveSignals(null)
+      setExecSignalsBusy(false)
+      return
+    }
     const visitorType = conversationState.visitorType
     if (visitorType !== "potential_client" && visitorType !== "unknown") {
       setExecutiveSignals(null)
@@ -700,6 +940,7 @@ export function HeroSection() {
     enquirySubmitSuccess,
     messages,
     userTurnCount,
+    chatFlowMode,
     conversationState.visitorType,
   ])
 
@@ -838,6 +1079,223 @@ export function HeroSection() {
     }
   }
 
+  const syncServiceConversationState = (
+    thread: Message[],
+    intake: ServiceIntakeState
+  ) => {
+    const whatsapp = extractPhone(intake.answers.whatsapp ?? "")
+    const email = extractEmail(intake.answers.email ?? "")
+    const summary = [
+      "PXLBRIEF AI INTAKE",
+      "",
+      "Source: PxlBrief AI Intake",
+      "Intent type: Service Intent",
+      `Service requested: ${intake.requestedService}`,
+      `Recommended service: ${intake.recommendedService}`,
+      `User message: ${intake.initialMessage}`,
+      `WhatsApp: ${whatsapp || "Not provided"}`,
+      `Email: ${email || "Not provided"}`,
+      `Company: ${intake.answers.company ?? "Not provided"}`,
+      `Website/social link: ${intake.answers.link ?? "Not provided"}`,
+      `Timeline/urgency: ${intake.answers.urgency ?? "Not provided"}`,
+      `Lead priority: ${
+        /(urgent|ready|asap|this week|immediate)/i.test(intake.answers.urgency ?? "")
+          ? "High"
+          : "Medium"
+      }`,
+    ].join("\n")
+
+    const base = deriveConversationState(
+      thread.map((m) => ({ role: m.role, content: m.content })),
+      conversationState,
+      { attachedFileName: attachedFile?.name ?? null }
+    )
+
+    const nextState: ConversationStatePayload = {
+      ...base,
+      visitorType: "potential_client",
+      company: intake.answers.company ?? base.company,
+      email: email || base.email,
+      whatsapp: whatsapp || base.whatsapp,
+      conversationStage: intake.submitted
+        ? "client_scheduling_focus"
+        : "client_discovery",
+      potentialClientStage: intake.submitted ? 5 : base.potentialClientStage,
+      businessVertical: intake.requestedService || base.businessVertical,
+      businessStage: intake.answers.urgency ?? base.businessStage,
+      servicesInterested: intake.recommendedService || base.servicesInterested,
+      currentChallenge: intake.initialMessage || base.currentChallenge,
+      acquisitionChannels: intake.answers.link ?? base.acquisitionChannels,
+      conversationSummary: summary,
+    }
+
+    setConversationState(nextState)
+    setLeadData((prev) => ({
+      ...deriveLeadData(prev, thread, nextState),
+      visitorType: "potential_client",
+      company: intake.answers.company ?? prev.company,
+      website: intake.answers.link ?? prev.website,
+      instagram: intake.answers.link?.startsWith("@")
+        ? intake.answers.link
+        : prev.instagram,
+      service: intake.recommendedService || prev.service,
+      email: email || prev.email,
+      phone: whatsapp || prev.phone,
+      notes: summary.slice(0, 1500),
+    }))
+
+    return nextState
+  }
+
+  const submitServiceLead = async (
+    thread: Message[],
+    intake: ServiceIntakeState,
+    syncedState: ConversationStatePayload
+  ) => {
+    const whatsapp = extractPhone(intake.answers.whatsapp ?? "")
+    const email = extractEmail(intake.answers.email ?? "")
+    const leadPriority = /(urgent|ready|asap|this week|immediate)/i.test(
+      intake.answers.urgency ?? ""
+    )
+      ? "High"
+      : "Medium"
+
+    const leadPayload: LeadData = {
+      visitorType: "potential_client",
+      name: "",
+      company: intake.answers.company ?? "",
+      website: intake.answers.link ?? "",
+      instagram: intake.answers.link?.startsWith("@") ? intake.answers.link : "",
+      service: intake.recommendedService,
+      email,
+      phone: whatsapp,
+      notes: syncedState.conversationSummary.slice(0, 1500),
+    }
+
+    setServiceIntakeState((state) => ({
+      ...state,
+      leadStatus: "submitting",
+      leadMessage: null,
+    }))
+
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: thread.map((m) => ({ role: m.role, content: m.content })),
+          snapshot: syncedState,
+          leadData: leadPayload,
+          professionalSummary: syncedState.conversationSummary,
+          submitSource: "PxlBrief AI Intake",
+          serviceRecommendation: {
+            directionLabel: intake.recommendedService,
+            whyItMatters: `The visitor asked for ${intake.requestedService}.`,
+            suggestedNextStep:
+              "Review the intake context and follow up with the right service path.",
+          },
+        }),
+      })
+      if (!res.ok) throw new Error("Service intake submit failed")
+      setServiceIntakeState((state) => ({
+        ...state,
+        leadStatus: "success",
+        leadMessage:
+          "Intake received. We’ll review this and follow up with the right next step.",
+      }))
+    } catch {
+      setServiceIntakeState((state) => ({
+        ...state,
+        leadStatus: "error",
+        leadMessage:
+          "We could not submit this right now. Please email info@pxlbrief.com.",
+      }))
+    }
+  }
+
+  const submitServiceAnswer = async (rawText: string) => {
+    const text = rawText.trim()
+    if (!text || isLoading) return
+
+    const step = serviceSteps[serviceIntakeState.currentStepIndex]
+    if (!step || serviceIntakeState.submitted) {
+      await submitMessage(text)
+      return
+    }
+
+    if (step.id === "whatsapp" && !isPhoneUsable(text)) {
+      const retryThread = [
+        ...messages,
+        makeMessage("user", text),
+        makeMessage("assistant", "Please share a WhatsApp number so we can route this correctly."),
+      ]
+      setMessages(retryThread)
+      setInputValue("")
+      syncServiceConversationState(retryThread, serviceIntakeState)
+      return
+    }
+
+    if (step.id === "email" && !isEmailUsable(text)) {
+      const retryThread = [
+        ...messages,
+        makeMessage("user", text),
+        makeMessage("assistant", "Please share a valid email ID for the detailed AI-led report."),
+      ]
+      setMessages(retryThread)
+      setInputValue("")
+      syncServiceConversationState(retryThread, serviceIntakeState)
+      return
+    }
+
+    const nextAnswers: ServiceIntakeAnswers = {
+      ...serviceIntakeState.answers,
+      [step.id]: text,
+    }
+    const nextStepIndex = serviceIntakeState.currentStepIndex + 1
+    const userMessage = makeMessage("user", text)
+
+    if (nextStepIndex < serviceSteps.length) {
+      const nextStep = serviceSteps[nextStepIndex]!
+      const nextState: ServiceIntakeState = {
+        ...serviceIntakeState,
+        answers: nextAnswers,
+        currentStepIndex: nextStepIndex,
+        leadMessage: null,
+      }
+      const thread = [
+        ...messages,
+        userMessage,
+        makeMessage("assistant", nextStep.question),
+      ]
+      setMessages(thread)
+      setServiceIntakeState(nextState)
+      setInputValue("")
+      syncServiceConversationState(thread, nextState)
+      return
+    }
+
+    const finalState: ServiceIntakeState = {
+      ...serviceIntakeState,
+      answers: nextAnswers,
+      currentStepIndex: nextStepIndex,
+      submitted: true,
+      leadMessage: null,
+    }
+    const thread = [
+      ...messages,
+      userMessage,
+      makeMessage(
+        "assistant",
+        `Captured. This looks like a fit for ${finalState.recommendedService}.\n\nWe’ll review the context and route it to the right next step.`
+      ),
+    ]
+    setMessages(thread)
+    setServiceIntakeState(finalState)
+    setInputValue("")
+    const syncedState = syncServiceConversationState(thread, finalState)
+    await submitServiceLead(thread, finalState, syncedState)
+  }
+
   const submitDiagnosticAnswer = async (rawText: string) => {
     const text = rawText.trim()
     if (!text || isLoading) return
@@ -923,11 +1381,124 @@ export function HeroSection() {
     const firstQuestion = diagnosticSteps[0]!.question
     const firstThread = [makeMessage("assistant", firstQuestion)]
     setMessages(firstThread)
+    setChatFlowMode("diagnostic")
     setDiagnosticState(createInitialDiagnosticState())
     setError(null)
     setInputValue("")
     syncDiagnosticConversationState(firstThread, {}, null)
     window.setTimeout(() => chatInputRef.current?.focus({ preventScroll: true }), 120)
+  }
+
+  const startServiceIntake = (
+    initialMessage: string,
+    service: { requestedService: string; recommendedService: string }
+  ) => {
+    const userMessage = makeMessage("user", initialMessage)
+    const assistantMessage = makeMessage(
+      "assistant",
+      serviceIntroCopy(service.requestedService)
+    )
+    const nextState: ServiceIntakeState = {
+      ...createInitialServiceIntakeState(),
+      initialMessage,
+      requestedService: service.requestedService,
+      recommendedService: service.recommendedService,
+    }
+    const thread = [...messages, userMessage, assistantMessage]
+    if (messages.length === 0) {
+      trackAnalyticsEvent(AnalyticsEvent.START_AI_CONSULTATION, {
+        surface: "hero",
+      })
+      chatOpenedTrackedRef.current = true
+    }
+    setChatFlowMode("service")
+    setMessages(thread)
+    setServiceIntakeState(nextState)
+    setInputValue("")
+    setError(null)
+    syncServiceConversationState(thread, nextState)
+  }
+
+  const startClarification = (initialMessage: string) => {
+    const thread = [
+      ...messages,
+      makeMessage("user", initialMessage),
+      makeMessage(
+        "assistant",
+        "Understood. Are you looking for a specific service such as marketing, website, branding, AI automation, or would you like to run a growth diagnostic first?"
+      ),
+    ]
+    if (messages.length === 0) {
+      trackAnalyticsEvent(AnalyticsEvent.START_AI_CONSULTATION, {
+        surface: "hero",
+      })
+      chatOpenedTrackedRef.current = true
+    }
+    setChatFlowMode("clarify")
+    setMessages(thread)
+    setInputValue("")
+    setError(null)
+  }
+
+  const handleClarificationChoice = (choice: string) => {
+    if (choice === "Run diagnostic") {
+      const firstQuestion = diagnosticSteps[0]!.question
+      const thread = [
+        ...messages,
+        makeMessage("user", choice),
+        makeMessage("assistant", firstQuestion),
+      ]
+      setChatFlowMode("diagnostic")
+      setMessages(thread)
+      setDiagnosticState(createInitialDiagnosticState())
+      setInputValue("")
+      syncDiagnosticConversationState(thread, {}, null)
+      return
+    }
+
+    if (choice === "I need a service") {
+      const thread = [
+        ...messages,
+        makeMessage("user", choice),
+        makeMessage(
+          "assistant",
+          "Which service do you need help with — marketing, website, SEO, branding, AI automation, CRM, dashboards, or something else?"
+        ),
+      ]
+      setChatFlowMode("clarify")
+      setMessages(thread)
+      setInputValue("")
+      return
+    }
+
+    void submitMessage(choice)
+  }
+
+  const routeInitialMessage = async (text: string) => {
+    const intent = classifyInitialIntent(text)
+    if (intent === "diagnostic") {
+      const thread = [
+        makeMessage("user", text),
+        makeMessage("assistant", diagnosticSteps[0]!.question),
+      ]
+      setChatFlowMode("diagnostic")
+      setMessages(thread)
+      setDiagnosticState(createInitialDiagnosticState())
+      setInputValue("")
+      syncDiagnosticConversationState(thread, {}, null)
+      return
+    }
+    if (intent === "service") {
+      const service = classifyServiceIntent(text)
+      if (service) startServiceIntake(text, service)
+      return
+    }
+    if (intent === "job" || intent === "vendor") {
+      setChatFlowMode("chat")
+      await submitMessage(text)
+      return
+    }
+    startClarification(text)
   }
 
   const submitMessage = async (rawText: string) => {
@@ -1017,9 +1588,30 @@ export function HeroSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!diagnosticState.snapshot) {
+    const text = inputValue.trim()
+    if (!text) return
+    if (messages.length === 0 || chatFlowMode === "idle") {
+      await routeInitialMessage(text)
+      return
+    }
+    if (chatFlowMode === "service" && !serviceIntakeState.submitted) {
+      await submitServiceAnswer(text)
+      return
+    }
+    if (chatFlowMode === "diagnostic" && !diagnosticState.snapshot) {
       await submitDiagnosticAnswer(inputValue)
       return
+    }
+    if (chatFlowMode === "clarify") {
+      const service = classifyServiceIntent(text)
+      if (isDiagnosticIntent(text)) {
+        handleClarificationChoice("Run diagnostic")
+        return
+      }
+      if (service) {
+        startServiceIntake(text, service)
+        return
+      }
     }
     await submitMessage(inputValue)
   }
@@ -1038,6 +1630,8 @@ export function HeroSection() {
     setExecutiveSignals(null)
     setExecSignalsBusy(false)
     setDiagnosticState(createInitialDiagnosticState())
+    setChatFlowMode("idle")
+    setServiceIntakeState(createInitialServiceIntakeState())
     if (chatFileInputRef.current) chatFileInputRef.current.value = ""
   }
 
@@ -1533,6 +2127,26 @@ export function HeroSection() {
                 </div>
               ) : null}
 
+              {chatFlowMode === "clarify" ? (
+                <div
+                  className="ml-9 grid max-w-[min(calc(100vw-5.25rem),25.5rem)] grid-cols-1 gap-2 sm:ml-11 sm:max-w-[min(78%,26rem)] sm:grid-cols-3"
+                  role="group"
+                  aria-label="Clarify intake path"
+                >
+                  {clarificationChoices.map((choice) => (
+                    <button
+                      key={choice}
+                      type="button"
+                      disabled={isLoading}
+                      onClick={() => handleClarificationChoice(choice)}
+                      className="min-h-9 touch-manipulation rounded-full border border-primary/14 bg-primary/[0.055] px-3 py-2 text-left text-[0.75rem] font-medium leading-snug text-foreground/88 transition-colors hover:border-primary/32 hover:bg-primary/[0.095] disabled:pointer-events-none disabled:opacity-45"
+                    >
+                      {choice}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
               <div ref={messagesEndRef} />
             </div>
 
@@ -1544,7 +2158,17 @@ export function HeroSection() {
               />
             ) : null}
 
-            {!enquirySubmitSuccess ? (
+            {serviceIntakeState.submitted ? (
+              <ServiceIntakeConfirmationPanel
+                service={serviceIntakeState.recommendedService}
+                leadStatus={serviceIntakeState.leadStatus}
+                leadMessage={serviceIntakeState.leadMessage}
+              />
+            ) : null}
+
+            {!enquirySubmitSuccess &&
+            chatFlowMode !== "service" &&
+            chatFlowMode !== "clarify" ? (
               <ExecutiveSignalsPanel
                 signals={executiveSignals}
                 loading={execSignalsBusy}
@@ -1566,33 +2190,33 @@ export function HeroSection() {
               {serviceRecommendation &&
                 !routingCardDismissed &&
                 !diagnosticState.snapshot &&
+                chatFlowMode !== "service" &&
+                chatFlowMode !== "clarify" &&
                 userTurnCount >= 2 && (
                   <ServiceRecommendationCard
                     recommendation={serviceRecommendation}
                     onDismiss={() => setRoutingCardDismissed(true)}
                   />
                 )}
-              <div className="mb-2 flex items-center justify-between gap-2 rounded-[0.75rem] border border-primary/12 bg-primary/[0.045] px-3 py-2 text-left shadow-[inset_0_1px_0_0_var(--shine-inset)]">
-                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
-                  Diagnostic stage
-                </span>
-                <span className="truncate text-[0.75rem] font-medium text-foreground/88">
-                  {diagnosticStage}
-                </span>
-              </div>
-              <div className="mb-2.5 flex min-w-0 justify-start sm:mb-3">
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => chatFileInputRef.current?.click()}
-                  className="inline-flex min-h-10 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.04] px-3 py-2 text-left text-[0.75rem] font-medium text-muted-foreground/95 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45 md:min-h-11 md:text-[0.8125rem]"
-                >
-                  <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90 md:h-4 md:w-4" />
-                  <span className="text-left leading-snug">
-                    {attachmentUploadLabel}
+              {chatFlowMode === "diagnostic" ? (
+                <div className="mb-2 flex items-center justify-between gap-2 rounded-[0.75rem] border border-primary/12 bg-primary/[0.045] px-3 py-2 text-left shadow-[inset_0_1px_0_0_var(--shine-inset)]">
+                  <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
+                    Diagnostic stage
                   </span>
-                </button>
-              </div>
+                  <span className="truncate text-[0.75rem] font-medium text-foreground/88">
+                    {diagnosticStage}
+                  </span>
+                </div>
+              ) : chatFlowMode === "service" || chatFlowMode === "clarify" ? (
+                <div className="mb-2 flex items-center justify-between gap-2 rounded-[0.75rem] border border-primary/12 bg-primary/[0.045] px-3 py-2 text-left shadow-[inset_0_1px_0_0_var(--shine-inset)]">
+                  <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/88">
+                    PxlBrief AI Intake
+                  </span>
+                  <span className="truncate text-[0.75rem] font-medium text-foreground/88">
+                    {chatFlowMode === "service" ? intakeStage : "Understanding requirement"}
+                  </span>
+                </div>
+              ) : null}
               {enquirySubmitSuccess ? (
                 <div className="space-y-0">
                   <div
@@ -1647,7 +2271,11 @@ export function HeroSection() {
                   placeholder={
                     currentDiagnosticStep
                       ? "Type your answer or choose below…"
-                      : "Add detail or your next move…"
+                      : currentServiceStep
+                        ? currentServiceStep.optional
+                          ? "Type a timeline, or write skip…"
+                          : "Type your answer…"
+                        : "Add detail or your next move…"
                   }
                   disabled={isLoading}
                   className="min-h-10 min-w-0 flex-1 touch-manipulation bg-transparent py-1.5 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/40 disabled:opacity-45 md:min-h-11 md:py-2 md:text-[0.9375rem]"
@@ -1660,13 +2288,28 @@ export function HeroSection() {
                   <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
                 </button>
               </div>
+              <div className="mt-2.5 flex min-w-0 justify-start">
+                <button
+                  type="button"
+                  disabled={isLoading}
+                  onClick={() => chatFileInputRef.current?.click()}
+                  className="inline-flex min-h-9 max-w-full touch-manipulation items-center gap-2 rounded-[0.625rem] border border-hairline bg-foreground/[0.035] px-3 py-2 text-left text-[0.75rem] font-medium text-muted-foreground/90 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.06] hover:text-foreground disabled:pointer-events-none disabled:opacity-45"
+                >
+                  <Paperclip className="h-3.5 w-3.5 shrink-0 text-primary/90" />
+                  <span className="truncate text-left leading-snug">
+                    {attachmentUploadLabel}
+                  </span>
+                </button>
+              </div>
               <div className="mt-2.5 sm:mt-3">
                 <button
                   type="button"
                   disabled={
                     leadSubmitBusy ||
                     isLoading ||
-                    conversationState.visitorType === "unknown"
+                    conversationState.visitorType === "unknown" ||
+                    chatFlowMode === "service" ||
+                    chatFlowMode === "clarify"
                   }
                   onClick={handleSubmitEnquiry}
                   className="flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] border border-hairline bg-foreground/[0.04] px-4 py-3 text-[0.8125rem] font-medium tracking-tight text-foreground/95 transition-all duration-300 ease-out hover:border-primary/28 hover:bg-primary/[0.06] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-40 md:min-h-12 md:rounded-[0.875rem] md:py-3.5 md:text-sm"
