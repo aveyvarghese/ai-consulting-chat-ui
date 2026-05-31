@@ -1846,11 +1846,6 @@ export function HeroSection() {
                 </a>
               </div>
 
-              <div className="relative mx-auto mb-4 w-full max-w-sm lg:hidden">
-                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
-                <ExecutiveIntelligencePanel compact />
-              </div>
-
               <p className="mb-2 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
                 Start here: tell us what kind of business you run and what you
                 want to improve.
@@ -1920,6 +1915,11 @@ export function HeroSection() {
                     {label}
                   </button>
                 ))}
+              </div>
+
+              <div className="relative mx-auto mt-4 w-full max-w-sm lg:hidden">
+                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
+                <ExecutiveIntelligencePanel compact />
               </div>
 
             </div>
