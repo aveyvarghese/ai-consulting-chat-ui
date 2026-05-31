@@ -9,6 +9,7 @@ import {
   Route,
   Workflow,
 } from "lucide-react"
+import { AiDigitalPresenceAudits } from "@/components/ai-digital-presence-audits"
 import { AILabTools } from "@/components/ai-lab-tools"
 import { pageMetadata } from "@/lib/seo"
 
@@ -26,6 +27,7 @@ const consoleItems = [
   { label: "ROI Calculator", status: "Live", tone: "live" },
   { label: "Campaign Intelligence", status: "Live", tone: "live" },
   { label: "Brand Positioning Engine", status: "Live", tone: "live" },
+  { label: "Digital Presence Audits", status: "New", tone: "live" },
 ] as const
 
 const principles = [
@@ -267,6 +269,7 @@ function ToolsSection() {
           text="Use these directional tools to pressure-test readiness, service fit, and productivity leverage before a deeper diagnostic."
         />
         <AILabTools />
+        <AiDigitalPresenceAudits />
       </div>
     </section>
   )
