@@ -25,9 +25,9 @@ import { pageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = pageMetadata({
   path: "/contact",
-  title: "Start Diagnostic | PxlBrief",
+  title: "Contact PxlBrief | Start Your AI Growth Diagnostic",
   description:
-    "Start with PxlBrief's AI-powered growth diagnostic for founder-led businesses looking to identify AI, marketing, website, CRM, and sales system gaps.",
+    "Contact PxlBrief to discuss AI implementation, digital marketing, brand strategy, website SEO, AEO, GEO, CRM, dashboards, and growth system consulting.",
 })
 
 const intakeSignals = [

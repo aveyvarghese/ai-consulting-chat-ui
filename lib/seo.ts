@@ -1,26 +1,38 @@
 import type { Metadata } from "next"
 import { getSiteUrl } from "@/lib/site"
+import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 
 export const SITE_NAME = "PxlBrief"
+export const SITE_TITLE = "PxlBrief | AI Growth Consulting for Brands & Businesses"
+export const ORGANIZATION_DESCRIPTION =
+  "AI growth consulting practice helping businesses connect AI implementation, brand strategy, digital marketing, websites, CRM, dashboards, and business intelligence."
 
 /** Primary positioning phrases for metadata.keywords and copy support */
 export const POSITIONING_KEYWORDS = [
   "AI consulting India",
-  "AI automation consulting",
-  "AI growth systems",
-  "AI strategy consultant",
-  "business automation",
-  "performance marketing systems",
-  "AI workflows for brands",
+  "AI growth consulting",
+  "AI implementation for business",
+  "digital marketing consultant India",
+  "brand strategy consultant",
+  "performance marketing consultant",
+  "SEO AEO GEO consultant",
+  "CRM automation consultant",
+  "AI automation for businesses",
+  "website SEO audit",
+  "AI marketing consultant",
 ] as const
 
 const KEYWORDS_STRING = [...POSITIONING_KEYWORDS].join(", ")
 
 export const DEFAULT_TITLE =
-  "PxlBrief | AI consulting, growth systems & automation for brands"
+  "PxlBrief | AI Growth Consulting, Digital Marketing & AI Automation"
 
 export const DEFAULT_DESCRIPTION =
-  "PxlBrief is an AI strategy consultant for founders and marketing leaders—AI consulting India and globally, AI automation consulting, AI growth systems, business automation, performance marketing systems, and AI workflows for brands. Install intelligence your team can run."
+  "PxlBrief helps founder-led businesses use AI implementation, brand strategy, digital marketing, SEO, AEO, GEO, CRM, dashboards, and automation to build smarter growth systems."
+
+export function absoluteUrl(path = "/") {
+  return new URL(path, getSiteUrl()).toString()
+}
 
 export function rootMetadata(): Metadata {
   const base = getSiteUrl()
@@ -76,19 +88,29 @@ export function pageMetadata(opts: {
   path: string
   title: string
   description: string
+  keywords?: readonly string[] | string
+  type?: "website" | "article"
 }): Metadata {
-  const { path, title, description } = opts
+  const { path, title, description, type = "website" } = opts
   const canonicalPath = path.startsWith("/") ? path : `/${path}`
+  const keywords =
+    typeof opts.keywords === "string"
+      ? opts.keywords
+      : opts.keywords
+        ? [...opts.keywords].join(", ")
+        : KEYWORDS_STRING
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
-    keywords: KEYWORDS_STRING,
+    keywords,
     alternates: {
       canonical: canonicalPath,
     },
     openGraph: {
-      type: "website",
+      type,
       locale: "en_IN",
       url: canonicalPath,
       siteName: SITE_NAME,
@@ -108,5 +130,60 @@ export function pageMetadata(opts: {
       title,
       description,
     },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
+}
+
+export function organizationJsonLd() {
+  const siteUrl = getSiteUrl()
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: siteUrl.toString(),
+    email: SITE_CONTACT_EMAIL,
+    description: ORGANIZATION_DESCRIPTION,
+  }
+}
+
+export function websiteJsonLd() {
+  const siteUrl = getSiteUrl()
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: siteUrl.toString(),
+    description: ORGANIZATION_DESCRIPTION,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+    },
+  }
+}
+
+export function professionalServiceJsonLd() {
+  const siteUrl = getSiteUrl()
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: SITE_NAME,
+    url: siteUrl.toString(),
+    email: SITE_CONTACT_EMAIL,
+    description: ORGANIZATION_DESCRIPTION,
+    areaServed: "India",
+    serviceType: [
+      "AI implementation consulting",
+      "Brand strategy",
+      "Digital marketing consulting",
+      "SEO, AEO and GEO consulting",
+      "CRM and dashboard consulting",
+      "Sales enablement",
+    ],
   }
 }

@@ -13,7 +13,7 @@ export function getSiteUrl(): URL {
     const host = vercel.replace(/^https?:\/\//i, "")
     return new URL(`https://${host}`)
   }
-  return new URL("https://pxlbrief.com")
+  return new URL("https://www.pxlbrief.com")
 }
 
 export function getSiteOrigin(): string {

@@ -21,7 +21,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/ai-growth-audit",
   title: "AI Growth Audit | PxlBrief",
   description:
-    "A strategic AI growth diagnostic for founder-led businesses across AI, marketing, website, CRM, dashboards, and sales systems.",
+    "Run an AI Growth Audit to identify business bottlenecks, marketing gaps, website issues, CRM leakage, AI opportunities, and the next growth system to build.",
 })
 
 const solvedGaps = [

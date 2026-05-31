@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
-import { rootMetadata } from '@/lib/seo'
+import { organizationJsonLd, rootMetadata, websiteJsonLd } from '@/lib/seo'
 import {
   DEFAULT_THEME_VARIANT,
   DEFAULT_THEME,
@@ -18,6 +18,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = rootMetadata()
+const sitewideJsonLd = [organizationJsonLd(), websiteJsonLd()]
 
 export default function RootLayout({
   children,
@@ -36,6 +37,11 @@ export default function RootLayout({
         <Script id="pxl-theme-boot" strategy="beforeInteractive">
           {`${THEME_BOOT_SCRIPT}${THEME_VARIANT_BOOT_SCRIPT}`}
         </Script>
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(sitewideJsonLd) }}
+        />
         <SiteAmbient />
         <div className="flex min-h-screen flex-col">
           <SiteHeader />

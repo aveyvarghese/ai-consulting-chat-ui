@@ -21,9 +21,9 @@ import { pageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = pageMetadata({
   path: "/services",
-  title: "Services | PxlBrief",
+  title: "AI Growth Consulting Services | PxlBrief",
   description:
-    "AI growth consulting services across AI implementation, brand strategy, digital marketing, websites, SEO, AEO, GEO, CRM, dashboards, and business intelligence.",
+    "Explore PxlBrief services across AI implementation, brand strategy, digital marketing, website development, SEO, AEO, GEO, market research, CRM, dashboards, and sales enablement.",
 })
 
 const stackLayers = [

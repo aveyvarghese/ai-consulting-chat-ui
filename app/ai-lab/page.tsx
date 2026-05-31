@@ -15,9 +15,9 @@ import { pageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = pageMetadata({
   path: "/ai-lab",
-  title: "AI Lab | PxlBrief",
+  title: "AI Lab Tools | PxlBrief",
   description:
-    "Explore AI-powered diagnostic, service recommendation, and productivity tools from PxlBrief.",
+    "Use PxlBrief AI Lab tools to run directional audits for growth readiness, service fit, ROI, campaign intelligence, brand positioning, Instagram, LinkedIn, YouTube, SEO, AEO, and GEO.",
 })
 
 const consoleItems = [
