@@ -540,6 +540,7 @@ function LeadCapturePanel({
 
 export function AiDigitalPresenceAudits() {
   const [activeTool, setActiveTool] = useState<AuditToolId>("instagram-audit")
+  const [mobileActiveTool, setMobileActiveTool] = useState<AuditToolId | "">("")
   const [inputs, setInputs] = useState<Record<AuditToolId, AuditInputState>>(initialInputs)
   const [auditStates, setAuditStates] =
     useState<Record<AuditToolId, AuditState>>(initialAuditStates)
@@ -650,7 +651,7 @@ export function AiDigitalPresenceAudits() {
       <div className="grid gap-4 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-5">
         <div className="min-w-0">
           <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85">
-            New tool group
+            AI audit tools
           </p>
           <h3 className="mt-2 text-balance text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             AI Digital Presence Audits
@@ -660,8 +661,35 @@ export function AiDigitalPresenceAudits() {
             visibility, answer readiness, or generative search readiness.
           </p>
 
+          <div className="mt-4 rounded-[0.9rem] border border-hairline bg-background/32 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:hidden">
+            <label className="block min-w-0">
+              <span className="mb-1.5 block text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/72">
+                Choose Audit Tool
+              </span>
+              <select
+                value={mobileActiveTool}
+                onChange={(event) => {
+                  const nextTool = event.target.value as AuditToolId | ""
+                  setMobileActiveTool(nextTool)
+                  if (nextTool) setActiveTool(nextTool)
+                }}
+                className="h-10 w-full min-w-0 rounded-[0.75rem] border border-hairline/80 bg-background/55 px-3 text-[0.8125rem] font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+              >
+                <option value="">Choose Audit Tool</option>
+                {auditTools.map((tool) => (
+                  <option key={tool.id} value={tool.id}>
+                    {tool.label} Audit
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground/78">
+              Select what you want PxlBrief AI to audit.
+            </p>
+          </div>
+
           <div
-            className="mt-4 grid grid-cols-2 gap-1.5 rounded-[0.9rem] border border-hairline bg-background/32 p-1.5 sm:grid-cols-3"
+            className="mt-4 hidden grid-cols-2 gap-1.5 rounded-[0.9rem] border border-hairline bg-background/32 p-1.5 sm:grid sm:grid-cols-3"
             role="tablist"
             aria-label="AI Digital Presence Audits"
           >
@@ -691,7 +719,11 @@ export function AiDigitalPresenceAudits() {
           </div>
         </div>
 
-        <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3 sm:p-4">
+        <div
+          className={`min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3 sm:block sm:p-4 ${
+            mobileActiveTool ? "block" : "hidden"
+          }`}
+        >
           <div className="mb-3 flex items-start gap-3 border-b border-hairline/70 pb-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.7rem] border border-primary/22 bg-primary/[0.08] text-primary">
               <Icon className="h-4.5 w-4.5" strokeWidth={1.65} aria-hidden />
