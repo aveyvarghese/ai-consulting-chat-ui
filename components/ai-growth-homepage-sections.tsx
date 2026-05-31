@@ -349,7 +349,7 @@ export function AIGrowthDiagnosticPreviewSection() {
               </div>
               <a
                 href="#consulting-chat"
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
+                className="cta-gradient-motion mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
               >
                 Discuss With PxlBrief AI
               </a>
@@ -614,7 +614,7 @@ export function FinalGrowthCtaSection() {
           <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-3">
             <a
               href="#consulting-chat"
-              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
+              className="cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
               Discuss With PxlBrief AI
             </a>

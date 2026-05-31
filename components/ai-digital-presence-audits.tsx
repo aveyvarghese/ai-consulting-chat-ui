@@ -528,7 +528,7 @@ function LeadCapturePanel({
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
+            className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
           >
             {status === "submitting" ? "Submitting..." : "Send My Detailed Report"}
           </button>
@@ -661,7 +661,7 @@ export function AiDigitalPresenceAudits() {
             visibility, answer readiness, or generative search readiness.
           </p>
 
-          <div className="mt-4 rounded-[0.9rem] border border-hairline bg-background/32 p-2 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:hidden">
+          <div className="mt-4 sm:hidden">
             <select
               aria-label="Choose Audit Tool"
               value={mobileActiveTool}
@@ -670,7 +670,7 @@ export function AiDigitalPresenceAudits() {
                 setMobileActiveTool(nextTool)
                 if (nextTool) setActiveTool(nextTool)
               }}
-              className="h-10 w-full min-w-0 rounded-[0.75rem] border border-hairline/80 bg-background/55 px-3 text-[0.8125rem] font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+              className="h-12 w-full min-w-0 rounded-[0.85rem] border border-primary/45 bg-background/75 px-3.5 text-[0.875rem] font-semibold text-foreground outline-none transition-colors focus:border-[var(--accent)] focus:ring-2 focus:ring-primary/12"
             >
               <option value="">Choose Audit Tool</option>
               {auditTools.map((tool) => (
@@ -760,7 +760,7 @@ export function AiDigitalPresenceAudits() {
             type="button"
             onClick={generateAudit}
             disabled={activeState.loading}
-            className="mt-3 inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
+            className="cta-gradient-motion mt-3 inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
           >
             <Sparkles className="h-3.5 w-3.5" aria-hidden />
             {activeState.loading ? "Generating audit..." : "Generate AI Audit"}

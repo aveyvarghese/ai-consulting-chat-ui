@@ -764,7 +764,7 @@ function RunToolButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
     >
       <Sparkles className="h-3.5 w-3.5" aria-hidden />
       {children}
@@ -952,7 +952,7 @@ function AiStrategyPanel({
           type="button"
           onClick={onGenerate}
           disabled={state.loading}
-          className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.7rem] border border-primary/30 bg-primary/[0.1] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.16] disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
+          className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.7rem] border border-primary/30 bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:border-primary/44 hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
         >
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
           {state.loading ? "Generating..." : "Generate AI Strategy"}
@@ -1081,7 +1081,7 @@ function AiStrategyPanel({
                     <button
                       type="submit"
                       disabled={status === "submitting"}
-                      className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
+                      className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
                     >
                       {status === "submitting"
                         ? "Submitting..."
@@ -1710,7 +1710,7 @@ export function AILabTools() {
                   </Link>
                   <Link
                     href="/#consulting-chat"
-                    className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                    className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
                   >
                     Discuss With PxlBrief AI
                   </Link>
@@ -2069,7 +2069,7 @@ export function AILabTools() {
                     </Link>
                     <Link
                       href="/#consulting-chat"
-                      className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
                     >
                       Discuss With PxlBrief AI
                     </Link>
@@ -2219,7 +2219,7 @@ export function AILabTools() {
                     </Link>
                     <Link
                       href="/#consulting-chat"
-                      className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
                     >
                       Discuss With PxlBrief AI
                     </Link>

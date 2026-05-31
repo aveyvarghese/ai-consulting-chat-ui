@@ -117,6 +117,40 @@
   }
 }
 
+@keyframes pxl-cta-gradient-motion {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.cta-gradient-motion {
+  background-color: #ff5722;
+  background-image: linear-gradient(110deg, #ff5722, #ff7a3d, #24b1b1, #ff5722);
+  background-size: 240% 100%;
+  background-position: 0% 50%;
+  border-color: color-mix(in oklch, var(--secondary-accent, #ff5722) 44%, var(--accent, #24b1b1));
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    0 14px 36px -26px rgba(255, 87, 34, 0.5);
+}
+
+.cta-gradient-motion:hover,
+.cta-gradient-motion:focus-visible {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    0 18px 42px -24px rgba(255, 87, 34, 0.58);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta-gradient-motion {
+    animation: pxl-cta-gradient-motion 5.5s ease-in-out infinite;
+  }
+}
+
 /* Executive intelligence — data grid, ambient motion (respect reduced motion) */
 .pxl-data-grid {
   background-image:
@@ -371,6 +405,7 @@
   .pxl-ambient-glow-drift-reverse,
   .pxl-hero-orb-drift,
   .pxl-credibility-marquee,
+  .cta-gradient-motion,
   .pxl-intel-bar--drag,
   .pxl-intel-bar--auto,
   .pxl-intel-bar--growth,
