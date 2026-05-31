@@ -1115,10 +1115,16 @@ export function AILabTools() {
   const [positioning, setPositioning] =
     useState<PositioningState>(initialPositioning)
   const [activeTool, setActiveTool] = useState<ActiveTool>("scorecard")
+  const [mobileActiveTool, setMobileActiveTool] = useState<ActiveTool | "">("")
   const [aiReadouts, setAiReadouts] =
     useState<Record<ActiveTool, AiReadoutState>>(createAiReadoutState)
   const [toolHasRun, setToolHasRun] =
     useState<Record<ActiveTool, boolean>>(createToolRunState)
+
+  const toolPanelClassName = (tool: ActiveTool) =>
+    `${mobileActiveTool === tool ? "block" : "hidden"} ${
+      activeTool === tool ? "sm:block" : "sm:hidden"
+    }`
 
   const runTool = (tool: ActiveTool) => {
     setToolHasRun((state) => ({ ...state, [tool]: true }))
@@ -1536,10 +1542,11 @@ export function AILabTools() {
             Select a tool to generate a directional readout.
           </span>
           <select
-            value={activeTool}
-            onChange={(event) => setActiveTool(event.target.value as ActiveTool)}
+            value={mobileActiveTool}
+            onChange={(event) => setMobileActiveTool(event.target.value as ActiveTool | "")}
             className="mt-3 h-12 w-full min-w-0 rounded-[0.8rem] border border-primary/36 bg-background/70 px-3.5 text-sm font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_34px_-28px_var(--glow-primary)] transition-colors focus:border-[var(--secondary-accent)] focus:ring-2 focus:ring-primary/12"
           >
+            <option value="">Choose AI Lab Tool</option>
             <option value="scorecard">AI Growth Scorecard</option>
             <option value="recommender">AI Service Recommender</option>
             <option value="roi">ROI Calculator</option>
@@ -1582,7 +1589,8 @@ export function AILabTools() {
         })}
       </div>
 
-      {activeTool === "scorecard" ? (
+      {activeTool === "scorecard" || mobileActiveTool === "scorecard" ? (
+        <div className={toolPanelClassName("scorecard")}>
         <ToolShell
           eyebrow="Tool 01"
           title="AI Growth Scorecard"
@@ -1714,9 +1722,11 @@ export function AILabTools() {
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "recommender" ? (
+      {activeTool === "recommender" || mobileActiveTool === "recommender" ? (
+        <div className={toolPanelClassName("recommender")}>
         <ToolShell
           eyebrow="Tool 02"
           title="AI Service Recommender"
@@ -1813,9 +1823,11 @@ export function AILabTools() {
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "roi" ? (
+      {activeTool === "roi" || mobileActiveTool === "roi" ? (
+        <div className={toolPanelClassName("roi")}>
         <ToolShell
           eyebrow="Tool 03"
           title="AI ROI / Productivity Calculator"
@@ -1939,9 +1951,11 @@ export function AILabTools() {
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "campaign" ? (
+      {activeTool === "campaign" || mobileActiveTool === "campaign" ? (
+        <div className={toolPanelClassName("campaign")}>
         <ToolShell
           eyebrow="Tool 04"
           title="Campaign Intelligence"
@@ -2067,9 +2081,11 @@ export function AILabTools() {
             </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "positioning" ? (
+      {activeTool === "positioning" || mobileActiveTool === "positioning" ? (
+        <div className={toolPanelClassName("positioning")}>
         <ToolShell
           eyebrow="Tool 05"
           title="Brand Positioning Engine"
@@ -2215,6 +2231,7 @@ export function AILabTools() {
             </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
     </div>
   )
