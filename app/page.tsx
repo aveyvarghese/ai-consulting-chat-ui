@@ -18,13 +18,13 @@ export default function Home() {
       <HomeBrandReportPopup />
       <HeroSection />
       <CredibilityStrip />
+      <FounderCredibilitySection />
       <ProblemSection />
       <AIGrowthDiagnosticPreviewSection />
       <StrategicSystemsWeBuildSection />
       <AILabPreviewSection />
       <IndustryPlaybooksPreviewSection />
       <CaseIntelligencePreviewSection />
-      <FounderCredibilitySection />
       <FinalGrowthCtaSection />
     </main>
   )
