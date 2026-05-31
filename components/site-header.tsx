@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { SiteHeaderMobileNav } from "@/components/site-header-mobile-nav"
-import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { cn } from "@/lib/utils"
 
 const nav = [
@@ -57,14 +57,12 @@ export function SiteHeader() {
               </Link>
             )
           })}
-          <a
-            href={STRATEGY_CALL_BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="touch-manipulation rounded-lg border border-primary/28 bg-gradient-to-b from-primary/14 to-primary/[0.07] px-3 py-2 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all duration-300 hover:border-primary/42 hover:bg-primary/15 hover:shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_34px_-18px_var(--glow-primary)] md:ml-1 md:py-2.5"
+          <StrategicSessionBookingLink
+            source="desktop_header"
+            className="cta-gradient-motion touch-manipulation rounded-lg border border-primary/32 px-3 py-2 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_12px_30px_-22px_var(--glow-primary)] transition-all duration-300 hover:border-primary/46 hover:shadow-[inset_0_1px_0_0_var(--shine-inset),0_16px_36px_-18px_var(--glow-primary)] md:ml-1 md:py-2.5"
           >
-            Strategic session
-          </a>
+            Book Strategic Session
+          </StrategicSessionBookingLink>
         </nav>
         <div className="shrink-0 md:hidden">
           <SiteHeaderMobileNav />

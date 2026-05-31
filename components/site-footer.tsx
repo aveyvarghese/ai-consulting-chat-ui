@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { SITE_CONTACT_EMAIL } from "@/lib/contact"
 
 const links = [
@@ -64,14 +64,12 @@ export function SiteFooter() {
             >
               Talk to PxlBrief AI
             </Link>
-            <a
-              href={STRATEGY_CALL_BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-9 touch-manipulation items-center text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground sm:min-h-11"
+            <StrategicSessionBookingLink
+              source="footer"
+              className="inline-flex min-h-9 touch-manipulation items-center text-sm font-semibold text-primary transition-colors duration-300 hover:text-primary/88 sm:min-h-11"
             >
-              Strategic session
-            </a>
+              Book Strategic Session
+            </StrategicSessionBookingLink>
           </nav>
         </div>
       </div>

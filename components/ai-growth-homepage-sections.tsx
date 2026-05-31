@@ -402,6 +402,20 @@ export function AILabPreviewSection() {
             </MetallicCard>
           ))}
         </div>
+        <div className="mx-auto mt-5 max-w-3xl rounded-[1rem] border border-primary/18 bg-primary/[0.045] p-3.5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:mt-8 sm:p-5">
+          <p className="text-sm font-semibold tracking-tight text-foreground">
+            Prefer a direct conversation?
+          </p>
+          <p className="mx-auto mt-1.5 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:text-sm">
+            Book a strategic session and we’ll review the right starting point.
+          </p>
+          <StrategicSessionBookingLink
+            source="homepage_ai_lab_preview"
+            className="cta-gradient-motion mt-4 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_12px_30px_-22px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+          >
+            Book Strategic Session
+          </StrategicSessionBookingLink>
+        </div>
       </div>
     </section>
   )
@@ -618,11 +632,11 @@ export function FinalGrowthCtaSection() {
               href="#consulting-chat"
               className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
-              Discuss With PxlBrief AI
+              Run My Growth Diagnostic
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"
-              className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
+              className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>

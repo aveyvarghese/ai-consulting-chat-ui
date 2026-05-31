@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { AiDigitalPresenceAudits } from "@/components/ai-digital-presence-audits"
 import { AILabTools } from "@/components/ai-lab-tools"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = pageMetadata({
@@ -146,6 +147,33 @@ function SecondaryCta({
   )
 }
 
+function BookingCta({ source }: { source: string }) {
+  return (
+    <StrategicSessionBookingLink
+      source={source}
+      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+    >
+      Book Strategic Session
+    </StrategicSessionBookingLink>
+  )
+}
+
+function BookingPrompt({ source }: { source: string }) {
+  return (
+    <div className="mt-5 rounded-[1rem] border border-primary/18 bg-primary/[0.045] p-3.5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:mt-8 sm:p-5">
+      <p className="text-sm font-semibold tracking-tight text-foreground">
+        Ready to discuss your growth system directly?
+      </p>
+      <p className="mx-auto mt-1.5 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:text-sm">
+        Book a strategic session with PxlBrief after you review the tool output.
+      </p>
+      <div className="mx-auto mt-4 max-w-sm">
+        <BookingCta source={source} />
+      </div>
+    </div>
+  )
+}
+
 export default function AILabPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden">
@@ -269,7 +297,9 @@ function ToolsSection() {
           text="Use these directional tools to pressure-test readiness, service fit, and productivity leverage before a deeper diagnostic."
         />
         <AILabTools />
+        <BookingPrompt source="ai_lab_after_tools" />
         <AiDigitalPresenceAudits />
+        <BookingPrompt source="ai_lab_after_digital_presence_audits" />
       </div>
     </section>
   )
@@ -322,6 +352,7 @@ function FinalCtaSection() {
             </p>
             <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
               <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+              <BookingCta source="ai_lab_final_cta" />
               <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
             </div>
           </div>

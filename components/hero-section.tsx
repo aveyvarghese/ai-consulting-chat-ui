@@ -1833,6 +1833,15 @@ export function HeroSection() {
                 </button>
               </div>
 
+              <div className="mx-auto mb-4 w-full max-w-xl md:mb-8 lg:mx-0">
+                <StrategicSessionBookingLink
+                  source="homepage_hero"
+                  className="pxl-mobile-secondary-cta inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/28 bg-primary/[0.055] px-5 py-3 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all duration-500 hover:border-primary/44 hover:bg-primary/10 sm:w-auto sm:px-6"
+                >
+                  Book Strategic Session
+                </StrategicSessionBookingLink>
+              </div>
+
               <p className="mb-1.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
                 Start here: tell us what kind of business you run and what you
                 want to improve.

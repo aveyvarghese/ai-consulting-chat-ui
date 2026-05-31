@@ -204,7 +204,7 @@ function SecondaryCta({
   return (
     <StrategicSessionBookingLink
       source={source}
-      className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/28 bg-primary/[0.055] px-6 py-3.5 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all duration-500 hover:border-primary/44 hover:bg-primary/10 sm:w-auto"
+      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
     >
       {children}
     </StrategicSessionBookingLink>
@@ -548,8 +548,9 @@ function FinalCtaSection() {
             Start the AI Growth Diagnostic and receive a clearer view of your
             bottlenecks, AI opportunities, and recommended next step.
           </p>
-          <div className="mx-auto mt-7 max-w-md">
+          <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
             <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+            <SecondaryCta source="ai_growth_audit_final_cta" />
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">
             <Route className="h-3.5 w-3.5 text-primary/75" />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, BookOpen, Clock3 } from "lucide-react"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { blogPosts } from "@/lib/blog-posts"
 import { pageMetadata } from "@/lib/seo"
 
@@ -92,6 +93,26 @@ export default function BlogPage() {
               </Link>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="section-cta-glow px-3 pb-14 pt-4 sm:px-4 sm:pb-20 md:px-6 md:pb-28">
+        <div className="mx-auto max-w-4xl rounded-[1.75rem] border border-primary/18 bg-primary/[0.055] p-5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset),0_28px_90px_-62px_var(--glow-primary)] sm:p-8 md:p-10">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-primary">
+            Direct conversation
+          </p>
+          <h2 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Ready to discuss your growth system directly?
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Book a strategic session with PxlBrief and we’ll review the right starting point.
+          </p>
+          <StrategicSessionBookingLink
+            source="blog_listing_final_cta"
+            className="cta-gradient-motion mt-6 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46 sm:w-auto"
+          >
+            Book Strategic Session
+          </StrategicSessionBookingLink>
         </div>
       </section>
     </main>

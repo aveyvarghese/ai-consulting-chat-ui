@@ -292,6 +292,17 @@ function SecondaryCta({
   )
 }
 
+function BookingCta({ source }: { source: string }) {
+  return (
+    <StrategicSessionBookingLink
+      source={source}
+      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+    >
+      Book Strategic Session
+    </StrategicSessionBookingLink>
+  )
+}
+
 export default function ServicesPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden">
@@ -328,8 +339,9 @@ function HeroSection() {
             marketing, websites, CRM, dashboards, and business intelligence into
             one structured growth system.
           </p>
-          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
+          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap md:mx-0 md:mt-9">
             <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+            <BookingCta source="services_hero" />
             <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
           </div>
         </div>
@@ -536,7 +548,7 @@ function EntryOffersSection() {
             </p>
             <StrategicSessionBookingLink
               source="services_entry_offer"
-              className="mt-5 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/26 bg-primary/[0.075] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/40 hover:bg-primary/[0.11]"
+              className="cta-gradient-motion mt-5 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/32 px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_12px_30px_-24px_var(--glow-primary)] transition-colors hover:border-primary/44"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>
@@ -608,8 +620,9 @@ function FinalCtaSection() {
             Start with the AI Growth Diagnostic and identify which system your
             business needs first.
           </p>
-          <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
+          <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center">
             <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+            <BookingCta source="services_final_cta" />
             <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">

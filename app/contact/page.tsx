@@ -191,7 +191,7 @@ function BookingCta({
   return (
     <StrategicSessionBookingLink
       source={source}
-      className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/28 bg-primary/[0.055] px-6 py-3.5 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all duration-500 hover:border-primary/44 hover:bg-primary/10 sm:w-auto"
+      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
     >
       {children}
     </StrategicSessionBookingLink>
@@ -372,7 +372,7 @@ function BeginOptionsSection() {
               Best for serious founders who already know they need strategic support.
             </p>
             <div className="mt-5">
-              <BookingCta source="start_diagnostic_options">Book Session</BookingCta>
+              <BookingCta source="start_diagnostic_options">Book Strategic Session</BookingCta>
             </div>
           </GlassCard>
 
@@ -475,8 +475,9 @@ function FinalCtaSection() {
           Start with the AI Growth Diagnostic and get a clearer view of your
           bottleneck, AI opportunity, and recommended next step.
         </p>
-        <div className="mx-auto mt-6 flex max-w-xl flex-col gap-2.5 sm:mt-8 sm:flex-row sm:justify-center">
+        <div className="mx-auto mt-6 flex max-w-xl flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center">
           <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+          <BookingCta source="contact_final_cta" />
           <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
         </div>
       </GlassCard>

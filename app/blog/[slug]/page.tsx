@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { blogPosts, getBlogPost } from "@/lib/blog-posts"
 import { absoluteUrl, pageMetadata, SITE_NAME } from "@/lib/seo"
 
@@ -151,7 +152,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Use the AI Growth Audit or AI Lab tools to identify where your business should focus first.
           </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+            <StrategicSessionBookingLink
+              source="blog_article_bottom_cta"
+              className="cta-gradient-motion inline-flex min-h-12 touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46"
+            >
+              Book Strategic Session
+            </StrategicSessionBookingLink>
             <Link
               href="/ai-growth-audit"
               className="inline-flex min-h-12 touch-manipulation items-center justify-center gap-2 rounded-xl border border-primary/32 bg-primary/14 px-5 py-3 text-sm font-semibold text-primary transition-all hover:border-primary/46 hover:bg-primary/18"

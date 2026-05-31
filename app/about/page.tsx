@@ -16,6 +16,7 @@ import {
   Target,
   Workflow,
 } from "lucide-react"
+import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = pageMetadata({
@@ -236,6 +237,17 @@ function SecondaryCta({
   )
 }
 
+function BookingCta({ source }: { source: string }) {
+  return (
+    <StrategicSessionBookingLink
+      source={source}
+      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+    >
+      Book Strategic Session
+    </StrategicSessionBookingLink>
+  )
+}
+
 export default function AboutPage() {
   return (
     <main className="relative min-h-screen overflow-x-hidden">
@@ -275,8 +287,9 @@ function HeroSection() {
             automation, websites, CRM, dashboards, and intelligence into one
             operating system for growth.
           </p>
-          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
+          <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap md:mx-0 md:mt-9">
             <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+            <BookingCta source="about_hero" />
             <SecondaryCta href="/services">View Services</SecondaryCta>
           </div>
         </div>
@@ -360,6 +373,17 @@ function PhilosophySection() {
               </p>
             </GlassCard>
           ))}
+        </div>
+        <div className="mt-5 rounded-[1rem] border border-primary/18 bg-primary/[0.045] p-3.5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:mt-8 sm:p-5">
+          <p className="text-sm font-semibold tracking-tight text-foreground">
+            Prefer a direct conversation?
+          </p>
+          <p className="mx-auto mt-1.5 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:text-sm">
+            Book a strategic session and we’ll review the right starting point.
+          </p>
+          <div className="mx-auto mt-4 max-w-sm">
+            <BookingCta source="about_philosophy" />
+          </div>
         </div>
       </div>
     </section>
@@ -506,8 +530,9 @@ function FinalCtaSection() {
             Start with the AI Growth Diagnostic and understand which growth
             system your business needs first.
           </p>
-          <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
+          <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center">
             <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
+            <BookingCta source="about_final_cta" />
             <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">
