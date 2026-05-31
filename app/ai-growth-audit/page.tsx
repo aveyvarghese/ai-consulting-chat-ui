@@ -251,7 +251,7 @@ function HeroSection() {
             issues, CRM leakages, and reporting blind spots.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta source="ai_growth_audit_hero" />
           </div>
         </div>
@@ -510,7 +510,7 @@ function CommercialSection() {
             text="Most businesses jump into campaigns, websites, AI tools, or CRM systems without first identifying the real growth bottleneck. The AI Growth Audit gives you a clear starting point before investing further."
           />
           <div className="flex flex-col gap-2.5 sm:flex-row">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta source="ai_growth_audit_commercial" />
           </div>
         </GlassCard>
@@ -549,7 +549,7 @@ function FinalCtaSection() {
             bottlenecks, AI opportunities, and recommended next step.
           </p>
           <div className="mx-auto mt-7 max-w-md">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">
             <Route className="h-3.5 w-3.5 text-primary/75" />

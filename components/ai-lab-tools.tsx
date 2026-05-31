@@ -1622,7 +1622,7 @@ export function AILabTools() {
                 href="/#consulting-chat"
                 className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
               >
-                Run My Growth Diagnostic
+                Discuss With PxlBrief AI
               </Link>
             </div>
           </div>
@@ -1944,7 +1944,7 @@ export function AILabTools() {
                   href="/#consulting-chat"
                   className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
                 >
-                  Run My Growth Diagnostic
+                  Discuss With PxlBrief AI
                 </Link>
               </div>
             </div>
@@ -2081,7 +2081,7 @@ export function AILabTools() {
                   href="/#consulting-chat"
                   className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
                 >
-                  Run My Growth Diagnostic
+                  Discuss With PxlBrief AI
                 </Link>
               </div>
             </div>

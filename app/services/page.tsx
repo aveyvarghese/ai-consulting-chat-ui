@@ -329,7 +329,7 @@ function HeroSection() {
             one structured growth system.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
           </div>
         </div>
@@ -609,7 +609,7 @@ function FinalCtaSection() {
             business needs first.
           </p>
           <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">

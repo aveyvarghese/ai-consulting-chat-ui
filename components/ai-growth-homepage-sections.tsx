@@ -351,7 +351,7 @@ export function AIGrowthDiagnosticPreviewSection() {
                 href="#consulting-chat"
                 className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
               >
-                Run My Growth Diagnostic
+                Discuss With PxlBrief AI
               </a>
             </div>
           </div>
@@ -616,7 +616,7 @@ export function FinalGrowthCtaSection() {
               href="#consulting-chat"
               className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
-              Run My Growth Diagnostic
+              Discuss With PxlBrief AI
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"

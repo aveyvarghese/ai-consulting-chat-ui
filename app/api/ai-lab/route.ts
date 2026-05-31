@@ -95,7 +95,7 @@ function fallbackReadout(tool: z.infer<typeof toolSchema>) {
       },
       {
         label: "Recommended next step",
-        value: "Run My Growth Diagnostic",
+        value: "Discuss With PxlBrief AI",
       },
       {
         label: "Recommended next PxlBrief service",

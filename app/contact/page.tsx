@@ -253,7 +253,7 @@ function HeroSection() {
             and recommended next step before a deeper strategic conversation.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <BookingCta source="start_diagnostic_hero" />
           </div>
         </div>
@@ -353,13 +353,13 @@ function BeginOptionsSection() {
           <GlassCard className="px-3.5 py-3 sm:p-5">
             <IconBox icon={Brain} />
             <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
-              Run My Growth Diagnostic
+              Discuss With PxlBrief AI
             </h3>
             <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 md:text-sm">
               Best for founders who want a directional readout before speaking.
             </p>
             <div className="mt-5">
-              <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+              <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             </div>
           </GlassCard>
 
@@ -476,7 +476,7 @@ function FinalCtaSection() {
           bottleneck, AI opportunity, and recommended next step.
         </p>
         <div className="mx-auto mt-6 flex max-w-xl flex-col gap-2.5 sm:mt-8 sm:flex-row sm:justify-center">
-          <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+          <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
           <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
         </div>
       </GlassCard>

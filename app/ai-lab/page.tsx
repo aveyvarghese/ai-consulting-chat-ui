@@ -179,7 +179,7 @@ function HeroSection() {
             recommendations, automation priorities, and growth system decisions.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="#lab-tools">Explore Tools</SecondaryCta>
           </div>
         </div>
@@ -318,7 +318,7 @@ function FinalCtaSection() {
               dashboards, and sales systems.
             </p>
             <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
-              <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+              <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
               <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
             </div>
           </div>

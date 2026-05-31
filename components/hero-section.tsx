@@ -1838,7 +1838,7 @@ export function HeroSection() {
                   onClick={startDiagnostic}
                   className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
                 >
-                  <span>Run My Growth Diagnostic</span>
+                  <span>Discuss With PxlBrief AI</span>
                 </button>
                 <a
                   href="#ai-lab"

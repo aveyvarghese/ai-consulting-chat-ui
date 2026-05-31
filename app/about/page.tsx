@@ -142,7 +142,7 @@ const audiences = [
 ] as const
 
 const engagementSteps = [
-  "Run My Growth Diagnostic",
+  "Discuss With PxlBrief AI",
   "Run AI Growth Audit",
   "Identify priority systems",
   "Build or optimize the growth infrastructure",
@@ -276,7 +276,7 @@ function HeroSection() {
             operating system for growth.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="/services">View Services</SecondaryCta>
           </div>
         </div>
@@ -507,7 +507,7 @@ function FinalCtaSection() {
             system your business needs first.
           </p>
           <div className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row sm:justify-center">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="/ai-lab">Explore AI Lab</SecondaryCta>
           </div>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.75rem] text-muted-foreground/70">
