@@ -9,6 +9,7 @@ import {
   Route,
   Workflow,
 } from "lucide-react"
+import { AiDigitalPresenceAudits } from "@/components/ai-digital-presence-audits"
 import { AILabTools } from "@/components/ai-lab-tools"
 import { pageMetadata } from "@/lib/seo"
 
@@ -26,6 +27,7 @@ const consoleItems = [
   { label: "ROI Calculator", status: "Live", tone: "live" },
   { label: "Campaign Intelligence", status: "Live", tone: "live" },
   { label: "Brand Positioning Engine", status: "Live", tone: "live" },
+  { label: "Digital Presence Audits", status: "New", tone: "live" },
 ] as const
 
 const principles = [
@@ -120,7 +122,7 @@ function PrimaryCta({ children }: { children: ReactNode }) {
   return (
     <Link
       href="/#consulting-chat"
-      className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] sm:w-auto"
+      className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] sm:w-auto"
     >
       {children}
     </Link>
@@ -137,7 +139,7 @@ function SecondaryCta({
   return (
     <Link
       href={href}
-      className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/28 bg-primary/[0.055] px-6 py-3.5 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all duration-500 hover:border-primary/44 hover:bg-primary/10 sm:w-auto"
+      className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/28 bg-primary/[0.055] px-6 py-3.5 text-sm font-semibold tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all duration-500 hover:border-primary/44 hover:bg-primary/10 sm:w-auto"
     >
       {children}
     </Link>
@@ -179,7 +181,7 @@ function HeroSection() {
             recommendations, automation priorities, and growth system decisions.
           </p>
           <div className="mx-auto mt-4 flex max-w-xl flex-col gap-2.5 sm:mt-7 sm:flex-row md:mx-0 md:mt-9">
-            <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+            <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
             <SecondaryCta href="#lab-tools">Explore Tools</SecondaryCta>
           </div>
         </div>
@@ -267,6 +269,7 @@ function ToolsSection() {
           text="Use these directional tools to pressure-test readiness, service fit, and productivity leverage before a deeper diagnostic."
         />
         <AILabTools />
+        <AiDigitalPresenceAudits />
       </div>
     </section>
   )
@@ -318,7 +321,7 @@ function FinalCtaSection() {
               dashboards, and sales systems.
             </p>
             <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
-              <PrimaryCta>Run My Growth Diagnostic</PrimaryCta>
+              <PrimaryCta>Discuss With PxlBrief AI</PrimaryCta>
               <SecondaryCta href="/ai-growth-audit">View AI Growth Audit</SecondaryCta>
             </div>
           </div>

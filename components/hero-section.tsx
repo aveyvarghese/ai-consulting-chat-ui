@@ -1777,7 +1777,7 @@ export function HeroSection() {
     <section
       id="consulting-chat"
       ref={sectionRef}
-      className="section-hero-dark relative flex min-h-[min(70vh,700px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-9 pt-6 sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
+      className="section-hero-dark relative flex min-h-[min(64vh,650px)] scroll-mt-24 flex-col items-center justify-center overflow-x-hidden px-3 pb-8 pt-5 sm:min-h-[min(70vh,700px)] sm:px-4 sm:pb-20 sm:pt-12 md:min-h-[min(82vh,900px)] md:pb-28 md:pt-20 lg:pt-24"
       aria-label="Run your AI growth diagnostic"
     >
       <div className="absolute inset-0 overflow-hidden">
@@ -1807,20 +1807,11 @@ export function HeroSection() {
         <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
           <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
             <div className="text-center lg:text-left">
-              <div className="mb-3 md:mb-8 lg:mb-9">
-                <span className="inline-flex max-w-full rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-primary/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[0.6875rem] sm:tracking-[0.22em]">
-                  PxlBrief AI diagnostic
-                </span>
-                <span className="mt-3 block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:mt-6 md:text-2xl">
-                  Pxl<span className="text-primary">Brief</span>
-                </span>
-              </div>
-
-              <h1 className="mx-auto mb-3 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
+              <h1 className="mx-auto mb-2.5 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
                 Run Your AI Growth Diagnostic
               </h1>
 
-              <p className="mx-auto mb-4 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
+              <p className="mx-auto mb-3 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
                 <span className="md:hidden">
                   Answer a few focused questions and PxlBrief AI will identify
                   your likely bottleneck, AI opportunity, and next step.
@@ -1832,29 +1823,24 @@ export function HeroSection() {
                 </span>
               </p>
 
-              <div className="mx-auto mb-4 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-9 lg:mx-0">
+              <div className="mx-auto mb-3 flex w-full max-w-xl flex-col gap-2 sm:flex-row sm:gap-2.5 md:mb-9 lg:mx-0">
                 <button
                   type="button"
                   onClick={startDiagnostic}
-                  className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
+                  className="pxl-mobile-primary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
                 >
-                  <span>Run My Growth Diagnostic</span>
+                  <span>Discuss With PxlBrief AI</span>
                 </button>
                 <a
                   href="#ai-lab"
-                  className="inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/14 bg-card/62 px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/34 hover:bg-primary/[0.06] hover:text-foreground hover:shadow-[0_14px_40px_-28px_var(--glow-primary)] sm:w-auto sm:flex-1 lg:flex-none"
+                  className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/14 bg-card/62 px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/34 hover:bg-primary/[0.06] hover:text-foreground hover:shadow-[0_14px_40px_-28px_var(--glow-primary)] sm:w-auto sm:flex-1 lg:flex-none"
                 >
                   <span className="md:hidden">Explore AI Lab</span>
                   <span className="hidden md:inline">Enter AI Lab</span>
                 </a>
               </div>
 
-              <div className="relative mx-auto mb-4 w-full max-w-sm lg:hidden">
-                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
-                <ExecutiveIntelligencePanel compact />
-              </div>
-
-              <p className="mb-2 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
+              <p className="mb-1.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
                 Start here: tell us what kind of business you run and what you
                 want to improve.
               </p>
@@ -1905,7 +1891,7 @@ export function HeroSection() {
               </div>
 
               <div
-                className="mx-auto mb-5 grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:mb-12 md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
+                className="mx-auto grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
                 role="group"
                 aria-label="Suggested prompts"
               >
@@ -1918,17 +1904,18 @@ export function HeroSection() {
                       setInputValue(prompt)
                       inputRef.current?.focus()
                     }}
-                    className="flex min-h-[2.35rem] w-full touch-manipulation items-center justify-center rounded-full border border-primary/12 bg-card/72 px-2 py-2 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.32] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm motion-reduce:transition-colors"
+                    className="flex min-h-9 w-full touch-manipulation items-center justify-center rounded-full border border-primary/12 bg-card/72 px-1.5 py-1.5 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/32 hover:bg-primary/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 dark:bg-card/[0.32] md:min-h-11 md:w-auto md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm motion-reduce:transition-colors"
                   >
                     {label}
                   </button>
                 ))}
               </div>
 
-              <p className="mx-auto max-w-xl text-[0.75rem] leading-relaxed text-muted-foreground/65 md:text-sm lg:mx-0">
-                A premium diagnostic layer for business bottlenecks, AI
-                opportunity, and the next system to build.
-              </p>
+              <div className="relative mx-auto mt-4 w-full max-w-sm lg:hidden">
+                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-primary/[0.035] blur-xl" />
+                <ExecutiveIntelligencePanel compact />
+              </div>
+
             </div>
 
             <div className="relative mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">

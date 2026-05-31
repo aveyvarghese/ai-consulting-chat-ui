@@ -6,7 +6,6 @@ import {
   AIGrowthDiagnosticPreviewSection,
   AILabPreviewSection,
   CaseIntelligencePreviewSection,
-  ExecutiveDashboardShowcaseSection,
   FinalGrowthCtaSection,
   FounderCredibilitySection,
   IndustryPlaybooksPreviewSection,
@@ -23,7 +22,6 @@ export default function Home() {
       <AIGrowthDiagnosticPreviewSection />
       <StrategicSystemsWeBuildSection />
       <AILabPreviewSection />
-      <ExecutiveDashboardShowcaseSection />
       <IndustryPlaybooksPreviewSection />
       <CaseIntelligencePreviewSection />
       <FounderCredibilitySection />

@@ -397,7 +397,7 @@ export function HomeBrandReportPopup() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-[0_0_28px_rgba(255,122,26,0.2)] transition hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60 sm:h-auto sm:py-3"
+                    className="cta-gradient-motion inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-[0_0_28px_rgba(255,122,26,0.2)] transition hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60 sm:h-auto sm:py-3"
                   >
                     {isSubmitting ? (
                       <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

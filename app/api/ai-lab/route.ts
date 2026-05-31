@@ -8,6 +8,12 @@ const toolSchema = z.enum([
   "scorecard",
   "roi",
   "recommender",
+  "instagram-audit",
+  "linkedin-audit",
+  "youtube-audit",
+  "seo-audit",
+  "aeo-audit",
+  "geo-audit",
 ])
 
 const bodySchema = z.object({
@@ -63,6 +69,52 @@ const toolInstructions: Record<z.infer<typeof toolSchema>, string> = {
 - What to diagnose first
 - Suggested audit scope
 - Next best action`,
+  "instagram-audit": `Return exactly these sections:
+- Brief Instagram audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested content / profile improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Digital Marketing & Performance Growth or Brand Strategy & Positioning)`,
+  "linkedin-audit": `Return exactly these sections:
+- Brief LinkedIn audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested authority / content / profile improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Brand Strategy & Positioning or Digital Marketing & Performance Growth)`,
+  "youtube-audit": `Return exactly these sections:
+- Brief YouTube audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested content / channel / conversion improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Digital Marketing & Performance Growth or Brand Strategy & Positioning)`,
+  "seo-audit": `Return exactly these sections:
+- Brief SEO audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested SEO improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Website, SEO, AEO & GEO)`,
+  "aeo-audit": `Return exactly these sections:
+- Brief AEO audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested answer-engine readiness improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Website, SEO, AEO & GEO)
+
+Focus on FAQ readiness, clear service explanations, structured answers, entity clarity, problem/solution content, and snippet-friendly copy.`,
+  "geo-audit": `Return exactly these sections:
+- Brief GEO audit summary
+- Good points (items, exactly 2)
+- Points that need work (items, exactly 2)
+- Suggested generative search readiness improvement direction
+- Recommended next step
+- Recommended PxlBrief service (must be Website, SEO, AEO & GEO)
+
+Focus on brand/entity clarity, topical authority, expert content, structured service pages, citations/testimonials/proof, and AI-search discoverability.`,
 }
 
 const systemPrompt = `You are a senior strategist for PxlBrief.
@@ -80,6 +132,12 @@ Rules:
 - Output ONLY valid JSON: {"sections":[{"label":"...","value":"..."},{"label":"...","items":["..."]}]}.
 - Keep outputs compact and business-consulting oriented.
 - No hype, no guaranteed results, no fake claims.
+- Do not claim to have crawled, scraped, inspected, or accessed live website or platform data.
+- If only a handle or URL is provided, say the audit is directional based on the provided input and category/goal context only.
+- Do not infer actual posting frequency, engagement quality, visual consistency, rankings, traffic, follower counts, comments, shares, website structure, page content, or channel performance unless the user explicitly provided those details.
+- Frame "Good points" as likely strategic advantages or useful starting signals from the provided category/goal, not as observed live facts.
+- Frame "Points that need work" as areas to verify or improve in a deeper audit, not as confirmed defects.
+- Avoid fake metrics, rankings, traffic estimates, follower assumptions, or performance guarantees.
 - Do not say "as an AI".
 - Make it clear through the substance that this is directional, not a full consulting diagnosis.
 - If input is vague, still provide a useful directional readout and suggest running the AI Growth Diagnostic.
@@ -95,7 +153,7 @@ function fallbackReadout(tool: z.infer<typeof toolSchema>) {
       },
       {
         label: "Recommended next step",
-        value: "Run My Growth Diagnostic",
+        value: "Discuss With PxlBrief AI",
       },
       {
         label: "Recommended next PxlBrief service",

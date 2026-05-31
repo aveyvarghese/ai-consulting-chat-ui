@@ -12,6 +12,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react"
+import { HomepageCaseMobileList } from "@/components/homepage-case-mobile-list"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 
 type Problem = {
@@ -349,9 +350,9 @@ export function AIGrowthDiagnosticPreviewSection() {
               </div>
               <a
                 href="#consulting-chat"
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
+                className="cta-gradient-motion mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
               >
-                Run My Growth Diagnostic
+                Discuss With PxlBrief AI
               </a>
             </div>
           </div>
@@ -470,7 +471,7 @@ export function IndustryPlaybooksPreviewSection() {
         <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
           {industryPlaybooks.map((playbook) => (
             <MetallicCard key={playbook.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-5">
-              <h3 className="text-base font-semibold tracking-tight text-foreground">
+              <h3 className="text-base font-semibold tracking-tight text-[var(--secondary-accent)]">
                 {playbook.title}
               </h3>
               <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
@@ -518,7 +519,8 @@ export function CaseIntelligencePreviewSection() {
           text="These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system."
           align="center"
         />
-        <div className="grid grid-cols-1 gap-2.5 sm:gap-5 lg:grid-cols-3">
+        <HomepageCaseMobileList cases={caseScenarios} />
+        <div className="hidden grid-cols-1 gap-2.5 sm:grid sm:gap-5 lg:grid-cols-3">
           {caseScenarios.map((item, index) => (
             <MetallicCard key={item.title} className="p-3.5 sm:p-6">
               <div className="mb-3 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
@@ -614,13 +616,13 @@ export function FinalGrowthCtaSection() {
           <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-3">
             <a
               href="#consulting-chat"
-              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
+              className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
-              Run My Growth Diagnostic
+              Discuss With PxlBrief AI
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"
-              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
+              className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>

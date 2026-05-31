@@ -121,6 +121,14 @@ const createAiReadoutState = (): Record<ActiveTool, AiReadoutState> => ({
   positioning: { loading: false, error: null, readout: null },
 })
 
+const createToolRunState = (): Record<ActiveTool, boolean> => ({
+  scorecard: false,
+  recommender: false,
+  roi: false,
+  campaign: false,
+  positioning: false,
+})
+
 const toolTabs: readonly {
   id: ActiveTool
   label: string
@@ -729,6 +737,41 @@ function PreviewDisclaimer() {
   )
 }
 
+function PlaceholderResultPanel() {
+  return (
+    <div className="flex min-h-[13rem] flex-col justify-center rounded-[0.9rem] border border-hairline/75 bg-background/30 px-4 py-5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:min-h-[16rem] sm:px-6">
+      <span className="mx-auto inline-flex rounded-full border border-primary/18 bg-primary/[0.06] px-3 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/85">
+        Waiting for input
+      </span>
+      <h4 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
+        Your result will appear here
+      </h4>
+      <p className="mx-auto mt-2 max-w-sm text-[0.8125rem] leading-relaxed text-muted-foreground/84">
+        Select your inputs and run the tool to generate a directional AI readout.
+      </p>
+    </div>
+  )
+}
+
+function RunToolButton({
+  children,
+  onClick,
+}: {
+  children: ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+    >
+      <Sparkles className="h-3.5 w-3.5" aria-hidden />
+      {children}
+    </button>
+  )
+}
+
 function AiStrategyPanel({
   state,
   onGenerate,
@@ -909,7 +952,7 @@ function AiStrategyPanel({
           type="button"
           onClick={onGenerate}
           disabled={state.loading}
-          className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.7rem] border border-primary/30 bg-primary/[0.1] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.16] disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
+          className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center gap-2 rounded-[0.7rem] border border-primary/30 bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:border-primary/44 hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55 sm:w-auto"
         >
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
           {state.loading ? "Generating..." : "Generate AI Strategy"}
@@ -1038,7 +1081,7 @@ function AiStrategyPanel({
                     <button
                       type="submit"
                       disabled={status === "submitting"}
-                      className="inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
+                      className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.7rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94] disabled:pointer-events-none disabled:opacity-55"
                     >
                       {status === "submitting"
                         ? "Submitting..."
@@ -1072,8 +1115,24 @@ export function AILabTools() {
   const [positioning, setPositioning] =
     useState<PositioningState>(initialPositioning)
   const [activeTool, setActiveTool] = useState<ActiveTool>("scorecard")
+  const [mobileActiveTool, setMobileActiveTool] = useState<ActiveTool | "">("")
   const [aiReadouts, setAiReadouts] =
     useState<Record<ActiveTool, AiReadoutState>>(createAiReadoutState)
+  const [toolHasRun, setToolHasRun] =
+    useState<Record<ActiveTool, boolean>>(createToolRunState)
+
+  const toolPanelClassName = (tool: ActiveTool) =>
+    `${mobileActiveTool === tool ? "block" : "hidden"} ${
+      activeTool === tool ? "sm:block" : "sm:hidden"
+    }`
+
+  const runTool = (tool: ActiveTool) => {
+    setToolHasRun((state) => ({ ...state, [tool]: true }))
+    setAiReadouts((state) => ({
+      ...state,
+      [tool]: { loading: false, error: null, readout: null },
+    }))
+  }
 
   const generateAiReadout = async (
     tool: ActiveTool,
@@ -1474,8 +1533,31 @@ export function AILabTools() {
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:gap-5 lg:gap-6">
+      <div className="min-w-0 rounded-[0.95rem] border border-primary/24 bg-card/84 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:hidden">
+        <label className="block min-w-0">
+          <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/90">
+            Choose AI Lab Tool
+          </span>
+          <span className="mt-1 block text-[0.75rem] leading-relaxed text-muted-foreground/82">
+            Select a tool to generate a directional readout.
+          </span>
+          <select
+            value={mobileActiveTool}
+            onChange={(event) => setMobileActiveTool(event.target.value as ActiveTool | "")}
+            className="mt-3 h-12 w-full min-w-0 rounded-[0.8rem] border border-primary/36 bg-background/70 px-3.5 text-sm font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_34px_-28px_var(--glow-primary)] transition-colors focus:border-[var(--secondary-accent)] focus:ring-2 focus:ring-primary/12"
+          >
+            <option value="">Choose AI Lab Tool</option>
+            <option value="scorecard">AI Growth Scorecard</option>
+            <option value="recommender">AI Service Recommender</option>
+            <option value="roi">ROI Calculator</option>
+            <option value="campaign">Campaign Intelligence</option>
+            <option value="positioning">Brand Positioning Engine</option>
+          </select>
+        </label>
+      </div>
+
       <div
-        className="flex min-w-0 gap-1.5 overflow-x-auto overscroll-x-contain rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:gap-2 sm:rounded-[1.1rem] sm:p-2"
+        className="hidden min-w-0 gap-1.5 rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:flex sm:gap-2 sm:rounded-[1.1rem] sm:p-2"
         role="tablist"
         aria-label="AI Lab tools"
       >
@@ -1507,7 +1589,8 @@ export function AILabTools() {
         })}
       </div>
 
-      {activeTool === "scorecard" ? (
+      {activeTool === "scorecard" || mobileActiveTool === "scorecard" ? (
+        <div className={toolPanelClassName("scorecard")}>
         <ToolShell
           eyebrow="Tool 01"
           title="AI Growth Scorecard"
@@ -1564,73 +1647,86 @@ export function AILabTools() {
                 setScorecard((state) => ({ ...state, reporting }))
               }
             />
+            <div className="sm:col-span-2">
+              <RunToolButton onClick={() => runTool("scorecard")}>
+                Run Scorecard
+              </RunToolButton>
+            </div>
           </div>
           <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3.5 sm:p-4">
-            <div className="mb-4 flex items-end justify-between gap-3">
-              <div>
-                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
-                  AI Growth Readiness Score
+            {toolHasRun.scorecard ? (
+              <>
+                <div className="mb-4 flex items-end justify-between gap-3">
+                  <div>
+                    <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+                      AI Growth Readiness Score
+                    </p>
+                    <p className="mt-1 font-mono text-4xl font-semibold tracking-tight text-foreground">
+                      {scorecardOutput.score}
+                      <span className="text-xl text-muted-foreground/65">/100</span>
+                    </p>
+                  </div>
+                  <Sparkles className="h-5 w-5 text-primary" aria-hidden />
+                </div>
+                <div className="grid gap-2.5">
+                  <MetricCard label="Strongest area" value={scorecardOutput.strongest} />
+                  <MetricCard label="Weakest area" value={scorecardOutput.weakest} />
+                  <MetricCard
+                    label="Recommended PxlBrief service"
+                    value={scorecardOutput.service}
+                  />
+                  <MetricCard
+                    label="Recommended first step"
+                    value={scorecardOutput.nextStep}
+                    tone="primary"
+                  />
+                </div>
+                <p className="mt-3 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
+                  {scorecardOutput.serviceReason}
                 </p>
-                <p className="mt-1 font-mono text-4xl font-semibold tracking-tight text-foreground">
-                  {scorecardOutput.score}
-                  <span className="text-xl text-muted-foreground/65">/100</span>
-                </p>
-              </div>
-              <Sparkles className="h-5 w-5 text-primary" aria-hidden />
-            </div>
-            <div className="grid gap-2.5">
-              <MetricCard label="Strongest area" value={scorecardOutput.strongest} />
-              <MetricCard label="Weakest area" value={scorecardOutput.weakest} />
-              <MetricCard
-                label="Recommended PxlBrief service"
-                value={scorecardOutput.service}
-              />
-              <MetricCard
-                label="Recommended first step"
-                value={scorecardOutput.nextStep}
-                tone="primary"
-              />
-            </div>
-            <p className="mt-3 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
-              {scorecardOutput.serviceReason}
-            </p>
-            <AiStrategyPanel
-              state={aiReadouts.scorecard}
-              leadContext={{
-                tool: "scorecard",
-                toolLabel: toolLabels.scorecard,
-                inputs: asRecord(scorecard),
-                directionalOutput: asRecord(scorecardOutput),
-                recommendedService: scorecardOutput.service,
-              }}
-              onGenerate={() =>
-                generateAiReadout(
-                  "scorecard",
-                  asRecord(scorecard),
-                  asRecord(scorecardOutput)
-                )
-              }
-            />
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              <Link
-                href="/ai-growth-audit"
-                className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-              >
-                View AI Growth Audit
-              </Link>
-              <Link
-                href="/#consulting-chat"
-                className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
-              >
-                Run My Growth Diagnostic
-              </Link>
-            </div>
+                <AiStrategyPanel
+                  state={aiReadouts.scorecard}
+                  leadContext={{
+                    tool: "scorecard",
+                    toolLabel: toolLabels.scorecard,
+                    inputs: asRecord(scorecard),
+                    directionalOutput: asRecord(scorecardOutput),
+                    recommendedService: scorecardOutput.service,
+                  }}
+                  onGenerate={() =>
+                    generateAiReadout(
+                      "scorecard",
+                      asRecord(scorecard),
+                      asRecord(scorecardOutput)
+                    )
+                  }
+                />
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  <Link
+                    href="/ai-growth-audit"
+                    className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+                  >
+                    View AI Growth Audit
+                  </Link>
+                  <Link
+                    href="/#consulting-chat"
+                    className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                  >
+                    Discuss With PxlBrief AI
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <PlaceholderResultPanel />
+            )}
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "recommender" ? (
+      {activeTool === "recommender" || mobileActiveTool === "recommender" ? (
+        <div className={toolPanelClassName("recommender")}>
         <ToolShell
           eyebrow="Tool 02"
           title="AI Service Recommender"
@@ -1667,60 +1763,71 @@ export function AILabTools() {
                 setRecommender((state) => ({ ...state, urgency }))
               }
             />
+            <RunToolButton onClick={() => runTool("recommender")}>
+              Get Recommendation
+            </RunToolButton>
           </div>
           <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3.5 sm:p-4">
-            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
-              Recommended service
-            </p>
-            <h4 className="mt-2 text-xl font-semibold leading-tight tracking-tight text-foreground">
-              {recommenderOutput.service}
-            </h4>
-            <div className="mt-4 grid gap-2.5">
-              <MetricCard
-                label="Priority level"
-                value={recommenderOutput.priority}
-                tone={recommenderOutput.priority === "High" ? "primary" : "default"}
-              />
-              <MetricCard
-                label="Business context"
-                value={recommenderOutput.businessContext}
-              />
-              <MetricCard label="Why this fits" value={recommenderOutput.reason} />
-              <MetricCard
-                label="Suggested next step"
-                value={recommenderOutput.step}
-                tone="primary"
-              />
-            </div>
-            <Link
-              href={recommenderOutput.ctaHref}
-              className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-            >
-              {recommenderOutput.ctaLabel}
-            </Link>
-            <AiStrategyPanel
-              state={aiReadouts.recommender}
-              leadContext={{
-                tool: "recommender",
-                toolLabel: toolLabels.recommender,
-                inputs: asRecord(recommender),
-                directionalOutput: asRecord(recommenderOutput),
-                recommendedService: recommenderOutput.service,
-              }}
-              onGenerate={() =>
-                generateAiReadout(
-                  "recommender",
-                  asRecord(recommender),
-                  asRecord(recommenderOutput)
-                )
-              }
-            />
+            {toolHasRun.recommender ? (
+              <>
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+                  Recommended service
+                </p>
+                <h4 className="mt-2 text-xl font-semibold leading-tight tracking-tight text-foreground">
+                  {recommenderOutput.service}
+                </h4>
+                <div className="mt-4 grid gap-2.5">
+                  <MetricCard
+                    label="Priority level"
+                    value={recommenderOutput.priority}
+                    tone={recommenderOutput.priority === "High" ? "primary" : "default"}
+                  />
+                  <MetricCard
+                    label="Business context"
+                    value={recommenderOutput.businessContext}
+                  />
+                  <MetricCard label="Why this fits" value={recommenderOutput.reason} />
+                  <MetricCard
+                    label="Suggested next step"
+                    value={recommenderOutput.step}
+                    tone="primary"
+                  />
+                </div>
+                <Link
+                  href={recommenderOutput.ctaHref}
+                  className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+                >
+                  {recommenderOutput.ctaLabel}
+                </Link>
+                <AiStrategyPanel
+                  state={aiReadouts.recommender}
+                  leadContext={{
+                    tool: "recommender",
+                    toolLabel: toolLabels.recommender,
+                    inputs: asRecord(recommender),
+                    directionalOutput: asRecord(recommenderOutput),
+                    recommendedService: recommenderOutput.service,
+                  }}
+                  onGenerate={() =>
+                    generateAiReadout(
+                      "recommender",
+                      asRecord(recommender),
+                      asRecord(recommenderOutput)
+                    )
+                  }
+                />
+              </>
+            ) : (
+              <PlaceholderResultPanel />
+            )}
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "roi" ? (
+      {activeTool === "roi" || mobileActiveTool === "roi" ? (
+        <div className={toolPanelClassName("roi")}>
         <ToolShell
           eyebrow="Tool 03"
           title="AI ROI / Productivity Calculator"
@@ -1767,75 +1874,88 @@ export function AILabTools() {
                 setRoi((state) => ({ ...state, followupHours }))
               }
             />
+            <div className="sm:col-span-2">
+              <RunToolButton onClick={() => runTool("roi")}>
+                Calculate ROI
+              </RunToolButton>
+            </div>
           </div>
           <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3.5 sm:p-4">
-            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
-              Directional estimate
-            </p>
-            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-              <MetricCard
-                label="Team size"
-                value={`${Math.round(roiOutput.teamSize)} people`}
-              />
-              <MetricCard
-                label="Weekly manual hours"
-                value={`${Math.round(roiOutput.weeklyHours)} hrs`}
-              />
-              <MetricCard
-                label="Monthly manual hours"
-                value={`${Math.round(roiOutput.monthlyHours)} hrs`}
-              />
-              <MetricCard
-                label="Manual work cost"
-                value={formatCurrency(roiOutput.monthlyCost)}
-              />
-              <MetricCard
-                label="Estimated hourly cost"
-                value={formatCurrency(roiOutput.hourlyCost)}
-              />
-            </div>
-            <div className="mt-3 grid gap-2.5">
-              {roiOutput.recoverable.map(({ rate, hours, value }) => (
-                <MetricCard
-                  key={rate}
-                  label={`${Math.round(rate * 100)}% recoverable estimate`}
-                  value={`${Math.round(hours)} hrs / ${formatCurrency(value)}`}
+            {toolHasRun.roi ? (
+              <>
+                <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+                  Directional estimate
+                </p>
+                <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                  <MetricCard
+                    label="Team size"
+                    value={`${Math.round(roiOutput.teamSize)} people`}
+                  />
+                  <MetricCard
+                    label="Weekly manual hours"
+                    value={`${Math.round(roiOutput.weeklyHours)} hrs`}
+                  />
+                  <MetricCard
+                    label="Monthly manual hours"
+                    value={`${Math.round(roiOutput.monthlyHours)} hrs`}
+                  />
+                  <MetricCard
+                    label="Manual work cost"
+                    value={formatCurrency(roiOutput.monthlyCost)}
+                  />
+                  <MetricCard
+                    label="Estimated hourly cost"
+                    value={formatCurrency(roiOutput.hourlyCost)}
+                  />
+                </div>
+                <div className="mt-3 grid gap-2.5">
+                  {roiOutput.recoverable.map(({ rate, hours, value }) => (
+                    <MetricCard
+                      key={rate}
+                      label={`${Math.round(rate * 100)}% recoverable estimate`}
+                      value={`${Math.round(hours)} hrs / ${formatCurrency(value)}`}
+                    />
+                  ))}
+                  <MetricCard
+                    label="Recommended automation priority"
+                    value={roiOutput.priority}
+                    tone="primary"
+                  />
+                </div>
+                <p className="mt-4 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
+                  This is a directional estimate, not a guaranteed saving.
+                </p>
+                <AiStrategyPanel
+                  state={aiReadouts.roi}
+                  leadContext={{
+                    tool: "roi",
+                    toolLabel: toolLabels.roi,
+                    inputs: asRecord(roi),
+                    directionalOutput: asRecord(roiOutput),
+                    recommendedService: `AI Implementation & Automation (${roiOutput.priority})`,
+                  }}
+                  onGenerate={() =>
+                    generateAiReadout("roi", asRecord(roi), asRecord(roiOutput))
+                  }
                 />
-              ))}
-              <MetricCard
-                label="Recommended automation priority"
-                value={roiOutput.priority}
-                tone="primary"
-              />
-            </div>
-            <p className="mt-4 rounded-[0.8rem] border border-hairline/75 bg-background/30 px-3 py-2.5 text-[0.75rem] leading-relaxed text-muted-foreground/82">
-              This is a directional estimate, not a guaranteed saving.
-            </p>
-            <AiStrategyPanel
-              state={aiReadouts.roi}
-              leadContext={{
-                tool: "roi",
-                toolLabel: toolLabels.roi,
-                inputs: asRecord(roi),
-                directionalOutput: asRecord(roiOutput),
-                recommendedService: `AI Implementation & Automation (${roiOutput.priority})`,
-              }}
-              onGenerate={() =>
-                generateAiReadout("roi", asRecord(roi), asRecord(roiOutput))
-              }
-            />
-            <Link
-              href="/ai-growth-audit"
-              className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-            >
-              Start AI Growth Audit
-            </Link>
+                <Link
+                  href="/ai-growth-audit"
+                  className="mt-4 inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+                >
+                  Start AI Growth Audit
+                </Link>
+              </>
+            ) : (
+              <PlaceholderResultPanel />
+            )}
           </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "campaign" ? (
+      {activeTool === "campaign" || mobileActiveTool === "campaign" ? (
+        <div className={toolPanelClassName("campaign")}>
         <ToolShell
           eyebrow="Tool 04"
           title="Campaign Intelligence"
@@ -1890,69 +2010,82 @@ export function AILabTools() {
                 placeholder="e.g. Gurgaon, Mumbai, 5 km around store"
                 onChange={(market) => setCampaign((state) => ({ ...state, market }))}
               />
+              <div className="sm:col-span-2">
+                <RunToolButton onClick={() => runTool("campaign")}>
+                  Generate Campaign Intelligence
+                </RunToolButton>
+              </div>
             </div>
             <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3.5 sm:p-4">
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
-                Directional intelligence
-              </p>
-              <div className="mt-4 grid gap-2.5">
-                <MetricCard label="Campaign theme" value={campaignOutput.theme} />
-                <MetricCard label="Core message" value={campaignOutput.message} />
-                <OutputList label="Campaign hooks" items={campaignOutput.hooks} />
-                <MetricCard
-                  label="Recommended funnel"
-                  value={campaignOutput.funnel}
-                  tone="primary"
-                />
-                <OutputList
-                  label="Suggested content formats"
-                  items={campaignOutput.formats}
-                />
-                <MetricCard label="CTA recommendation" value={campaignOutput.cta} />
-                <MetricCard
-                  label="Recommended PxlBrief service"
-                  value={campaignOutput.service}
-                  tone="primary"
-                />
-              </div>
-              <PreviewDisclaimer />
-              <AiStrategyPanel
-                state={aiReadouts.campaign}
-                leadContext={{
-                  tool: "campaign",
-                  toolLabel: toolLabels.campaign,
-                  inputs: asRecord(campaign),
-                  directionalOutput: asRecord(campaignOutput),
-                  recommendedService: campaignOutput.service,
-                }}
-                onGenerate={() =>
-                  generateAiReadout(
-                    "campaign",
-                    asRecord(campaign),
-                    asRecord(campaignOutput)
-                  )
-                }
-              />
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <Link
-                  href="/ai-growth-audit"
-                  className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-                >
-                  View AI Growth Audit
-                </Link>
-                <Link
-                  href="/#consulting-chat"
-                  className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
-                >
-                  Run My Growth Diagnostic
-                </Link>
-              </div>
+              {toolHasRun.campaign ? (
+                <>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+                    Directional intelligence
+                  </p>
+                  <div className="mt-4 grid gap-2.5">
+                    <MetricCard label="Campaign theme" value={campaignOutput.theme} />
+                    <MetricCard label="Core message" value={campaignOutput.message} />
+                    <OutputList label="Campaign hooks" items={campaignOutput.hooks} />
+                    <MetricCard
+                      label="Recommended funnel"
+                      value={campaignOutput.funnel}
+                      tone="primary"
+                    />
+                    <OutputList
+                      label="Suggested content formats"
+                      items={campaignOutput.formats}
+                    />
+                    <MetricCard label="CTA recommendation" value={campaignOutput.cta} />
+                    <MetricCard
+                      label="Recommended PxlBrief service"
+                      value={campaignOutput.service}
+                      tone="primary"
+                    />
+                  </div>
+                  <PreviewDisclaimer />
+                  <AiStrategyPanel
+                    state={aiReadouts.campaign}
+                    leadContext={{
+                      tool: "campaign",
+                      toolLabel: toolLabels.campaign,
+                      inputs: asRecord(campaign),
+                      directionalOutput: asRecord(campaignOutput),
+                      recommendedService: campaignOutput.service,
+                    }}
+                    onGenerate={() =>
+                      generateAiReadout(
+                        "campaign",
+                        asRecord(campaign),
+                        asRecord(campaignOutput)
+                      )
+                    }
+                  />
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    <Link
+                      href="/ai-growth-audit"
+                      className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+                    >
+                      View AI Growth Audit
+                    </Link>
+                    <Link
+                      href="/#consulting-chat"
+                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                    >
+                      Discuss With PxlBrief AI
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <PlaceholderResultPanel />
+              )}
             </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
 
-      {activeTool === "positioning" ? (
+      {activeTool === "positioning" || mobileActiveTool === "positioning" ? (
+        <div className={toolPanelClassName("positioning")}>
         <ToolShell
           eyebrow="Tool 05"
           title="Brand Positioning Engine"
@@ -2021,72 +2154,84 @@ export function AILabTools() {
                   }
                 />
               </div>
+              <div className="sm:col-span-2">
+                <RunToolButton onClick={() => runTool("positioning")}>
+                  Generate Positioning Snapshot
+                </RunToolButton>
+              </div>
             </div>
             <div className="min-w-0 rounded-[0.95rem] border border-primary/18 bg-primary/[0.045] p-3.5 sm:p-4">
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
-                Directional intelligence
-              </p>
-              <div className="mt-4 grid gap-2.5">
-                <MetricCard
-                  label="Positioning statement"
-                  value={positioningOutput.statement}
-                  tone="primary"
-                />
-                <MetricCard label="Brand promise" value={positioningOutput.promise} />
-                <OutputList label="Tagline options" items={positioningOutput.taglines} />
-                <OutputList
-                  label="Communication pillars"
-                  items={positioningOutput.pillars}
-                />
-                <MetricCard
-                  label="Recommended tone of voice"
-                  value={positioningOutput.tone}
-                />
-                <MetricCard
-                  label="Recommended PxlBrief service"
-                  value={positioningOutput.service}
-                  tone="primary"
-                />
-                <MetricCard
-                  label="Suggested next step"
-                  value={positioningOutput.nextStep}
-                />
-              </div>
-              <PreviewDisclaimer />
-              <AiStrategyPanel
-                state={aiReadouts.positioning}
-                leadContext={{
-                  tool: "positioning",
-                  toolLabel: toolLabels.positioning,
-                  inputs: asRecord(positioning),
-                  directionalOutput: asRecord(positioningOutput),
-                  recommendedService: positioningOutput.service,
-                }}
-                onGenerate={() =>
-                  generateAiReadout(
-                    "positioning",
-                    asRecord(positioning),
-                    asRecord(positioningOutput)
-                  )
-                }
-              />
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <Link
-                  href="/services"
-                  className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
-                >
-                  View Services
-                </Link>
-                <Link
-                  href="/#consulting-chat"
-                  className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
-                >
-                  Run My Growth Diagnostic
-                </Link>
-              </div>
+              {toolHasRun.positioning ? (
+                <>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/85">
+                    Directional intelligence
+                  </p>
+                  <div className="mt-4 grid gap-2.5">
+                    <MetricCard
+                      label="Positioning statement"
+                      value={positioningOutput.statement}
+                      tone="primary"
+                    />
+                    <MetricCard label="Brand promise" value={positioningOutput.promise} />
+                    <OutputList label="Tagline options" items={positioningOutput.taglines} />
+                    <OutputList
+                      label="Communication pillars"
+                      items={positioningOutput.pillars}
+                    />
+                    <MetricCard
+                      label="Recommended tone of voice"
+                      value={positioningOutput.tone}
+                    />
+                    <MetricCard
+                      label="Recommended PxlBrief service"
+                      value={positioningOutput.service}
+                      tone="primary"
+                    />
+                    <MetricCard
+                      label="Suggested next step"
+                      value={positioningOutput.nextStep}
+                    />
+                  </div>
+                  <PreviewDisclaimer />
+                  <AiStrategyPanel
+                    state={aiReadouts.positioning}
+                    leadContext={{
+                      tool: "positioning",
+                      toolLabel: toolLabels.positioning,
+                      inputs: asRecord(positioning),
+                      directionalOutput: asRecord(positioningOutput),
+                      recommendedService: positioningOutput.service,
+                    }}
+                    onGenerate={() =>
+                      generateAiReadout(
+                        "positioning",
+                        asRecord(positioning),
+                        asRecord(positioningOutput)
+                      )
+                    }
+                  />
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    <Link
+                      href="/services"
+                      className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/30 bg-primary/[0.09] px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/44 hover:bg-primary/[0.14]"
+                    >
+                      View Services
+                    </Link>
+                    <Link
+                      href="/#consulting-chat"
+                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                    >
+                      Discuss With PxlBrief AI
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <PlaceholderResultPanel />
+              )}
             </div>
           </div>
         </ToolShell>
+        </div>
       ) : null}
     </div>
   )
