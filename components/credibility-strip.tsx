@@ -3,7 +3,7 @@ const CAPABILITIES = [
   "Brand Strategy",
   "Performance Growth",
   "CRM Systems",
-  "Founder Dashboards",
+  "Executive Intelligence",
   "Market Intelligence",
 ] as const
 

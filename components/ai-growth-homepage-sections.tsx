@@ -12,6 +12,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react"
+import { HomepageCaseMobileList } from "@/components/homepage-case-mobile-list"
 import { StrategicSessionBookingLink } from "@/components/strategic-session-booking-link"
 
 type Problem = {
@@ -518,7 +519,8 @@ export function CaseIntelligencePreviewSection() {
           text="These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system."
           align="center"
         />
-        <div className="grid grid-cols-1 gap-2.5 sm:gap-5 lg:grid-cols-3">
+        <HomepageCaseMobileList cases={caseScenarios} />
+        <div className="hidden grid-cols-1 gap-2.5 sm:grid sm:gap-5 lg:grid-cols-3">
           {caseScenarios.map((item, index) => (
             <MetallicCard key={item.title} className="p-3.5 sm:p-6">
               <div className="mb-3 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
