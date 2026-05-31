@@ -1527,8 +1527,30 @@ export function AILabTools() {
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:gap-5 lg:gap-6">
+      <div className="min-w-0 rounded-[0.95rem] border border-primary/24 bg-card/84 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:hidden">
+        <label className="block min-w-0">
+          <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-primary/90">
+            Choose AI Lab Tool
+          </span>
+          <span className="mt-1 block text-[0.75rem] leading-relaxed text-muted-foreground/82">
+            Select a tool to generate a directional readout.
+          </span>
+          <select
+            value={activeTool}
+            onChange={(event) => setActiveTool(event.target.value as ActiveTool)}
+            className="mt-3 h-12 w-full min-w-0 rounded-[0.8rem] border border-primary/36 bg-background/70 px-3.5 text-sm font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_34px_-28px_var(--glow-primary)] transition-colors focus:border-[var(--secondary-accent)] focus:ring-2 focus:ring-primary/12"
+          >
+            <option value="scorecard">AI Growth Scorecard</option>
+            <option value="recommender">AI Service Recommender</option>
+            <option value="roi">ROI Calculator</option>
+            <option value="campaign">Campaign Intelligence</option>
+            <option value="positioning">Brand Positioning Engine</option>
+          </select>
+        </label>
+      </div>
+
       <div
-        className="flex min-w-0 gap-1.5 overflow-x-auto overscroll-x-contain rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:gap-2 sm:rounded-[1.1rem] sm:p-2"
+        className="hidden min-w-0 gap-1.5 rounded-[0.95rem] border border-hairline bg-card/84 p-1.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:flex sm:gap-2 sm:rounded-[1.1rem] sm:p-2"
         role="tablist"
         aria-label="AI Lab tools"
       >
