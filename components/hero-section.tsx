@@ -1823,7 +1823,7 @@ export function HeroSection() {
                 </span>
               </p>
 
-              <div className="mx-auto mb-3 flex w-full max-w-xl flex-col gap-2 sm:flex-row sm:gap-2.5 md:mb-9 lg:mx-0">
+              <div className="mx-auto mb-3 flex w-full max-w-xl flex-col sm:flex-row md:mb-9 lg:mx-0">
                 <button
                   type="button"
                   onClick={startDiagnostic}
@@ -1831,13 +1831,6 @@ export function HeroSection() {
                 >
                   <span>Discuss With PxlBrief AI</span>
                 </button>
-                <a
-                  href="#ai-lab"
-                  className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/14 bg-card/62 px-6 py-3.5 text-sm font-semibold tracking-tight text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary/34 hover:bg-primary/[0.06] hover:text-foreground hover:shadow-[0_14px_40px_-28px_var(--glow-primary)] sm:w-auto sm:flex-1 lg:flex-none"
-                >
-                  <span className="md:hidden">Explore AI Lab</span>
-                  <span className="hidden md:inline">Enter AI Lab</span>
-                </a>
               </div>
 
               <p className="mb-1.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">

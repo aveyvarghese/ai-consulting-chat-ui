@@ -93,7 +93,7 @@ const systems: readonly SystemCard[] = [
 export function StrategicSystemsWeBuildSection() {
   return (
     <section
-      className="relative border-y border-hairline/70 bg-gradient-to-b from-background via-section-tint/40 to-background px-3 py-10 sm:px-4 sm:py-24 md:py-32"
+      className="section-bronze relative border-y border-hairline/70 px-3 py-10 sm:px-4 sm:py-24 md:py-32"
       aria-labelledby="strategic-systems-we-build-heading"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />

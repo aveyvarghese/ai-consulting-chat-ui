@@ -255,7 +255,7 @@ function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
 
 export function ProblemSection() {
   return (
-    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section className="section-deep relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -290,7 +290,7 @@ export function ProblemSection() {
 
 export function AIGrowthDiagnosticPreviewSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section className="section-alt relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.22]" />
       <div className="relative mx-auto grid max-w-6xl gap-7 sm:gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center lg:gap-14">
         <SectionHeader
@@ -364,7 +364,7 @@ export function AIGrowthDiagnosticPreviewSection() {
 
 export function AILabPreviewSection() {
   return (
-    <section id="ai-lab" className="relative scroll-mt-20 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section id="ai-lab" className="section-deep relative scroll-mt-20 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="AI Lab"
@@ -461,7 +461,7 @@ export function ExecutiveDashboardShowcaseSection() {
 
 export function IndustryPlaybooksPreviewSection() {
   return (
-    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section className="section-soft relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
           eyebrow="Industry playbooks"
@@ -510,7 +510,7 @@ export function IndustryPlaybooksPreviewSection() {
 
 export function CaseIntelligencePreviewSection() {
   return (
-    <section className="relative border-y border-hairline/70 bg-section-tint/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section className="section-alt relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.2]" />
       <div className="relative mx-auto max-w-6xl">
         <SectionHeader
@@ -564,7 +564,7 @@ export function CaseIntelligencePreviewSection() {
 
 export function FounderCredibilitySection() {
   return (
-    <section className="relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
+    <section className="section-dark relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
       <div className="relative mx-auto grid max-w-6xl gap-5 rounded-[1.1rem] border border-hairline bg-card/82 p-4 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.34] sm:rounded-[1.25rem] sm:p-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-10 md:p-10">
         <div className="pointer-events-none absolute -right-20 -top-24 hidden h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl sm:block" />
         <div className="relative">
@@ -600,7 +600,7 @@ export function FounderCredibilitySection() {
 
 export function FinalGrowthCtaSection() {
   return (
-    <section className="relative px-3 pb-14 pt-6 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
+    <section className="section-cta-glow relative px-3 pb-14 pt-6 sm:px-4 sm:pb-28 sm:pt-12 md:pb-36 md:pt-14">
       <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.15rem] border border-hairline bg-card/94 px-4 py-7 text-center shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl sm:rounded-[1.75rem] sm:px-10 sm:py-16 dark:bg-card/[0.42] md:px-14 md:py-20">
         <div className="pointer-events-none absolute -left-20 top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full bg-primary/[0.09] blur-3xl pxl-ambient-glow-drift sm:block" />
         <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-52 w-52 rounded-full bg-accent/[0.08] blur-2xl pxl-ambient-glow-drift-reverse sm:block" />

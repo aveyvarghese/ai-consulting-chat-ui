@@ -191,6 +191,10 @@
     linear-gradient(180deg, var(--section-hero) 0%, color-mix(in oklch, var(--section-hero) 82%, var(--section-deep)) 100%);
 }
 
+.section-dark,
+.section-alt,
+.section-deep,
+.section-soft,
 .section-mid,
 .section-graphite,
 .section-bronze,
@@ -199,6 +203,10 @@
   isolation: isolate;
 }
 
+.section-dark::before,
+.section-alt::before,
+.section-deep::before,
+.section-soft::before,
 .section-mid::before,
 .section-graphite::before,
 .section-bronze::before,
@@ -219,34 +227,50 @@
   opacity: 0.62;
 }
 
-.section-mid {
+.section-dark {
   background:
-    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--glow) 34%, transparent), transparent min(72vw, 24rem)),
-    linear-gradient(180deg, var(--section-mid) 0%, var(--section-deep) 100%);
+    radial-gradient(circle at 82% 8%, rgba(36, 177, 177, 0.045), transparent min(62vw, 24rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.006)),
+    #070707;
 }
 
+.section-alt,
+.section-mid {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(36, 177, 177, 0.06), transparent min(72vw, 24rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)),
+    #111315;
+}
+
+.section-soft,
 .section-graphite {
   background:
-    radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--glow) 58%, transparent), transparent min(70vw, 26rem)),
-    linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 72%, #101010) 0%, var(--section-deep) 100%);
+    radial-gradient(circle at 82% 12%, rgba(36, 177, 177, 0.055), transparent min(70vw, 26rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012)),
+    #151718;
 }
 
 .section-bronze {
   background:
-    radial-gradient(circle at 18% 12%, color-mix(in oklch, var(--glow) 72%, transparent), transparent min(74vw, 28rem)),
-    linear-gradient(180deg, var(--section-alt) 0%, var(--section-mid) 100%);
+    radial-gradient(circle at 18% 12%, rgba(255, 87, 34, 0.045), transparent min(74vw, 28rem)),
+    radial-gradient(circle at 84% 22%, rgba(36, 177, 177, 0.04), transparent min(62vw, 24rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.014)),
+    #151718;
 }
 
+.section-deep,
 .section-espresso {
   background:
-    radial-gradient(circle at 78% 18%, color-mix(in oklch, var(--accent-soft) 7%, transparent), transparent min(68vw, 24rem)),
-    linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 62%, var(--section-mid)) 0%, var(--section-deep) 100%);
+    radial-gradient(circle at 78% 18%, rgba(245, 245, 245, 0.026), transparent min(68vw, 24rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.008)),
+    #0a0a0a;
 }
 
 .section-cta-glow {
   background:
-    radial-gradient(circle at 50% 48%, color-mix(in oklch, var(--glow) 82%, transparent), transparent min(74vw, 34rem)),
-    linear-gradient(180deg, var(--section-mid) 0%, var(--section-cta) 100%);
+    radial-gradient(circle at 50% 48%, rgba(36, 177, 177, 0.075), transparent min(74vw, 34rem)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.012)),
+    #111315;
 }
 
 .cta-glass-panel {
@@ -257,28 +281,43 @@
 }
 
 @media (max-width: 767px) {
-  .section-mid {
+  .section-dark {
     background:
-      radial-gradient(circle at 18% 10%, color-mix(in oklch, var(--glow) 48%, transparent), transparent 18rem),
-      linear-gradient(180deg, var(--section-mid) 0%, var(--section-deep) 100%);
+      radial-gradient(circle at 84% 8%, rgba(36, 177, 177, 0.052), transparent 18rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.006)),
+      #070707;
   }
 
+  .section-alt,
+  .section-mid {
+    background:
+      radial-gradient(circle at 18% 10%, rgba(36, 177, 177, 0.07), transparent 18rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)),
+      #111315;
+  }
+
+  .section-soft,
   .section-graphite {
     background:
-      radial-gradient(circle at 86% 8%, color-mix(in oklch, var(--glow) 70%, transparent), transparent 19rem),
-      linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 72%, #101010) 0%, var(--section-deep) 100%);
+      radial-gradient(circle at 86% 8%, rgba(36, 177, 177, 0.065), transparent 19rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012)),
+      #151718;
   }
 
   .section-bronze {
     background:
-      radial-gradient(circle at 16% 10%, color-mix(in oklch, var(--glow) 90%, transparent), transparent 20rem),
-      linear-gradient(180deg, var(--section-alt) 0%, var(--section-mid) 100%);
+      radial-gradient(circle at 16% 10%, rgba(255, 87, 34, 0.052), transparent 20rem),
+      radial-gradient(circle at 86% 16%, rgba(36, 177, 177, 0.046), transparent 18rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.014)),
+      #151718;
   }
 
+  .section-deep,
   .section-espresso {
     background:
-      radial-gradient(circle at 82% 12%, color-mix(in oklch, var(--accent-soft) 9%, transparent), transparent 18rem),
-      linear-gradient(180deg, color-mix(in oklch, var(--section-alt) 62%, var(--section-mid)) 0%, var(--section-deep) 100%);
+      radial-gradient(circle at 82% 12%, rgba(245, 245, 245, 0.03), transparent 18rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.008)),
+      #0a0a0a;
   }
 }
 
