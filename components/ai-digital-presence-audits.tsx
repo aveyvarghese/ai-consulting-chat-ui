@@ -661,31 +661,24 @@ export function AiDigitalPresenceAudits() {
             visibility, answer readiness, or generative search readiness.
           </p>
 
-          <div className="mt-4 rounded-[0.9rem] border border-hairline bg-background/32 p-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:hidden">
-            <label className="block min-w-0">
-              <span className="mb-1.5 block text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/72">
-                Choose Audit Tool
-              </span>
-              <select
-                value={mobileActiveTool}
-                onChange={(event) => {
-                  const nextTool = event.target.value as AuditToolId | ""
-                  setMobileActiveTool(nextTool)
-                  if (nextTool) setActiveTool(nextTool)
-                }}
-                className="h-10 w-full min-w-0 rounded-[0.75rem] border border-hairline/80 bg-background/55 px-3 text-[0.8125rem] font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
-              >
-                <option value="">Choose Audit Tool</option>
-                {auditTools.map((tool) => (
-                  <option key={tool.id} value={tool.id}>
-                    {tool.label} Audit
-                  </option>
-                ))}
-              </select>
-            </label>
-            <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground/78">
-              Select what you want PxlBrief AI to audit.
-            </p>
+          <div className="mt-4 rounded-[0.9rem] border border-hairline bg-background/32 p-2 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:hidden">
+            <select
+              aria-label="Choose Audit Tool"
+              value={mobileActiveTool}
+              onChange={(event) => {
+                const nextTool = event.target.value as AuditToolId | ""
+                setMobileActiveTool(nextTool)
+                if (nextTool) setActiveTool(nextTool)
+              }}
+              className="h-10 w-full min-w-0 rounded-[0.75rem] border border-hairline/80 bg-background/55 px-3 text-[0.8125rem] font-semibold text-foreground outline-none shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+            >
+              <option value="">Choose Audit Tool</option>
+              {auditTools.map((tool) => (
+                <option key={tool.id} value={tool.id}>
+                  {tool.label} Audit
+                </option>
+              ))}
+            </select>
           </div>
 
           <div
