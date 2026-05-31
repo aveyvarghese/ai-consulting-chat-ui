@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 import {
   Sheet,
@@ -11,8 +12,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { STRATEGY_CALL_BOOKING_URL } from "@/lib/booking"
+import { cn } from "@/lib/utils"
 
 const nav = [
+  { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
   { href: "/ai-growth-audit", label: "AI Growth Audit" },
   { href: "/ai-lab", label: "AI Lab" },
@@ -20,7 +23,13 @@ const nav = [
   { href: "/contact", label: "Contact" },
 ] as const
 
+function isActivePath(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname.startsWith(href)
+}
+
 export function SiteHeaderMobileNav() {
+  const pathname = usePathname()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -56,16 +65,26 @@ export function SiteHeaderMobileNav() {
           className="relative flex flex-col gap-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4"
           aria-label="Primary mobile"
         >
-          {nav.map(({ href, label }) => (
-            <SheetClose asChild key={href}>
-              <Link
-                href={href}
-                className="touch-manipulation rounded-[0.85rem] border border-primary/10 bg-foreground/[0.025] px-3.5 py-3 text-sm font-semibold text-foreground/92 shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/22 hover:bg-primary/[0.055] active:bg-foreground/[0.08]"
-              >
-                {label}
-              </Link>
-            </SheetClose>
-          ))}
+          {nav.map(({ href, label }) => {
+            const isActive = isActivePath(pathname, href)
+
+            return (
+              <SheetClose asChild key={href}>
+                <Link
+                  href={href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "relative touch-manipulation rounded-[0.85rem] border px-3.5 py-3 text-sm font-semibold shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all [-webkit-tap-highlight-color:transparent] before:absolute before:inset-y-2.5 before:left-2 before:w-0.5 before:scale-y-0 before:rounded-full before:bg-primary before:transition-transform before:duration-300 hover:border-primary/22 hover:bg-primary/[0.055] active:bg-foreground/[0.08]",
+                    isActive
+                      ? "border-primary/24 bg-primary/[0.08] pl-4 text-primary before:scale-y-100"
+                      : "border-primary/10 bg-foreground/[0.025] text-foreground/92"
+                  )}
+                >
+                  {label}
+                </Link>
+              </SheetClose>
+            )
+          })}
           <SheetClose asChild>
             <a
               href={STRATEGY_CALL_BOOKING_URL}
