@@ -24,10 +24,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-primary/10 bg-header-bg/88 shadow-[0_1px_0_rgba(255,255,255,0.035),0_18px_48px_-36px_rgba(0,0,0,0.85)] backdrop-blur-xl supports-[backdrop-filter]:bg-header-bg/74 md:backdrop-blur-2xl">
-      <div className="mx-auto flex h-12 max-w-6xl min-w-0 flex-nowrap items-center justify-between gap-3 pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pt-[max(0px,env(safe-area-inset-top))] sm:h-14 md:h-16 md:gap-6 md:px-6 md:pt-0">
+      <div className="mx-auto flex h-14 max-w-6xl min-w-0 flex-nowrap items-center justify-between gap-3 pl-[max(0.875rem,env(safe-area-inset-left))] pr-[max(0.875rem,env(safe-area-inset-right))] pt-[max(0px,env(safe-area-inset-top))] sm:h-14 md:h-16 md:gap-6 md:px-6 md:pt-0">
         <Link
           href="/"
-          className="group min-w-0 flex-1 touch-manipulation py-1.5 text-[0.9375rem] font-semibold leading-none tracking-tight text-foreground transition-opacity hover:opacity-95 sm:text-base md:flex-none md:py-2 md:text-xl md:leading-tight"
+          className="group min-w-0 flex-1 touch-manipulation py-1.5 text-[1.28rem] font-bold leading-none tracking-[-0.025em] text-foreground transition-opacity hover:opacity-95 sm:text-base sm:font-semibold sm:tracking-tight md:flex-none md:py-2 md:text-xl md:leading-tight"
         >
           <span className="block max-w-full truncate">
             Pxl<span className="text-primary transition-colors group-hover:text-primary/88">Brief</span>

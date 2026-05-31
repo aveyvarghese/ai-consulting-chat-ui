@@ -145,6 +145,22 @@
     0 18px 42px -24px rgba(255, 87, 34, 0.58);
 }
 
+@media (max-width: 639.98px) {
+  .pxl-mobile-primary-cta {
+    min-height: 3.25rem;
+    border-radius: 0.78rem;
+    padding: 0.78rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .pxl-mobile-secondary-cta {
+    min-height: 3rem;
+    border-radius: 0.72rem;
+    padding: 0.7rem 1.15rem;
+    font-size: 0.8125rem;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .cta-gradient-motion {
     animation: pxl-cta-gradient-motion 5.5s ease-in-out infinite;

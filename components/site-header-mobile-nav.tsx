@@ -35,10 +35,10 @@ export function SiteHeaderMobileNav() {
       <SheetTrigger asChild>
         <button
           type="button"
-          className="inline-flex size-9 shrink-0 touch-manipulation items-center justify-center rounded-lg border border-primary/10 bg-foreground/[0.025] text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors hover:bg-primary/[0.06] active:bg-foreground/[0.08] [-webkit-tap-highlight-color:transparent] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:size-10"
+          className="inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-[0.8rem] border border-primary/16 bg-foreground/[0.035] text-foreground shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-colors hover:bg-primary/[0.06] active:bg-foreground/[0.08] [-webkit-tap-highlight-color:transparent] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 sm:size-10 sm:rounded-lg"
           aria-label="Open menu"
         >
-          <Menu className="size-[1.125rem]" strokeWidth={1.75} aria-hidden />
+          <Menu className="size-[1.45rem] sm:size-[1.125rem]" strokeWidth={2.25} aria-hidden />
         </button>
       </SheetTrigger>
       <SheetContent
@@ -53,16 +53,16 @@ export function SiteHeaderMobileNav() {
           className="pointer-events-none absolute inset-0 opacity-[0.14] pxl-data-grid"
           aria-hidden
         />
-        <SheetHeader className="relative border-b border-primary/10 px-4 pb-4 pt-2 text-left sm:px-5">
-          <SheetTitle className="text-base font-semibold tracking-tight text-foreground">
+        <SheetHeader className="relative border-b border-primary/10 px-4 pb-4 pt-3 text-left sm:px-5 sm:pt-2">
+          <SheetTitle className="text-[1.28rem] font-bold tracking-[-0.025em] text-foreground sm:text-base sm:font-semibold sm:tracking-tight">
             Pxl<span className="text-primary">Brief</span>
           </SheetTitle>
-          <p className="mt-1 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-muted-foreground/70">
+          <p className="mt-1.5 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-muted-foreground/70 sm:mt-1 sm:text-[0.6875rem]">
             Executive AI growth systems
           </p>
         </SheetHeader>
         <nav
-          className="relative flex flex-col gap-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4"
+          className="relative flex flex-col gap-1.5 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:gap-1 sm:px-4"
           aria-label="Primary mobile"
         >
           {nav.map(({ href, label }) => {
@@ -74,7 +74,7 @@ export function SiteHeaderMobileNav() {
                   href={href}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "relative touch-manipulation rounded-[0.85rem] border px-3.5 py-3 text-sm font-semibold shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all [-webkit-tap-highlight-color:transparent] before:absolute before:inset-y-2.5 before:left-2 before:w-0.5 before:scale-y-0 before:rounded-full before:bg-primary before:transition-transform before:duration-300 hover:border-primary/22 hover:bg-primary/[0.055] active:bg-foreground/[0.08]",
+                    "relative touch-manipulation rounded-[0.9rem] border px-4 py-3.5 text-[0.9375rem] font-semibold shadow-[inset_0_1px_0_0_var(--shine-inset)] transition-all [-webkit-tap-highlight-color:transparent] before:absolute before:inset-y-2.5 before:left-2 before:w-0.5 before:scale-y-0 before:rounded-full before:bg-primary before:transition-transform before:duration-300 hover:border-primary/22 hover:bg-primary/[0.055] active:bg-foreground/[0.08] sm:rounded-[0.85rem] sm:px-3.5 sm:py-3 sm:text-sm",
                     isActive
                       ? "border-primary/24 bg-primary/[0.08] pl-4 text-primary before:scale-y-100"
                       : "border-primary/10 bg-foreground/[0.025] text-foreground/92"
@@ -90,7 +90,7 @@ export function SiteHeaderMobileNav() {
               href={STRATEGY_CALL_BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 touch-manipulation rounded-[0.85rem] border border-primary/32 bg-gradient-to-b from-primary/15 to-primary/[0.075] px-3.5 py-3 text-center text-sm font-semibold leading-snug tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 hover:bg-primary/12"
+              className="mt-3 touch-manipulation rounded-[0.9rem] border border-primary/32 bg-gradient-to-b from-primary/15 to-primary/[0.075] px-4 py-3.5 text-center text-[0.9375rem] font-semibold leading-snug tracking-tight text-primary shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 hover:bg-primary/12 sm:rounded-[0.85rem] sm:px-3.5 sm:py-3 sm:text-sm"
             >
               Strategic session
             </a>

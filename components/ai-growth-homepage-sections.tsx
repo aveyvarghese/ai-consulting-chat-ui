@@ -616,13 +616,13 @@ export function FinalGrowthCtaSection() {
           <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-3">
             <a
               href="#consulting-chat"
-              className="cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
+              className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
             >
               Discuss With PxlBrief AI
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"
-              className="inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
+              className="pxl-mobile-secondary-cta inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/30 bg-primary/[0.06] px-8 py-3.5 text-sm font-semibold tracking-tight text-primary transition-all duration-500 hover:border-primary/45 hover:bg-primary/12"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>
