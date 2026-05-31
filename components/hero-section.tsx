@@ -1807,11 +1807,8 @@ export function HeroSection() {
         <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
           <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
             <div className="text-center lg:text-left">
-              <div className="mb-3 md:mb-8 lg:mb-9">
-                <span className="inline-flex max-w-full rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-primary/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[0.6875rem] sm:tracking-[0.22em]">
-                  PxlBrief AI diagnostic
-                </span>
-                <span className="mt-3 block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:mt-6 md:text-2xl">
+              <div className="mb-3 md:mb-6 lg:mb-7">
+                <span className="block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:text-2xl">
                   Pxl<span className="text-primary">Brief</span>
                 </span>
               </div>
@@ -1905,7 +1902,7 @@ export function HeroSection() {
               </div>
 
               <div
-                className="mx-auto mb-5 grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:mb-12 md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
+                className="mx-auto grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:flex md:max-w-2xl md:flex-wrap md:justify-center md:gap-2.5 lg:mx-0 lg:justify-start"
                 role="group"
                 aria-label="Suggested prompts"
               >
@@ -1925,10 +1922,6 @@ export function HeroSection() {
                 ))}
               </div>
 
-              <p className="mx-auto max-w-xl text-[0.75rem] leading-relaxed text-muted-foreground/65 md:text-sm lg:mx-0">
-                A premium diagnostic layer for business bottlenecks, AI
-                opportunity, and the next system to build.
-              </p>
             </div>
 
             <div className="relative mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">

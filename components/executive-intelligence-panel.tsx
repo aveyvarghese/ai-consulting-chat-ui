@@ -51,8 +51,6 @@ const auditTools = [
 export function ExecutiveIntelligencePanel({
   compact,
 }: ExecutiveIntelligencePanelProps) {
-  const badges = ["AI Audit Tools", "Live", "Digital Presence"]
-
   return (
     <div
       className={cn(
@@ -96,38 +94,17 @@ export function ExecutiveIntelligencePanel({
       <div className="relative z-[1]">
         <div
           className={cn(
-            "flex flex-col border-b border-hairline/70",
-            compact ? "mb-3 gap-3 pb-3" : "mb-5 gap-4 pb-5"
+            "border-b border-hairline/70",
+            compact ? "mb-3 pb-3" : "mb-5 pb-5"
           )}
         >
-          <div className="flex flex-wrap gap-2">
-            {badges.map((badge) => (
-              <span
-                key={badge}
-                className="rounded-full border border-primary/14 bg-primary/[0.055] px-2.5 py-1 text-[0.54rem] font-semibold uppercase tracking-[0.13em] text-primary/85 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:text-[0.56rem]"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75 sm:text-[0.625rem] sm:tracking-[0.2em]">
-                Digital presence preview
-              </p>
-              <p className="mt-1 text-[0.95rem] font-semibold tracking-tight text-foreground/95 sm:mt-1.5 sm:text-base">
-                AI audit tools
-              </p>
-            </div>
-            <div className="flex items-center gap-2 rounded-full border border-primary/22 bg-primary/[0.07] px-2.5 py-1 shadow-[inset_0_1px_0_0_var(--shine-inset)]">
-              <span className="relative flex h-2 w-2" aria-hidden>
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40 opacity-60 motion-reduce:animate-none" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-              </span>
-              <span className="text-[0.625rem] font-medium tabular-nums text-primary/90">
-                Live
-              </span>
-            </div>
+          <div>
+            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75 sm:text-[0.625rem] sm:tracking-[0.2em]">
+              Digital presence preview
+            </p>
+            <p className="mt-1 text-[0.95rem] font-semibold tracking-tight text-foreground/95 sm:mt-1.5 sm:text-base">
+              AI audit tools
+            </p>
           </div>
         </div>
 
@@ -178,7 +155,7 @@ export function ExecutiveIntelligencePanel({
 
         <div className={cn("border-t border-hairline/70", compact ? "mt-3 pt-3" : "mt-5 pt-4")}>
           <Link
-            href="/ai-lab"
+            href="/ai-lab#ai-audit-tools"
             className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
           >
             Explore AI Audit Tools

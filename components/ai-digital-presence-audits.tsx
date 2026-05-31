@@ -647,7 +647,10 @@ export function AiDigitalPresenceAudits() {
   )
 
   return (
-    <section className="mt-5 min-w-0 rounded-[1rem] border border-hairline bg-card/86 p-3.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:mt-6 sm:rounded-[1.25rem] sm:p-6 md:p-7">
+    <section
+      id="ai-audit-tools"
+      className="mt-5 min-w-0 scroll-mt-24 rounded-[1rem] border border-hairline bg-card/86 p-3.5 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl dark:bg-card/[0.34] sm:mt-6 sm:scroll-mt-28 sm:rounded-[1.25rem] sm:p-6 md:p-7"
+    >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-5">
         <div className="min-w-0">
           <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-primary/85">
