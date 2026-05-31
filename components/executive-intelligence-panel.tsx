@@ -99,7 +99,7 @@ export function ExecutiveIntelligencePanel({
           )}
         >
           <div>
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground/75 sm:text-[0.625rem] sm:tracking-[0.2em]">
+            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[var(--secondary-accent)] sm:text-[0.625rem] sm:tracking-[0.2em]">
               Digital presence preview
             </p>
             <p className="mt-1 text-[0.95rem] font-semibold tracking-tight text-foreground/95 sm:mt-1.5 sm:text-base">

@@ -28,7 +28,7 @@ export function CredibilityStrip() {
         aria-hidden
       />
       <div className="relative z-[1] mx-auto max-w-6xl px-3 sm:px-4 md:px-6">
-        <p className="mb-5 text-center text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground/75 md:mb-6">
+        <p className="mb-5 text-center text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[var(--secondary-accent)] md:mb-6">
           AI-native growth systems for founder-led businesses
         </p>
 

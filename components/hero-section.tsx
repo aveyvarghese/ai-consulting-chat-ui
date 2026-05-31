@@ -1807,12 +1807,6 @@ export function HeroSection() {
         <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl">
           <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,0.98fr)_minmax(390px,0.82fr)] lg:gap-10 xl:gap-14">
             <div className="text-center lg:text-left">
-              <div className="mb-3 md:mb-6 lg:mb-7">
-                <span className="block text-lg font-semibold tracking-tight text-foreground sm:text-xl md:text-2xl">
-                  Pxl<span className="text-primary">Brief</span>
-                </span>
-              </div>
-
               <h1 className="mx-auto mb-3 max-w-4xl text-balance text-[2rem] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground min-[390px]:text-[2.18rem] sm:text-[2.45rem] md:mb-8 md:text-5xl md:leading-[1.03] md:tracking-[-0.045em] lg:mx-0 lg:text-[3.45rem] xl:text-[3.85rem]">
                 Run Your AI Growth Diagnostic
               </h1>

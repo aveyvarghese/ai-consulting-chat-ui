@@ -471,7 +471,7 @@ export function IndustryPlaybooksPreviewSection() {
         <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
           {industryPlaybooks.map((playbook) => (
             <MetallicCard key={playbook.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-5">
-              <h3 className="text-base font-semibold tracking-tight text-foreground">
+              <h3 className="text-base font-semibold tracking-tight text-[var(--secondary-accent)]">
                 {playbook.title}
               </h3>
               <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
