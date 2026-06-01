@@ -135,15 +135,6 @@ const suggestionChips: { label: string; prompt: string }[] = [
   },
 ]
 
-const floatingChipPositions = [
-  "md:absolute md:-left-6 md:top-2 md:w-auto md:-rotate-2",
-  "md:absolute md:right-4 md:-top-3 md:w-auto md:rotate-2",
-  "md:absolute md:-right-8 md:top-20 md:w-auto md:rotate-1",
-  "md:absolute md:-left-8 md:bottom-8 md:w-auto md:rotate-1",
-  "md:absolute md:left-1/2 md:-bottom-5 md:w-auto md:-translate-x-1/2",
-  "md:absolute md:right-8 md:bottom-4 md:w-auto md:-rotate-2",
-] as const
-
 type DiagnosticStepId =
   | "businessType"
   | "mainChallenge"
@@ -1817,56 +1808,90 @@ export function HeroSection() {
       </div>
 
       {!hasMessages ? (
-        <div className="relative z-10 mx-auto w-full min-w-0 max-w-[1280px]">
-          <div className="grid items-center gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(390px,0.86fr)] lg:gap-10 xl:gap-16">
-            <div className="text-center lg:text-left">
-              <h1 className="mx-auto mb-2.5 max-w-4xl text-balance text-[2.65rem] font-semibold leading-[0.94] tracking-[-0.065em] text-foreground min-[390px]:text-[3rem] sm:text-[3.7rem] md:mb-7 md:text-[4.4rem] md:leading-[0.92] lg:mx-0 lg:text-[4.75rem] xl:text-[5.6rem]">
-                Run Your AI Growth Diagnostic
-              </h1>
+        <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-[1180px] flex-col items-center text-center">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/[0.055] px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.2em] text-accent/90 shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:mb-5 sm:px-4 sm:text-[0.6875rem]">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_14px_rgba(36,177,177,0.85)]" />
+            PxlBrief AI Growth Interface
+          </div>
 
-              <p className="mx-auto mb-3 max-w-xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-8 md:max-w-2xl md:text-lg md:leading-relaxed lg:mx-0 lg:max-w-xl">
-                <span className="md:hidden">
-                  Answer a few focused questions and PxlBrief AI will identify
-                  your likely bottleneck, AI opportunity, and next step.
-                </span>
-                <span className="hidden md:inline">
-                  Answer a few focused questions and PxlBrief AI will identify
-                  your likely growth bottleneck, AI opportunity, and recommended
-                  next step.
-                </span>
-              </p>
+          <h1 className="mx-auto mb-2.5 max-w-5xl text-balance text-[2.65rem] font-semibold leading-[0.94] tracking-[-0.065em] text-foreground min-[390px]:text-[3rem] sm:text-[3.85rem] md:mb-6 md:text-[4.75rem] md:leading-[0.9] lg:text-[5.7rem] xl:text-[6.35rem]">
+            Run Your AI Growth Diagnostic
+          </h1>
 
-              <div className="mx-auto mb-4 flex w-full max-w-xl flex-col gap-2.5 sm:flex-row md:mb-8 lg:mx-0">
-                <button
-                  type="button"
-                  onClick={startDiagnostic}
-                  className="pxl-mobile-secondary-cta cta-secondary-ai inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border px-6 py-3 text-sm font-semibold tracking-tight transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1 lg:flex-none"
-                >
-                  <span>Discuss With PxlBrief AI</span>
-                </button>
-                <StrategicSessionBookingLink
-                  source="homepage_hero"
-                  className="pxl-mobile-primary-cta cta-gradient-motion cta-primary-booking inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto sm:px-6"
-                >
-                  Book Strategic Session
-                </StrategicSessionBookingLink>
+          <p className="mx-auto mb-4 max-w-2xl text-pretty text-[0.9375rem] font-normal leading-[1.55] text-muted-foreground/90 md:mb-7 md:text-lg md:leading-relaxed">
+            <span className="md:hidden">
+              Answer a few focused questions and PxlBrief AI will identify your
+              likely bottleneck, AI opportunity, and next step.
+            </span>
+            <span className="hidden md:inline">
+              Answer a few focused questions and PxlBrief AI will identify your
+              likely growth bottleneck, AI opportunity, and recommended next
+              step.
+            </span>
+          </p>
+
+          <div className="mx-auto mb-5 flex w-full max-w-xl flex-col justify-center gap-2.5 sm:flex-row md:mb-8">
+            <button
+              type="button"
+              onClick={startDiagnostic}
+              className="pxl-mobile-secondary-cta cta-secondary-ai inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border px-6 py-3 text-sm font-semibold tracking-tight transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985] motion-reduce:transition-colors sm:w-auto sm:flex-1"
+            >
+              <span>Discuss With PxlBrief AI</span>
+            </button>
+            <StrategicSessionBookingLink
+              source="homepage_hero"
+              className="pxl-mobile-primary-cta cta-gradient-motion cta-primary-booking inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto sm:flex-1 sm:px-6"
+            >
+              Book Strategic Session
+            </StrategicSessionBookingLink>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-5xl">
+            <div className="pointer-events-none absolute -inset-x-8 -inset-y-10 rounded-[2rem] bg-[radial-gradient(circle_at_50%_12%,rgba(36,177,177,0.2),transparent_38%),radial-gradient(circle_at_82%_72%,rgba(255,87,34,0.13),transparent_32%)] blur-3xl" />
+            <div className="neural-grid-bg pointer-events-none absolute inset-x-4 top-12 hidden h-[68%] rounded-[2rem] border border-primary/10 opacity-50 md:block" />
+
+            <div className="intelligence-glass-panel relative overflow-hidden rounded-[1.25rem] border p-3 text-left sm:rounded-[1.55rem] sm:p-4 md:p-5">
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/55 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,245,245,0.08),transparent_36%)]" />
+
+              <div className="relative mb-3 flex flex-col gap-3 rounded-[1rem] border border-hairline/70 bg-background/35 px-3 py-3 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-4">
+                <div>
+                  <p className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--secondary-accent)]">
+                    AI command surface
+                  </p>
+                  <p className="mt-1 text-sm font-semibold tracking-tight text-foreground/95">
+                    Diagnostic console ready
+                  </p>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-[0.65rem] text-muted-foreground/75 sm:min-w-[18rem]">
+                  <span className="rounded-full border border-accent/18 bg-accent/[0.05] px-2 py-1">
+                    Growth scan
+                  </span>
+                  <span className="rounded-full border border-primary/18 bg-primary/[0.055] px-2 py-1">
+                    AI map
+                  </span>
+                  <span className="rounded-full border border-[rgba(255,87,34,0.22)] bg-[rgba(255,87,34,0.055)] px-2 py-1">
+                    Next step
+                  </span>
+                </div>
               </div>
 
-              <p className="mb-1.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em] lg:text-left">
+              <p className="relative mb-1.5 text-center text-[0.625rem] font-medium uppercase tracking-[0.18em] text-primary/80 md:mb-3 md:text-[0.6875rem] md:tracking-[0.22em]">
                 Start here: tell us what kind of business you run and what you
                 want to improve.
               </p>
+
               <div
                 ref={diagnosticPanelRef}
-                className={`intelligence-glass-panel relative mx-auto mb-4 w-full min-w-0 max-w-2xl rounded-[1.125rem] border p-1.5 transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:mb-6 md:p-2 lg:mx-0 ${
+                className={`relative mx-auto mb-4 w-full min-w-0 max-w-3xl rounded-[1.125rem] border border-transparent p-1.5 transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:mb-5 md:p-2 ${
                   isFocused || isLandingHighlighted
-                    ? "drop-shadow-[0_0_32px_rgba(36,177,177,0.18)]"
+                    ? "drop-shadow-[0_0_34px_rgba(36,177,177,0.22)]"
                     : ""
                 }`}
               >
                 <div
-                  className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-accent/25 via-primary/[0.12] to-[var(--secondary-accent)]/25 blur-md transition-opacity duration-500 ease-out ${
-                    isFocused || isLandingHighlighted ? "opacity-90" : "opacity-35"
+                  className={`absolute -inset-px rounded-[1.125rem] bg-gradient-to-r from-accent/30 via-primary/[0.14] to-[var(--secondary-accent)]/30 blur-md transition-opacity duration-500 ease-out ${
+                    isFocused || isLandingHighlighted ? "opacity-90" : "opacity-42"
                   }`}
                   style={{
                     animation: "pulse-glow 4s ease-in-out infinite",
@@ -1875,10 +1900,10 @@ export function HeroSection() {
 
                 <form onSubmit={handleSubmit}>
                   <div
-                    className={`relative flex min-w-0 items-center rounded-[0.95rem] border bg-background/45 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`relative flex min-w-0 items-center rounded-[0.95rem] border bg-background/55 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isFocused
-                        ? "border-accent/45 shadow-[0_18px_48px_-30px_rgba(36,177,177,0.55),inset_0_1px_0_0_var(--shine-inset)] ring-1 ring-accent/15"
-                        : "border-accent/18 hover:border-accent/34 hover:bg-background/55"
+                        ? "border-accent/50 shadow-[0_18px_58px_-30px_rgba(36,177,177,0.7),inset_0_1px_0_0_var(--shine-inset)] ring-1 ring-accent/18"
+                        : "border-accent/18 hover:border-accent/34 hover:bg-background/65"
                     }`}
                   >
                     <input
@@ -1889,7 +1914,7 @@ export function HeroSection() {
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
                       placeholder={displayedPlaceholder}
-                      className="min-h-[3.125rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-3.5 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.75rem] md:px-6 md:py-6 md:text-lg"
+                      className="min-h-[3.125rem] min-w-0 flex-1 touch-manipulation bg-transparent px-4 py-3.5 text-[0.9375rem] font-normal leading-snug text-foreground outline-none placeholder:text-muted-foreground/45 sm:px-5 sm:py-5 md:min-h-[3.9rem] md:px-6 md:py-6 md:text-lg"
                     />
                     <button
                       type="submit"
@@ -1903,11 +1928,11 @@ export function HeroSection() {
               </div>
 
               <div
-                className="relative mx-auto grid w-full min-w-0 max-w-2xl grid-cols-2 gap-x-2 gap-y-2 justify-items-stretch md:min-h-28 md:max-w-2xl lg:mx-0"
+                className="relative mx-auto grid w-full min-w-0 max-w-3xl grid-cols-2 gap-2 justify-items-stretch md:grid-cols-4"
                 role="group"
                 aria-label="Suggested prompts"
               >
-                {suggestionChips.map(({ label, prompt }, index) => (
+                {suggestionChips.map(({ label, prompt }) => (
                   <button
                     key={prompt}
                     type="button"
@@ -1916,29 +1941,19 @@ export function HeroSection() {
                       setInputValue(prompt)
                       inputRef.current?.focus()
                     }}
-                    className={`floating-audit-card flex min-h-9 w-full touch-manipulation items-center justify-center rounded-full border px-1.5 py-1.5 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-accent/34 hover:bg-accent/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 md:min-h-11 md:justify-start md:px-4 md:py-2.5 md:text-left md:text-sm motion-reduce:transition-colors ${floatingChipPositions[index] ?? ""}`}
+                    className="floating-audit-card flex min-h-9 w-full touch-manipulation items-center justify-center rounded-full border px-1.5 py-1.5 text-center text-[0.75rem] font-medium leading-snug text-pretty text-muted-foreground/90 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-accent/34 hover:bg-accent/[0.065] hover:text-foreground active:scale-[0.99] disabled:pointer-events-none disabled:opacity-45 md:min-h-11 md:px-3 md:py-2.5 md:text-sm motion-reduce:transition-colors"
                   >
                     {label}
                   </button>
                 ))}
               </div>
 
-              <div className="relative mx-auto mt-4 w-full max-w-sm lg:hidden">
+              <div className="relative mx-auto mt-4 w-full max-w-2xl md:mt-5">
                 <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-accent/[0.05] blur-xl" />
                 <ExecutiveIntelligencePanel compact />
               </div>
-
-            </div>
-
-            <div className="relative mx-auto hidden w-full max-w-md min-w-0 lg:mx-0 lg:block lg:max-w-none">
-              <div className="pointer-events-none absolute -inset-8 rounded-[2rem] bg-gradient-to-br from-accent/[0.1] via-transparent to-[var(--secondary-accent)]/[0.08] blur-3xl" />
-              <div className="neural-grid-bg pointer-events-none absolute inset-0 translate-x-5 translate-y-5 rounded-[1.5rem] border border-primary/8 opacity-65" />
-              <div className="relative">
-                <ExecutiveIntelligencePanel />
-              </div>
             </div>
           </div>
-
         </div>
       ) : null}
 
