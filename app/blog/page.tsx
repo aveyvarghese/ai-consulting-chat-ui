@@ -109,7 +109,7 @@ export default function BlogPage() {
           </p>
           <StrategicSessionBookingLink
             source="blog_listing_final_cta"
-            className="cta-gradient-motion mt-6 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46 sm:w-auto"
+            className="cta-gradient-motion cta-primary-booking mt-6 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46 sm:w-auto"
           >
             Book Strategic Session
           </StrategicSessionBookingLink>

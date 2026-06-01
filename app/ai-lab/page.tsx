@@ -123,7 +123,7 @@ function PrimaryCta({ children }: { children: ReactNode }) {
   return (
     <Link
       href="/#consulting-chat"
-      className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/35 bg-gradient-to-b from-primary via-primary/95 to-primary/82 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),0_18px_48px_-24px_var(--glow-primary)] transition-all duration-500 hover:border-primary/48 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.26),0_24px_58px_-20px_var(--glow-primary)] active:scale-[0.985] sm:w-auto"
+      className="pxl-mobile-secondary-cta cta-secondary-ai inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border px-6 py-3 text-sm font-semibold tracking-tight transition-all duration-500 active:scale-[0.985] sm:w-auto"
     >
       {children}
     </Link>
@@ -151,7 +151,7 @@ function BookingCta({ source }: { source: string }) {
   return (
     <StrategicSessionBookingLink
       source={source}
-      className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+      className="pxl-mobile-primary-cta cta-gradient-motion cta-primary-booking inline-flex min-h-[3.125rem] w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-6 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
     >
       Book Strategic Session
     </StrategicSessionBookingLink>

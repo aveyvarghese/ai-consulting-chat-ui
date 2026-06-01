@@ -93,81 +93,88 @@ const systems: readonly SystemCard[] = [
 export function StrategicSystemsWeBuildSection() {
   return (
     <section
-      className="section-bronze relative border-y border-hairline/70 px-3 py-10 sm:px-4 sm:py-24 md:py-32"
+      className="relative z-10 w-full overflow-hidden border-t border-white/5 bg-black px-4 py-20 text-white md:px-8 md:py-28"
       aria-labelledby="strategic-systems-we-build-heading"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
       <div
-        className="pointer-events-none absolute left-[8%] top-[22%] h-[min(52vw,380px)] w-[min(52vw,380px)] rounded-full bg-primary/[0.04] blur-[100px] motion-reduce:opacity-80"
+        className="pointer-events-none absolute left-[-10%] top-1/3 h-[80vw] max-h-[550px] w-[80vw] max-w-[550px] rounded-full bg-purple-500/[0.01] blur-[140px]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute bottom-[12%] right-[6%] h-[min(48vw,340px)] w-[min(48vw,340px)] rounded-full bg-ring/[0.055] blur-[90px] motion-reduce:opacity-80"
+        className="pointer-events-none absolute bottom-1/3 right-[-10%] h-[80vw] max-h-[550px] w-[80vw] max-w-[550px] rounded-full bg-cyan-500/[0.01] blur-[140px]"
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-6xl">
-        <header className="mx-auto mb-7 max-w-3xl text-center sm:mb-12 md:mb-20 md:text-left">
-          <p className="mb-3 text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-primary/80">
+      <div className="relative mx-auto max-w-7xl space-y-16">
+        <header className="max-w-3xl space-y-3">
+          <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
             Growth architecture
           </p>
           <h2
             id="strategic-systems-we-build-heading"
-            className="text-balance text-3xl font-semibold leading-[1.12] tracking-[-0.02em] text-foreground md:text-[2.35rem]"
+            className="text-3xl font-black leading-tight tracking-tight text-white md:text-5xl"
           >
             Strategic systems we build.
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground/90 md:mx-0 md:text-lg md:leading-relaxed">
+          <p className="max-w-2xl text-sm font-light leading-relaxed text-slate-400 md:text-base">
             PxlBrief does not treat AI, marketing, branding, websites, CRM, and
             dashboards as separate activities. We connect them into one
             structured growth system.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
-          {systems.map((item) => (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+          {systems.map((item, index) => (
             <article
               key={item.title}
-              className="group relative flex min-w-0 flex-col overflow-hidden rounded-[1.125rem] border border-hairline bg-card/95 p-4 shadow-[inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-xl transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-7 dark:bg-card/[0.38] md:p-8 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/28 motion-safe:hover:shadow-[var(--shadow-card-hover),0_0_0_1px_var(--glow-ambient)] motion-reduce:hover:translate-y-0"
+              className="group relative flex flex-col justify-between space-y-6 border-b border-white/10 pb-8 transition-all duration-300 md:last:border-b"
             >
               <div
-                className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-gradient-to-br from-primary/[0.12] via-primary/[0.04] to-ring/[0.08] opacity-0 blur-3xl transition-opacity duration-700 ease-out group-hover:opacity-100"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-ring/[0.04] opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"
+                className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-[#ff7f50] to-transparent transition-all duration-500 group-hover:w-1/3"
                 aria-hidden
               />
 
-              <div className="relative z-10 flex flex-1 flex-col">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-[0.625rem] border border-primary/22 bg-primary/[0.08] text-primary shadow-sm transition-all duration-500 group-hover:border-primary/38 group-hover:bg-primary/[0.12] group-hover:shadow-[0_0_28px_-6px_var(--glow-primary)] sm:mb-6 sm:h-12 sm:w-12">
-                  <item.icon className="h-5 w-5" strokeWidth={1.6} aria-hidden />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-slate-600 transition-colors group-hover:text-[#ff7f50]">
+                    SYSTEM_PILLAR_0{index + 1}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 bg-white/[0.02] text-slate-600 transition-all duration-300 group-hover:border-[#ff7f50]/20 group-hover:text-[#ff7f50]">
+                      <item.icon className="h-4 w-4" strokeWidth={1.6} aria-hidden />
+                    </div>
+                    <div className="h-1.5 w-1.5 rounded-full bg-slate-800 transition-all duration-300 group-hover:bg-[#ff7f50] group-hover:shadow-[0_0_8px_rgba(255,127,80,0.6)]" />
+                  </div>
                 </div>
 
-                <h3 className="text-lg font-semibold tracking-tight text-foreground md:text-[1.0625rem]">
+                <h3 className="text-xl font-black tracking-tight text-white transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 group-hover:bg-clip-text group-hover:text-transparent md:text-2xl">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm md:leading-relaxed">
+                <p className="text-xs font-light leading-relaxed text-slate-400 md:text-sm">
                   {item.description}
                 </p>
 
-                <ul
-                  className="mt-4 space-y-2 border-t border-hairline/50 pt-4 sm:mt-6 sm:space-y-2.5 sm:pt-6"
-                  aria-label={`${item.title} capabilities`}
-                >
-                  {item.bullets.map((b) => (
-                    <li
-                      key={b}
-                      className="flex gap-3 text-[0.8125rem] leading-snug text-muted-foreground/95 md:text-sm"
-                    >
-                      <span
-                        className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary/50 ring-1 ring-primary/15"
-                        aria-hidden
-                      />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="pt-2">
+                  <ul
+                    className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                    aria-label={`${item.title} capabilities`}
+                  >
+                    {item.bullets.map((b) => (
+                      <li
+                        key={b}
+                        className="flex items-center gap-2 text-xs text-slate-500 transition-colors duration-300 group-hover:text-slate-300"
+                      >
+                        <span
+                          className="font-mono text-[#ff7f50] opacity-40 transition-opacity group-hover:opacity-100"
+                          aria-hidden
+                        >
+                          →
+                        </span>
+                        <span className="font-light tracking-wide">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </article>
           ))}

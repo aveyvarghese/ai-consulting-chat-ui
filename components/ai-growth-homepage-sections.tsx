@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react"
 import {
   ArrowRight,
   BarChart3,
@@ -7,7 +6,6 @@ import {
   CircleDot,
   Gauge,
   Landmark,
-  LockKeyhole,
   Route,
   Sparkles,
   Workflow,
@@ -245,42 +243,68 @@ function MetallicCard({
   )
 }
 
-function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
-  return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-[0.625rem] border border-primary/22 bg-primary/[0.09] text-primary shadow-sm sm:h-11 sm:w-11">
-      <Icon className="h-5 w-5" strokeWidth={1.65} aria-hidden />
-    </div>
-  )
-}
-
 export function ProblemSection() {
   return (
-    <section className="section-deep relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
-      <div className="relative mx-auto max-w-6xl">
-        <SectionHeader
-          eyebrow="Diagnosis"
-          title="Most businesses do not have a marketing problem. They have a disconnected growth system."
-          text="PxlBrief starts by finding where growth signal breaks: campaign to website, website to CRM, CRM to sales, sales to founder-level decisions."
-        />
-        <div className="grid grid-cols-1 gap-2.5 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <section className="relative z-10 w-full overflow-hidden border-t border-white/5 bg-black px-4 py-20 text-white md:px-8 md:py-28">
+      <div
+        className="pointer-events-none absolute right-[-10%] top-1/4 h-[70vw] max-h-[500px] w-[70vw] max-w-[500px] rounded-full bg-red-500/[0.02] blur-[120px]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute bottom-1/4 left-[-10%] h-[70vw] max-h-[500px] w-[70vw] max-w-[500px] rounded-full bg-cyan-500/[0.02] blur-[120px]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl space-y-16">
+        <div className="max-w-4xl space-y-4">
+          <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
+            Diagnosis
+          </p>
+          <h2 className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-3xl font-black leading-[1.15] tracking-tight text-transparent md:text-5xl">
+            Most businesses do not have a marketing problem. They have a disconnected growth system.
+          </h2>
+          <p className="max-w-3xl text-sm font-light leading-relaxed text-slate-400 md:text-base">
+            PxlBrief starts by finding where growth signal breaks: campaign to website, website to CRM, CRM to sales, sales to founder-level decisions.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {problems.map((problem, index) => (
-            <MetallicCard key={problem.title} className="p-3 sm:p-6">
-              <div className="mb-2.5 flex items-center justify-between gap-3 sm:mb-5">
-                <span className="font-mono text-[0.6875rem] text-primary/80">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="rounded-full border border-primary/18 bg-primary/[0.06] px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/90">
-                  Signal gap
-                </span>
+            <div
+              key={problem.title}
+              className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-xl border border-white/5 bg-[#0A0A0A]/40 p-6 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:border-red-500/20 hover:bg-[#0A0A0A]/80 md:p-8"
+            >
+              <span
+                className="pointer-events-none absolute bottom-2 right-4 select-none font-mono text-8xl font-black text-white/[0.01] transition-colors duration-500 group-hover:text-red-500/[0.03] md:text-9xl"
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <div className="relative z-10 space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-[10px] text-slate-600 transition-colors group-hover:text-red-400/60">
+                    NODE_SIGNAL_ERR //{String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-red-400">
+                    <span className="h-1 w-1 rounded-full bg-red-400 animate-pulse" />
+                    Signal gap
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-bold tracking-tight text-white transition-colors duration-200 group-hover:text-red-400 md:text-xl">
+                  {problem.title}
+                </h3>
+                <p className="text-xs font-light leading-relaxed text-slate-400 md:text-sm">
+                  {problem.signal}
+                </p>
               </div>
-              <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
-                {problem.title}
-              </h3>
-              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:mt-3 md:text-sm">
-                {problem.signal}
-              </p>
-            </MetallicCard>
+
+              <div
+                className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-red-500 via-purple-500 to-transparent transition-all duration-500 group-hover:w-full"
+                aria-hidden
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -290,73 +314,129 @@ export function ProblemSection() {
 
 export function AIGrowthDiagnosticPreviewSection() {
   return (
-    <section className="section-alt relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.12] pxl-data-grid md:opacity-[0.22]" />
-      <div className="relative mx-auto grid max-w-6xl gap-7 sm:gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center lg:gap-14">
-        <SectionHeader
-          eyebrow="AI Growth Diagnostic"
-          title="Start with a live AI diagnosis of your growth system."
-          text="Answer a few focused questions and receive a directional readout of your growth bottleneck, AI opportunity, and recommended next step."
-        />
-        <MetallicCard className="p-3 sm:p-6 md:p-7">
-          <div className="mb-3 flex items-center justify-between border-b border-hairline/70 pb-3 sm:mb-5 sm:pb-4">
-            <div>
-              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground/75">
-                Diagnostic interface
-              </p>
-              <p className="mt-1 text-sm font-semibold tracking-tight text-foreground">
-                Growth system intake
-              </p>
+    <section className="relative z-10 w-full overflow-hidden border-t border-white/5 bg-black px-4 py-16 text-white md:px-8 md:py-24">
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[85vw] max-h-[600px] w-[85vw] max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.02] blur-[130px]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl space-y-12">
+        <div className="mx-auto max-w-3xl space-y-3 text-center md:mx-0 md:text-left">
+          <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
+            AI Growth Diagnostic
+          </p>
+          <h2 className="text-3xl font-black leading-tight tracking-tight text-white md:text-5xl">
+            Start with a live AI diagnosis of your growth system.
+          </h2>
+          <p className="mx-auto max-w-2xl text-sm font-light leading-relaxed text-slate-400 md:mx-0 md:text-base">
+            Answer a few focused questions and receive a directional readout of your growth bottleneck, AI opportunity, and recommended next step.
+          </p>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A]/70 shadow-2xl backdrop-blur-xl">
+          <div className="flex h-11 w-full items-center justify-between border-b border-white/5 bg-black/40 px-4">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-red-500/30 transition-colors group-hover:bg-red-500/60" />
+              <div className="h-3 w-3 rounded-full bg-yellow-500/30 transition-colors group-hover:bg-yellow-500/60" />
+              <div className="h-3 w-3 rounded-full bg-green-500/30 transition-colors group-hover:bg-green-500/60" />
             </div>
-            <span className="rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/90">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+              DIAGNOSTIC_CONSOLE_v3.5.exe
+            </span>
+            <span className="rounded border border-cyan-500/15 bg-cyan-500/5 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-cyan-400">
               Preview
             </span>
           </div>
-          <div className="grid gap-3 sm:gap-5 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="space-y-1.5 sm:space-y-3">
-              {diagnosticInputs.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[0.875rem] border border-hairline/80 bg-background/35 px-3 py-2 sm:px-4 sm:py-3"
-                >
-                  <span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
-                    {item}
-                  </span>
-                  <div className="mt-1.5 h-1.5 rounded-full bg-muted/55 sm:mt-2 sm:h-2">
-                    <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-primary/40 to-primary/80" />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="rounded-[1rem] border border-primary/20 bg-primary/[0.045] p-3 sm:p-4">
-              <div className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground sm:mb-4">
-                <Brain className="h-4 w-4 text-primary" />
-                Output preview
+
+          <div className="grid grid-cols-1 divide-y divide-white/5 lg:grid-cols-12 lg:divide-x lg:divide-y-0">
+            <div className="space-y-6 bg-black/20 p-6 md:p-8 lg:col-span-5">
+              <div className="space-y-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                  Diagnostic interface
+                </span>
+                <span className="block font-mono text-[10px] uppercase tracking-wider text-slate-600">
+                  // INTAKE PARAMETERS
+                </span>
+                <h3 className="text-base font-bold tracking-tight text-white">
+                  Growth system intake
+                </h3>
               </div>
-              <div className="space-y-2 sm:space-y-3">
-                {diagnosticOutputs.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary sm:h-4 sm:w-4" />
-                    <div>
-                      <p className="text-[0.8125rem] font-semibold text-foreground">
-                        {item}
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground/80">
-                        Directional intelligence generated from the live intake.
-                      </p>
+
+              <div className="space-y-5">
+                {diagnosticInputs.map((item) => (
+                  <div key={item} className="space-y-2">
+                    <span className="block font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                      {item}
+                    </span>
+                    <div className="relative">
+                      <div className="min-h-12 w-full cursor-pointer rounded-lg border border-white/5 bg-black/40 px-4 py-3 text-xs font-light text-slate-300 shadow-inner transition-all focus-within:border-cyan-500/40 focus-within:ring-1 focus-within:ring-cyan-500/20 hover:border-cyan-500/25 md:text-sm">
+                        Select Option Parameter...
+                      </div>
+                      <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-500">
+                        ▼
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <a
-                href="#consulting-chat"
-                className="cta-gradient-motion mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[0.75rem] bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/[0.94] sm:mt-6"
-              >
-                Discuss With PxlBrief AI
-              </a>
+            </div>
+
+            <div className="relative flex flex-col justify-between space-y-6 bg-black/40 p-6 md:p-8 lg:col-span-7">
+              <div
+                className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-pulse"
+                aria-hidden
+              />
+              <div className="space-y-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-cyan-400">
+                      // GENERATED RESULTS
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-4 w-4 text-cyan-400" />
+                      <h3 className="text-base font-bold tracking-tight text-white">
+                        Output preview
+                      </h3>
+                    </div>
+                  </div>
+                  <span className="rounded border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-cyan-400 animate-pulse">
+                    Live Scan
+                  </span>
+                </div>
+
+                <div className="relative space-y-4 overflow-hidden rounded-xl border border-white/5 bg-black/30 p-5">
+                  {diagnosticOutputs.map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-start gap-3 border-b border-white/[0.03] pb-3 last:border-0 last:pb-0"
+                    >
+                      <div className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/5">
+                        <CheckCircle2 className="h-2.5 w-2.5 text-cyan-400" strokeWidth={3} />
+                      </div>
+                      <div className="space-y-0.5">
+                        <h4 className="font-mono text-xs font-bold uppercase tracking-wide text-slate-300">
+                          {item}
+                        </h4>
+                        <p className="text-xs font-light leading-relaxed text-slate-400">
+                          Directional intelligence generated from the live intake.
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 lg:pt-0">
+                <a
+                  href="#consulting-chat"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] px-6 py-4 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,127,80,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_35px_rgba(255,127,80,0.45)]"
+                >
+                  Discuss With PxlBrief AI
+                </a>
+              </div>
             </div>
           </div>
-        </MetallicCard>
+        </div>
       </div>
     </section>
   )
@@ -364,54 +444,69 @@ export function AIGrowthDiagnosticPreviewSection() {
 
 export function AILabPreviewSection() {
   return (
-    <section id="ai-lab" className="section-deep relative scroll-mt-20 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="relative mx-auto max-w-6xl">
-        <SectionHeader
-          eyebrow="AI Lab"
-          title="Explore the intelligence systems we build."
-          text="The AI Lab demonstrates how PxlBrief turns business inputs into diagnosis, recommendations, scores, campaigns, and growth systems."
-          align="center"
-        />
-        <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-3">
+    <section id="ai-lab" className="relative z-10 w-full scroll-mt-20 overflow-hidden border-t border-white/5 bg-black px-4 pb-12 pt-20 text-white md:px-8">
+      <div className="relative mx-auto max-w-7xl space-y-16">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div className="space-y-3 lg:col-span-5">
+            <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
+              AI Lab
+            </p>
+            <h2 className="text-3xl font-black leading-tight tracking-tight text-white md:text-5xl">
+              Explore the intelligence systems we build.
+            </h2>
+            <p className="text-sm font-light leading-relaxed text-slate-400 md:text-base">
+              The AI Lab demonstrates how PxlBrief turns business inputs into diagnosis, recommendations, scores, campaigns, and growth systems.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:col-span-7 sm:grid-cols-2">
           {labCards.map((card) => (
-            <MetallicCard key={card.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-6">
-              <div className="flex items-start justify-between gap-4">
-                <IconBadge icon={card.icon} />
+            <article
+              key={card.title}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A]/60 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/20 hover:bg-[#0A0A0A]/80 md:p-8"
+            >
+              <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+              <div className="mb-6 flex items-start justify-between gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.02] text-slate-400 transition-colors group-hover:text-cyan-400">
+                  <card.icon className="h-5 w-5" strokeWidth={1.65} aria-hidden />
+                </div>
                 <span
-                  className={`rounded-full border px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] ${
+                  className={`rounded border px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest ${
                     card.status === "Available"
-                      ? "border-primary/25 bg-primary/[0.08] text-primary"
-                      : "border-hairline bg-foreground/[0.04] text-muted-foreground"
+                      ? "border-amber-500/20 bg-amber-500/10 text-amber-400"
+                      : "border-white/10 bg-white/[0.03] text-slate-500"
                   }`}
                 >
                   {card.status}
                 </span>
               </div>
-              <h3 className="text-[0.9375rem] font-semibold tracking-tight text-foreground sm:text-base">
+              <h3 className="text-xl font-bold tracking-tight text-white">
                 {card.title}
               </h3>
-              <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground/88 md:text-sm">
+              <p className="mb-6 mt-3 text-sm font-light leading-relaxed text-slate-400">
                 {card.description}
               </p>
               <a
                 href={card.status === "Available" ? "/ai-lab#lab-tools" : "#ai-lab"}
-                className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-[0.7rem] border border-primary/18 bg-primary/[0.055] px-4 py-2 text-[0.8125rem] font-semibold text-primary transition-colors hover:border-primary/32 hover:bg-primary/[0.09] sm:w-auto"
+                className="inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-lg border border-white/10 px-5 py-2.5 font-mono text-xs text-slate-300 transition-all hover:bg-white/5 hover:text-white sm:w-auto"
               >
                 {card.status === "Available" ? "Open in AI Lab" : "Preview"}
               </a>
-            </MetallicCard>
+            </article>
           ))}
+          </div>
         </div>
-        <div className="mx-auto mt-5 max-w-3xl rounded-[1rem] border border-primary/18 bg-primary/[0.045] p-3.5 text-center shadow-[inset_0_1px_0_0_var(--shine-inset)] sm:mt-8 sm:p-5">
-          <p className="text-sm font-semibold tracking-tight text-foreground">
+
+        <div className="mx-auto max-w-3xl rounded-xl border border-white/5 bg-white/[0.01] p-5 text-center text-slate-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <p className="text-sm font-semibold tracking-tight text-white">
             Prefer a direct conversation?
           </p>
-          <p className="mx-auto mt-1.5 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground/90 sm:text-sm">
+          <p className="mx-auto mt-1.5 max-w-xl text-[0.8125rem] font-light leading-relaxed text-slate-400 sm:text-sm">
             Book a strategic session and we’ll review the right starting point.
           </p>
           <StrategicSessionBookingLink
             source="homepage_ai_lab_preview"
-            className="cta-gradient-motion mt-4 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-5 py-3 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_12px_30px_-22px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46 sm:w-auto"
+            className="mt-4 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-full bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,127,80,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_35px_rgba(255,127,80,0.45)] sm:w-auto"
           >
             Book Strategic Session
           </StrategicSessionBookingLink>
@@ -475,46 +570,61 @@ export function ExecutiveDashboardShowcaseSection() {
 
 export function IndustryPlaybooksPreviewSection() {
   return (
-    <section className="section-soft relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="relative mx-auto max-w-6xl">
-        <SectionHeader
-          eyebrow="Industry playbooks"
-          title="AI growth systems designed for real business categories."
-          text="Each category has its own acquisition constraints, trust markers, operational drag, and automation opportunity."
-        />
-        <div className="flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
+    <section className="relative z-10 w-full overflow-hidden bg-black px-4 py-12 text-white md:px-8">
+      <div className="relative mx-auto max-w-7xl space-y-6 border-t border-white/5 pt-8">
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            Industry playbooks
+          </p>
+          <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl">
+            AI growth systems designed for real business categories.
+          </h2>
+          <p className="max-w-2xl text-sm font-light leading-relaxed text-slate-400 md:text-base">
+            Each category has its own acquisition constraints, trust markers, operational drag, and automation opportunity.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {industryPlaybooks.map((playbook) => (
-            <MetallicCard key={playbook.title} className="min-w-[82%] p-3.5 sm:min-w-0 sm:p-5">
-              <h3 className="text-base font-semibold tracking-tight text-[var(--secondary-accent)]">
-                {playbook.title}
-              </h3>
-              <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-5 sm:space-y-3">
+            <article
+              key={playbook.title}
+              className="space-y-6 rounded-xl border border-white/5 bg-[#0A0A0A]/40 p-6 transition-all duration-300 hover:border-white/10 md:p-8"
+            >
+              <div className="border-b border-white/5 pb-3">
+                <h3 className="text-xl font-black text-white">
+                  {playbook.title}
+                </h3>
+                <span className="font-mono text-[9px] uppercase tracking-wider text-[#ff7f50]">
+                  Common challenge
+                </span>
+              </div>
+              <dl className="space-y-4 text-xs font-light leading-relaxed text-slate-400 md:text-sm">
                 <div>
-                  <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                  <dt className="block font-mono text-[11px] font-medium uppercase tracking-wider text-slate-500">
                     Common challenge
                   </dt>
-                  <dd className="mt-1 text-muted-foreground/90">
+                  <dd className="mt-1">
                     {playbook.challenge}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/80">
+                  <dt className="block font-mono text-[11px] font-medium uppercase tracking-wider text-slate-500">
                     AI opportunity
                   </dt>
-                  <dd className="mt-1 text-foreground/88">
+                  <dd className="mt-1">
                     {playbook.opportunity}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                  <dt className="block font-mono text-[11px] font-medium uppercase tracking-wider text-slate-500">
                     Recommended system
                   </dt>
-                  <dd className="mt-1 text-muted-foreground/90">
+                  <dd className="mt-1">
                     {playbook.system}
                   </dd>
                 </div>
               </dl>
-            </MetallicCard>
+            </article>
           ))}
         </div>
       </div>
@@ -524,51 +634,61 @@ export function IndustryPlaybooksPreviewSection() {
 
 export function CaseIntelligencePreviewSection() {
   return (
-    <section className="section-alt relative border-y border-hairline/70 px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.1] pxl-data-grid md:opacity-[0.2]" />
-      <div className="relative mx-auto max-w-6xl">
-        <SectionHeader
-          eyebrow="Case intelligence"
-          title="Strategic systems, not isolated services."
-          text="These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system."
-          align="center"
-        />
+    <section className="relative z-10 w-full overflow-hidden bg-black px-4 py-12 text-white md:px-8">
+      <div className="relative mx-auto max-w-7xl space-y-6 border-t border-white/5 pt-12">
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            Case intelligence
+          </p>
+          <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl">
+            Strategic systems, not isolated services.
+          </h2>
+          <p className="max-w-2xl text-sm font-light leading-relaxed text-slate-400 md:text-base">
+            These example transformation scenarios show how strategy, execution, and AI layers connect into one operating system.
+          </p>
+        </div>
+
         <HomepageCaseMobileList cases={caseScenarios} />
-        <div className="hidden grid-cols-1 gap-2.5 sm:grid sm:gap-5 lg:grid-cols-3">
+        <div className="hidden border-t border-white/10 sm:block">
           {caseScenarios.map((item, index) => (
-            <MetallicCard key={item.title} className="p-3.5 sm:p-6">
-              <div className="mb-3 flex flex-col items-start gap-2 sm:mb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-                <span className="font-mono text-[0.6875rem] text-primary/80">
-                  Case {index + 1}
-                </span>
-                <span className="rounded-full border border-hairline bg-foreground/[0.04] px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground/85">
-                  Example transformation scenario
+            <article
+              key={item.title}
+              className="group border-b border-white/10 py-5 transition-all duration-200 hover:px-2"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <span className="font-mono text-[9px] text-slate-600 transition-colors group-hover:text-[#ff7f50]">
+                    Case {index + 1} // Example transformation scenario
+                  </span>
+                  <h3 className="text-sm font-bold text-white transition-colors group-hover:text-cyan-400 md:text-base">
+                    {item.title}
+                  </h3>
+                </div>
+                <span className="whitespace-nowrap rounded-full border border-white/15 px-4 py-2 font-mono text-xs text-slate-400 transition-all group-hover:border-white group-hover:text-white">
+                  View Case
                 </span>
               </div>
-              <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                {item.title}
-              </h3>
-              <dl className="mt-3 space-y-2 text-[0.8125rem] leading-relaxed sm:mt-6 sm:space-y-4 md:text-sm">
+              <dl className="mt-4 grid gap-4 text-xs font-light leading-relaxed text-slate-400 md:grid-cols-3 md:text-sm">
                 <div>
-                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                  <dt className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-600">
                     Problem
                   </dt>
-                  <dd className="text-muted-foreground/90">{item.problem}</dd>
+                  <dd>{item.problem}</dd>
                 </div>
                 <div>
-                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-primary/80">
+                  <dt className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-600">
                     System
                   </dt>
-                  <dd className="text-foreground/88">{item.system}</dd>
+                  <dd>{item.system}</dd>
                 </div>
                 <div>
-                  <dt className="mb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
+                  <dt className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-600">
                     AI Layer
                   </dt>
-                  <dd className="text-muted-foreground/90">{item.aiLayer}</dd>
+                  <dd>{item.aiLayer}</dd>
                 </div>
               </dl>
-            </MetallicCard>
+            </article>
           ))}
         </div>
       </div>
@@ -578,34 +698,67 @@ export function CaseIntelligencePreviewSection() {
 
 export function FounderCredibilitySection() {
   return (
-    <section className="section-dark relative px-3 py-8 sm:px-4 sm:py-24 md:py-32">
-      <div className="relative mx-auto grid max-w-6xl gap-5 rounded-[1.1rem] border border-hairline bg-card/82 p-4 shadow-[var(--shadow-chat-depth),inset_0_1px_0_0_var(--shine-inset)] backdrop-blur-2xl dark:bg-card/[0.34] sm:rounded-[1.25rem] sm:p-8 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-10 md:p-10">
-        <div className="pointer-events-none absolute -right-20 -top-24 hidden h-72 w-72 rounded-full bg-primary/[0.08] blur-3xl sm:block" />
-        <div className="relative">
-          <p className="mb-4 text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-primary/85">
-            Founder credibility
-          </p>
-          <h2 className="text-balance text-[1.55rem] font-semibold leading-[1.1] tracking-[-0.03em] text-foreground sm:text-3xl md:text-[2.45rem] md:tracking-[-0.035em]">
-            Built by a strategist who understands brand, business, AI, and execution.
-          </h2>
-          <p className="mt-4 text-[0.875rem] leading-relaxed text-muted-foreground/90 sm:text-[0.9375rem] md:mt-6 md:text-lg">
-            PxlBrief sits at the intersection of strategy and implementation:
-            not just ideas, not just tools, and not just campaigns. The work is
-            to connect decisions, systems, and execution into measurable growth.
-          </p>
-        </div>
-        <div className="relative grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
-          {credibilityPoints.map((point) => (
-            <div
-              key={point}
-              className="flex items-center gap-2.5 rounded-[0.95rem] border border-hairline/80 bg-background/35 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3"
-            >
-              <LockKeyhole className="h-4 w-4 shrink-0 text-primary/85" />
-              <span className="text-[0.8125rem] font-medium leading-snug text-foreground/90 md:text-sm">
-                {point}
-              </span>
+    <section className="relative z-10 w-full overflow-hidden bg-black px-4 py-16 text-white md:px-8 md:py-24">
+      <div
+        className="pointer-events-none absolute bottom-0 right-0 h-[60vw] max-h-[400px] w-[60vw] max-w-[400px] rounded-full bg-purple-500/[0.02] blur-[120px]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl rounded-2xl border border-white/5 bg-[#0A0A0A]/40 p-6 shadow-2xl backdrop-blur-md md:p-12">
+        <div
+          className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"
+          aria-hidden
+        />
+
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+          <div className="space-y-4 md:space-y-6 lg:col-span-5">
+            <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50]">
+              Founder credibility
+            </p>
+            <h2 className="bg-gradient-to-r from-white to-slate-400 bg-clip-text text-3xl font-black leading-tight tracking-tight text-transparent md:text-4xl lg:text-5xl">
+              Built by a strategist who understands brand, business, AI, and execution.
+            </h2>
+            <p className="text-sm font-light leading-relaxed text-slate-400 md:text-base">
+              PxlBrief sits at the intersection of strategy and implementation:
+              not just ideas, not just tools, and not just campaigns. The work is
+              to connect decisions, systems, and execution into measurable growth.
+            </p>
+          </div>
+
+          <div className="space-y-6 lg:col-span-7">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {credibilityPoints.slice(0, 2).map((point, index) => (
+                <div
+                  key={point}
+                  className="group relative overflow-hidden rounded-xl border border-white/5 bg-black/40 p-6"
+                >
+                  <div className="pointer-events-none absolute -bottom-4 -right-4 font-mono text-6xl font-black text-white/[0.01] transition-colors group-hover:text-cyan-500/[0.03]">
+                    {index === 0 ? "EXP" : "BRD"}
+                  </div>
+                  <div className="mb-1 bg-gradient-to-b from-white to-slate-300 bg-clip-text text-4xl font-black tracking-tight text-transparent md:text-5xl">
+                    {index === 0 ? "9+" : "50+"}
+                  </div>
+                  <div className="font-mono text-xs uppercase tracking-wider text-slate-400">
+                    {point}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {credibilityPoints.slice(2).map((point) => (
+                <div
+                  key={point}
+                  className="flex items-center gap-3 rounded-xl border border-white/5 bg-black/20 p-4 transition-all duration-200 hover:border-white/10"
+                >
+                  <div className="h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-[#ff7f50] to-[#ffa07a] shadow-[0_0_8px_rgba(255,127,80,0.5)]" />
+                  <span className="text-xs font-light tracking-wide text-slate-300 md:text-sm">
+                    {point}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -630,13 +783,13 @@ export function FinalGrowthCtaSection() {
           <div className="mx-auto mt-7 flex max-w-xl flex-col gap-2.5 sm:mt-12 sm:flex-row sm:justify-center sm:gap-3">
             <a
               href="#consulting-chat"
-              className="pxl-mobile-primary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] bg-primary px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-md shadow-primary/10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary/[0.94] hover:shadow-xl hover:shadow-primary/20 active:scale-[0.985] motion-reduce:transition-colors"
+              className="pxl-mobile-secondary-cta cta-secondary-ai inline-flex min-h-12 touch-manipulation items-center justify-center rounded-[0.875rem] border px-8 py-3 text-sm font-semibold tracking-tight transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.985] motion-reduce:transition-colors"
             >
               Run My Growth Diagnostic
             </a>
             <StrategicSessionBookingLink
               source="homepage_final_cta"
-              className="pxl-mobile-secondary-cta cta-gradient-motion inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46"
+              className="pxl-mobile-primary-cta cta-gradient-motion cta-primary-booking inline-flex min-h-[3.125rem] touch-manipulation items-center justify-center rounded-[0.875rem] border border-primary/32 px-8 py-3.5 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all duration-500 hover:border-primary/46"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>

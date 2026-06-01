@@ -1710,7 +1710,7 @@ export function AILabTools() {
                   </Link>
                   <Link
                     href="/#consulting-chat"
-                    className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                    className="cta-secondary-ai inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border px-4 py-2.5 text-sm font-semibold transition-colors"
                   >
                     Discuss With PxlBrief AI
                   </Link>
@@ -2069,7 +2069,7 @@ export function AILabTools() {
                     </Link>
                     <Link
                       href="/#consulting-chat"
-                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                      className="cta-secondary-ai inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border px-4 py-2.5 text-sm font-semibold transition-colors"
                     >
                       Discuss With PxlBrief AI
                     </Link>
@@ -2219,7 +2219,7 @@ export function AILabTools() {
                     </Link>
                     <Link
                       href="/#consulting-chat"
-                      className="cta-gradient-motion inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+                      className="cta-secondary-ai inline-flex min-h-11 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border px-4 py-2.5 text-sm font-semibold transition-colors"
                     >
                       Discuss With PxlBrief AI
                     </Link>

@@ -24,18 +24,19 @@ export function SiteHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b border-primary/10 bg-header-bg/88 shadow-[0_1px_0_rgba(255,255,255,0.035),0_18px_48px_-36px_rgba(0,0,0,0.85)] backdrop-blur-xl supports-[backdrop-filter]:bg-header-bg/74 md:backdrop-blur-2xl">
-      <div className="mx-auto flex h-14 max-w-6xl min-w-0 flex-nowrap items-center justify-between gap-3 pl-[max(0.875rem,env(safe-area-inset-left))] pr-[max(0.875rem,env(safe-area-inset-right))] pt-[max(0px,env(safe-area-inset-top))] sm:h-14 md:h-16 md:gap-6 md:px-6 md:pt-0">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.055] bg-black/40 shadow-[0_1px_0_rgba(255,255,255,0.04),0_22px_70px_-48px_rgba(0,0,0,0.95)] backdrop-blur-md supports-[backdrop-filter]:bg-black/35 md:backdrop-blur-xl">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="mx-auto flex h-16 max-w-7xl min-w-0 flex-nowrap items-center justify-between gap-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(0px,env(safe-area-inset-top))] md:h-20 md:gap-6 md:px-8 md:pt-0">
         <Link
           href="/"
-          className="group min-w-0 flex-1 touch-manipulation py-1.5 text-[1.28rem] font-bold leading-none tracking-[-0.025em] text-foreground transition-opacity hover:opacity-95 sm:text-base sm:font-semibold sm:tracking-tight md:flex-none md:py-2 md:text-xl md:leading-tight"
+          className="group min-w-0 flex-1 touch-manipulation py-1.5 text-xl font-black leading-none tracking-tight text-white transition-opacity hover:opacity-95 md:flex-none md:py-2 md:text-2xl md:leading-tight"
         >
           <span className="block max-w-full truncate">
-            Pxl<span className="text-primary transition-colors group-hover:text-primary/88">Brief</span>
+            Pxl<span className="text-[#ff7f50] transition-colors group-hover:text-[#ffa07a]">Brief</span>
           </span>
         </Link>
         <nav
-          className="hidden min-w-0 items-center justify-end gap-1 md:flex md:gap-2"
+          className="hidden min-w-0 items-center justify-end gap-2 text-sm font-medium text-slate-400 lg:flex lg:gap-4 xl:gap-6"
           aria-label="Primary"
         >
           {nav.map(({ href, label }) => {
@@ -47,10 +48,10 @@ export function SiteHeader() {
                 href={href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "relative touch-manipulation rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-300 after:absolute after:inset-x-3 after:bottom-1.5 after:h-px after:origin-center after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-300 hover:border-primary/12 hover:bg-primary/[0.045] hover:text-foreground",
+                  "relative touch-manipulation rounded-full border px-3 py-1.5 text-sm font-medium transition-all duration-300 hover:text-white",
                   isActive
-                    ? "border-primary/18 bg-primary/[0.065] text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)] after:scale-x-100"
-                    : "border-transparent text-muted-foreground"
+                    ? "border-white/10 bg-white/[0.055] text-white shadow-[0_0_15px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.08)]"
+                    : "border-transparent text-slate-400"
                 )}
               >
                 {label}
@@ -59,12 +60,12 @@ export function SiteHeader() {
           })}
           <StrategicSessionBookingLink
             source="desktop_header"
-            className="cta-gradient-motion touch-manipulation rounded-lg border border-primary/32 px-3 py-2 text-sm font-semibold tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_12px_30px_-22px_var(--glow-primary)] transition-all duration-300 hover:border-primary/46 hover:shadow-[inset_0_1px_0_0_var(--shine-inset),0_16px_36px_-18px_var(--glow-primary)] md:ml-1 md:py-2.5"
+            className="touch-manipulation rounded-full border border-[#ff7f50]/35 bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] px-4 py-2 text-xs font-semibold tracking-tight text-white shadow-[0_0_20px_rgba(255,127,80,0.3),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ffa07a]/55 hover:shadow-[0_0_30px_rgba(255,127,80,0.5),inset_0_1px_0_rgba(255,255,255,0.22)] md:ml-1 md:px-5 md:py-2.5 md:text-sm"
           >
             Book Strategic Session
           </StrategicSessionBookingLink>
         </nav>
-        <div className="shrink-0 md:hidden">
+        <div className="shrink-0 lg:hidden">
           <SiteHeaderMobileNav />
         </div>
       </div>

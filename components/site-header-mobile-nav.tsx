@@ -89,7 +89,7 @@ export function SiteHeaderMobileNav() {
           <SheetClose asChild>
             <StrategicSessionBookingLink
               source="mobile_menu"
-              className="cta-gradient-motion mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.9rem] border border-primary/32 px-4 py-3 text-center text-[0.9375rem] font-semibold leading-snug tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 sm:rounded-[0.85rem] sm:px-3.5 sm:py-3 sm:text-sm"
+              className="cta-gradient-motion cta-primary-booking mt-3 inline-flex min-h-12 w-full touch-manipulation items-center justify-center rounded-[0.9rem] border border-primary/32 px-4 py-3 text-center text-[0.9375rem] font-semibold leading-snug tracking-tight text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_10px_28px_-22px_var(--glow-primary)] transition-all [-webkit-tap-highlight-color:transparent] hover:border-primary/44 sm:rounded-[0.85rem] sm:px-3.5 sm:py-3 sm:text-sm"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>

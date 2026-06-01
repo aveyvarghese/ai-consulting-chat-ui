@@ -155,13 +155,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
             <StrategicSessionBookingLink
               source="blog_article_bottom_cta"
-              className="cta-gradient-motion inline-flex min-h-12 touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46"
+              className="cta-gradient-motion cta-primary-booking inline-flex min-h-12 touch-manipulation items-center justify-center rounded-xl border border-primary/32 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[inset_0_1px_0_0_var(--shine-inset),0_14px_36px_-26px_var(--glow-primary)] transition-all hover:border-primary/46"
             >
               Book Strategic Session
             </StrategicSessionBookingLink>
             <Link
               href="/ai-growth-audit"
-              className="inline-flex min-h-12 touch-manipulation items-center justify-center gap-2 rounded-xl border border-primary/32 bg-primary/14 px-5 py-3 text-sm font-semibold text-primary transition-all hover:border-primary/46 hover:bg-primary/18"
+              className="cta-secondary-ai inline-flex min-h-12 touch-manipulation items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-all"
             >
               Run My Growth Diagnostic
               <ArrowRight className="size-4" aria-hidden />

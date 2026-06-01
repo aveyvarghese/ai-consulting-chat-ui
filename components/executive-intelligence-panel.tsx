@@ -52,127 +52,126 @@ export function ExecutiveIntelligencePanel({
   compact,
 }: ExecutiveIntelligencePanelProps) {
   return (
-    <div
+    <section
       className={cn(
-        "intelligence-glass-panel relative overflow-hidden rounded-[1.35rem] border",
+        "relative z-10 w-full overflow-hidden border-t border-white/5 bg-black text-white",
         compact
-          ? "rounded-[1.05rem] p-3.5 sm:p-5"
-          : "p-5 sm:p-6 md:p-7"
+          ? "rounded-2xl border border-white/10 px-4 py-6"
+          : "px-4 py-20 md:px-8"
       )}
       aria-label="AI audit tools preview"
     >
       <div
-        className={cn(
-          "pointer-events-none absolute inset-0 pxl-data-grid",
-          compact ? "opacity-[0.18]" : "opacity-[0.28] pxl-data-grid-shift"
-        )}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[80vw] max-h-[500px] w-[80vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.03] blur-[100px]"
         aria-hidden
       />
       <div
-        className={cn(
-          "pointer-events-none absolute rounded-full bg-accent/[0.12]",
-          compact
-            ? "-right-16 -top-12 h-36 w-36 blur-2xl"
-            : "-right-1/4 -top-10 h-64 w-64 blur-3xl motion-safe:pxl-ambient-glow-drift"
-        )}
-        aria-hidden
-      />
-      <div
-        className={cn(
-          "pointer-events-none absolute rounded-full bg-[rgba(255,87,34,0.12)]",
-          compact
-            ? "-bottom-12 left-0 h-28 w-28 blur-2xl"
-            : "-bottom-14 left-0 h-48 w-48 blur-3xl motion-safe:pxl-ambient-glow-drift-reverse"
-        )}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-primary/45 to-transparent"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]"
         aria-hidden
       />
 
-      <div className="relative z-[1]">
+      <div className={cn("relative z-[1] mx-auto space-y-8", compact ? "max-w-2xl" : "max-w-7xl space-y-12")}>
         <div
           className={cn(
-            "border-b border-hairline/70",
-            compact ? "mb-3 pb-3" : "mb-5 pb-5"
+            "space-y-3",
+            compact ? "max-w-xl" : "max-w-3xl"
           )}
         >
           <div>
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[var(--secondary-accent)] sm:text-[0.625rem] sm:tracking-[0.2em]">
+            <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
               Digital presence preview
             </p>
-            <p className="mt-1 text-[0.95rem] font-semibold tracking-tight text-foreground/95 sm:mt-1.5 sm:text-base">
+            <h2
+              className={cn(
+                "mt-2 font-black leading-tight tracking-tight text-white",
+                compact ? "text-2xl" : "text-3xl md:text-5xl"
+              )}
+            >
               AI audit tools
-            </p>
+            </h2>
           </div>
+
+          <p
+            className={cn(
+              "max-w-2xl font-light leading-relaxed text-slate-400",
+              compact ? "text-sm" : "text-sm md:text-base"
+            )}
+          >
+            Run quick AI-led audits across your social presence, website visibility,
+            answer readiness, and generative search readiness.
+          </p>
         </div>
 
-        <p
-          className={cn(
-            "text-[0.75rem] leading-relaxed text-muted-foreground/82",
-            compact ? "mb-3" : "mb-4"
-          )}
-        >
-          Run quick AI-led audits across your social presence, website visibility,
-          answer readiness, and generative search readiness.
-        </p>
-
-        <ul className={cn("grid gap-2", !compact && "sm:grid-cols-2")}>
+        <ul className={cn("grid grid-cols-1 gap-4 md:gap-6", compact ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3")}>
           {auditTools.map((tool, index) => (
             <li
               key={tool.key}
               className={cn(
-                "floating-audit-card relative min-w-0 rounded-[0.85rem] border",
-                index % 3 === 0 ? "glow-card-cyan" : index % 3 === 1 ? "glow-card-orange" : "",
-                compact ? "px-3 py-2.5" : "px-3 py-3"
+                "group relative flex min-w-0 flex-col justify-between overflow-hidden rounded-xl border border-white/5 bg-[#0A0A0A]/40 transition-all duration-300 hover:-translate-y-1 hover:bg-[#0A0A0A]/80",
+                index < 3
+                  ? "hover:border-cyan-500/30"
+                  : "hover:border-purple-500/30",
+                compact
+                  ? "min-h-[150px] p-5"
+                  : "min-h-[180px] p-6 md:p-8",
+                !compact && index === 0 ? "lg:min-h-[220px]" : "",
+                !compact && index === 2 ? "lg:translate-y-8" : "",
+                !compact && index === 3 ? "lg:-translate-y-4" : "",
+                !compact && index === 5 ? "lg:-translate-y-8" : ""
               )}
             >
-              <span
-                className={cn(
-                  "absolute right-3 top-3 h-1.5 w-1.5 rounded-full",
-                  index % 2 === 0 ? "bg-accent shadow-[0_0_14px_rgba(36,177,177,0.8)]" : "bg-[var(--secondary-accent)] shadow-[0_0_14px_rgba(255,87,34,0.75)]"
-                )}
-                aria-hidden
-              />
-              <div className="flex min-w-0 items-start gap-2.5">
+              <div className="space-y-4">
                 <div
                   className={cn(
-                    "flex shrink-0 items-center justify-center rounded-[0.62rem] border border-accent/20 bg-accent/[0.075] text-accent shadow-[inset_0_1px_0_0_var(--shine-inset)]",
-                    compact ? "h-8 w-8" : "h-8 w-8"
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.02] text-slate-400 transition-colors",
+                    index < 3
+                      ? "group-hover:text-cyan-400"
+                      : "group-hover:text-purple-400"
                   )}
                 >
                   <tool.icon
-                    className="h-3.5 w-3.5"
+                    className="h-4 w-4"
                     strokeWidth={1.75}
                     aria-hidden
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[0.78rem] font-semibold leading-tight tracking-tight text-foreground/95">
+                  <h3 className="mb-1 text-lg font-bold leading-tight tracking-tight text-white">
                     {tool.label}
-                  </p>
-                  <p className="mt-1 text-[0.68rem] leading-snug text-muted-foreground/70">
+                  </h3>
+                  <p className="text-xs font-light leading-relaxed text-slate-400 md:text-sm">
                     {tool.description}
                   </p>
                 </div>
               </div>
+              <div
+                className={cn(
+                  "absolute bottom-0 left-0 h-px w-0 transition-all duration-300 group-hover:w-full",
+                  index < 3
+                    ? "bg-gradient-to-r from-cyan-500 to-transparent"
+                    : "bg-gradient-to-r from-purple-500 to-transparent"
+                )}
+                aria-hidden
+              />
             </li>
           ))}
         </ul>
 
-        <div className={cn("border-t border-hairline/70", compact ? "mt-3 pt-3" : "mt-5 pt-4")}>
+        <div className="flex flex-col items-center justify-center space-y-3 pt-4">
           <Link
             href="/ai-lab#ai-audit-tools"
-            className="cta-gradient-motion cta-primary-booking inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/32 px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:border-primary/46"
+            className={cn(
+              "inline-flex touch-manipulation items-center justify-center rounded-full bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,127,80,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_35px_rgba(255,127,80,0.45)]",
+              compact ? "min-h-11 w-full px-6 py-3" : "w-full px-8 py-3.5 sm:w-auto"
+            )}
           >
             Explore AI Audit Tools
           </Link>
-          <p className="mt-2.5 text-center text-[0.6875rem] leading-relaxed text-muted-foreground/65">
+          <p className="text-center font-mono text-[10px] tracking-wider text-slate-500 md:text-xs">
             Directional audits first. Deeper report available after submission.
           </p>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
