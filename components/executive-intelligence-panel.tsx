@@ -54,9 +54,9 @@ export function ExecutiveIntelligencePanel({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[1.35rem] border border-primary/14 bg-gradient-to-b from-card/[0.78] via-card/[0.55] to-card/[0.34] shadow-[0_28px_90px_-52px_rgba(0,0,0,0.92),0_0_0_1px_rgba(255,255,255,0.035),inset_0_1px_0_0_var(--shine-inset),inset_0_-1px_0_rgba(255,255,255,0.025)] backdrop-blur-2xl dark:from-card/[0.48] dark:via-card/[0.34] dark:to-card/[0.22]",
+        "intelligence-glass-panel relative overflow-hidden rounded-[1.35rem] border",
         compact
-          ? "rounded-[1.05rem] p-3.5 shadow-[0_16px_54px_-40px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.03),inset_0_1px_0_0_var(--shine-inset)] sm:p-5"
+          ? "rounded-[1.05rem] p-3.5 sm:p-5"
           : "p-5 sm:p-6 md:p-7"
       )}
       aria-label="AI audit tools preview"
@@ -64,13 +64,13 @@ export function ExecutiveIntelligencePanel({
       <div
         className={cn(
           "pointer-events-none absolute inset-0 pxl-data-grid",
-          compact ? "opacity-[0.18]" : "opacity-[0.36] pxl-data-grid-shift"
+          compact ? "opacity-[0.18]" : "opacity-[0.28] pxl-data-grid-shift"
         )}
         aria-hidden
       />
       <div
         className={cn(
-          "pointer-events-none absolute rounded-full bg-primary/[0.095]",
+          "pointer-events-none absolute rounded-full bg-accent/[0.12]",
           compact
             ? "-right-16 -top-12 h-36 w-36 blur-2xl"
             : "-right-1/4 -top-10 h-64 w-64 blur-3xl motion-safe:pxl-ambient-glow-drift"
@@ -79,7 +79,7 @@ export function ExecutiveIntelligencePanel({
       />
       <div
         className={cn(
-          "pointer-events-none absolute rounded-full bg-accent/[0.105]",
+          "pointer-events-none absolute rounded-full bg-[rgba(255,87,34,0.12)]",
           compact
             ? "-bottom-12 left-0 h-28 w-28 blur-2xl"
             : "-bottom-14 left-0 h-48 w-48 blur-3xl motion-safe:pxl-ambient-glow-drift-reverse"
@@ -119,18 +119,26 @@ export function ExecutiveIntelligencePanel({
         </p>
 
         <ul className={cn("grid gap-2", !compact && "sm:grid-cols-2")}>
-          {auditTools.map((tool) => (
+          {auditTools.map((tool, index) => (
             <li
               key={tool.key}
               className={cn(
-                "min-w-0 rounded-[0.85rem] border border-hairline/65 bg-background/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]",
+                "floating-audit-card relative min-w-0 rounded-[0.85rem] border",
+                index % 3 === 0 ? "glow-card-cyan" : index % 3 === 1 ? "glow-card-orange" : "",
                 compact ? "px-3 py-2.5" : "px-3 py-3"
               )}
             >
+              <span
+                className={cn(
+                  "absolute right-3 top-3 h-1.5 w-1.5 rounded-full",
+                  index % 2 === 0 ? "bg-accent shadow-[0_0_14px_rgba(36,177,177,0.8)]" : "bg-[var(--secondary-accent)] shadow-[0_0_14px_rgba(255,87,34,0.75)]"
+                )}
+                aria-hidden
+              />
               <div className="flex min-w-0 items-start gap-2.5">
                 <div
                   className={cn(
-                    "flex shrink-0 items-center justify-center rounded-[0.62rem] border border-primary/18 bg-primary/[0.075] text-primary shadow-[inset_0_1px_0_0_var(--shine-inset)]",
+                    "flex shrink-0 items-center justify-center rounded-[0.62rem] border border-accent/20 bg-accent/[0.075] text-accent shadow-[inset_0_1px_0_0_var(--shine-inset)]",
                     compact ? "h-8 w-8" : "h-8 w-8"
                   )}
                 >
@@ -156,7 +164,7 @@ export function ExecutiveIntelligencePanel({
         <div className={cn("border-t border-hairline/70", compact ? "mt-3 pt-3" : "mt-5 pt-4")}>
           <Link
             href="/ai-lab#ai-audit-tools"
-            className="cta-gradient-motion inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.75rem] bg-primary px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:bg-primary/[0.94]"
+            className="cta-gradient-motion cta-primary-booking inline-flex min-h-10 w-full touch-manipulation items-center justify-center rounded-[0.75rem] border border-primary/32 px-4 py-2 text-[0.8125rem] font-semibold text-primary-foreground transition-colors hover:border-primary/46"
           >
             Explore AI Audit Tools
           </Link>
