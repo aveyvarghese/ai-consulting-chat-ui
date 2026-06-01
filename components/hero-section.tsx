@@ -28,7 +28,6 @@ import {
   AnalyticsEvent,
   trackAnalyticsEvent,
 } from "@/lib/analytics-events"
-import { ExecutiveIntelligencePanel } from "@/components/executive-intelligence-panel"
 import { ExecutiveSignalsPanel } from "@/components/executive-signals-panel"
 import type { ExecutiveSignalItem } from "@/lib/executive-signals-types"
 import { ServiceRecommendationCard } from "@/components/service-recommendation-card"
@@ -1777,35 +1776,22 @@ export function HeroSection() {
     <section
       id="consulting-chat"
       ref={sectionRef}
-      className="relative flex min-h-[calc(100svh-4rem)] scroll-mt-24 flex-col overflow-hidden bg-black px-4 pb-16 pt-10 text-white sm:px-5 sm:pb-20 md:min-h-[calc(100svh-5rem)] md:px-8 md:pb-24 md:pt-16 lg:pt-20"
+      className="relative flex min-h-screen scroll-mt-24 flex-col overflow-hidden bg-[#000000] px-4 py-12 text-white sm:px-6 md:px-8 md:py-20"
       aria-label="Run your AI growth diagnostic"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div
-          className="absolute left-1/2 top-0 z-[2] h-px w-full max-w-7xl -translate-x-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          className="pointer-events-none absolute left-[-10%] top-[-10%] z-0 h-[100vw] w-[100vw] rounded-full bg-cyan-500/10 blur-[100px] sm:h-[500px] sm:w-[500px]"
+          style={{ animation: "pxl-breathe 14s ease-in-out infinite" }}
           aria-hidden
         />
         <div
-          className="absolute left-[-10%] top-[-10%] z-0 h-[80vw] w-[80vw] rounded-full bg-cyan-500/10 blur-[80px] md:h-[500px] md:w-[500px] md:blur-[120px]"
-          style={{ animation: "pxl-breathe 14s ease-in-out infinite" }}
-        />
-        <div
-          className="absolute right-[-10%] top-[20%] z-0 h-[80vw] w-[80vw] rounded-full bg-purple-500/10 blur-[80px] md:h-[600px] md:w-[600px] md:blur-[150px]"
+          className="pointer-events-none absolute right-[-10%] top-[30%] z-0 h-[100vw] w-[100vw] rounded-full bg-purple-500/10 blur-[120px] sm:h-[600px] sm:w-[600px]"
           style={{ animation: "pxl-breathe 18s ease-in-out infinite 1.5s" }}
           aria-hidden
         />
         <div
-          className="absolute bottom-[-18%] left-1/2 z-0 h-[70vw] w-[90vw] -translate-x-1/2 rounded-full bg-[#ff7f50]/[0.06] blur-[90px] md:h-[420px] md:w-[900px] md:blur-[140px]"
-          style={{
-            animation: "pxl-breathe 18s ease-in-out infinite 2s",
-          }}
-        />
-        <div
-          className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] md:bg-[size:40px_40px]"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-x-[-18%] bottom-[-24%] z-0 h-[46%] bg-[linear-gradient(120deg,rgba(34,211,238,0.1)_1px,transparent_1px),linear-gradient(60deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[length:72px_72px] opacity-45 [transform:perspective(760px)_rotateX(62deg)]"
+          className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:24px_24px] sm:bg-[size:32px_32px]"
           aria-hidden
         />
         <div className="absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-black/80 to-transparent md:h-44" />
@@ -1813,166 +1799,123 @@ export function HeroSection() {
       </div>
 
       {!hasMessages ? (
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center">
-          <div className="grid w-full grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-12 lg:gap-8">
-            <div className="flex flex-col items-center space-y-6 text-center md:space-y-8 lg:col-span-7 lg:items-start lg:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-cyan-400 md:text-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_16px_rgba(34,211,238,0.85)] animate-pulse" />
-                AI Engine Live v3.5
-              </div>
+        <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center space-y-12 pt-8 text-center md:pt-16">
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-cyan-400 sm:text-xs">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_16px_rgba(34,211,238,0.85)]" />
+            AI Engine Live v3.5
+          </div>
 
-              <div className="space-y-4 md:space-y-6">
-                <h1 className="mx-auto max-w-xl bg-gradient-to-b from-white via-slate-200 to-slate-500 bg-clip-text text-4xl font-black leading-[1.05] tracking-tight text-transparent sm:text-5xl md:max-w-2xl md:text-6xl lg:mx-0 lg:text-7xl">
-                  Run Your AI <br className="hidden sm:block" />
-                  Growth Diagnostic
-                </h1>
+          <div className="max-w-2xl space-y-4 md:space-y-6">
+            <h1 className="bg-gradient-to-b from-white via-slate-200 to-slate-400 bg-clip-text text-4xl font-black leading-[1.08] tracking-tight text-transparent sm:text-5xl md:text-6xl lg:text-7xl">
+              Run Your AI <br />
+              Growth Diagnostic
+            </h1>
+            <p className="mx-auto max-w-xl text-sm font-light leading-relaxed text-slate-400 sm:text-base md:text-lg">
+              Answer a few focused questions and PxlBrief AI will identify your
+              likely growth bottleneck, AI opportunity, and recommended next
+              step.
+            </p>
+          </div>
 
-                <p className="mx-auto max-w-md text-base font-light leading-relaxed text-slate-400 md:max-w-xl md:text-lg lg:mx-0">
-                  <span className="md:hidden">
-                    Answer a few focused questions and PxlBrief AI will identify
-                    your likely bottleneck, AI opportunity, and next step.
+          <div className="mx-auto flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row">
+            <button
+              type="button"
+              onClick={startDiagnostic}
+              className="w-full touch-manipulation whitespace-nowrap rounded-full bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] px-8 py-4 text-sm font-semibold text-white shadow-[0_0_25px_rgba(255,127,80,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(255,127,80,0.45)] active:translate-y-0 sm:w-auto"
+            >
+              Discuss With PxlBrief AI
+            </button>
+            <StrategicSessionBookingLink
+              source="homepage_hero"
+              className="inline-flex w-full touch-manipulation items-center justify-center whitespace-nowrap rounded-full border border-white/10 bg-white/[0.02] px-8 py-4 text-sm font-semibold text-slate-300 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.06] hover:text-white sm:w-auto"
+            >
+              Book Strategic Session
+            </StrategicSessionBookingLink>
+          </div>
+
+          <div
+            ref={diagnosticPanelRef}
+            className={`mx-auto w-full max-w-2xl pt-4 transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isFocused || isLandingHighlighted
+                ? "drop-shadow-[0_0_34px_rgba(34,211,238,0.2)]"
+                : ""
+            }`}
+          >
+            <form
+              onSubmit={handleSubmit}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A]/70 p-5 text-left shadow-2xl backdrop-blur-xl sm:p-8"
+            >
+              <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+                    // INTELLIGENT UI CONSOLE PIPELINE
                   </span>
-                  <span className="hidden md:inline">
-                    Answer a few focused questions and PxlBrief AI will identify
-                    your likely growth bottleneck, AI opportunity, and
-                    recommended next step.
+                  <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-cyan-400">
+                    Diagnostic console ready
                   </span>
-                </p>
-              </div>
+                </div>
 
-              <div className="flex w-full max-w-md flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
-                <button
-                  type="button"
-                  onClick={startDiagnostic}
-                  className="w-full touch-manipulation rounded-full border border-[#ff7f50]/35 bg-gradient-to-r from-[#ff7f50] to-[#ffa07a] px-8 py-4 text-sm font-semibold tracking-wide text-white shadow-[0_0_25px_rgba(255,127,80,0.25),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(255,127,80,0.45),inset_0_1px_0_rgba(255,255,255,0.24)] active:translate-y-0 sm:w-auto md:text-base"
-                >
-                  <span>Discuss With PxlBrief AI</span>
-                </button>
-                <StrategicSessionBookingLink
-                  source="homepage_hero"
-                  className="inline-flex w-full touch-manipulation items-center justify-center rounded-full border border-white/10 bg-white/[0.045] px-8 py-4 text-sm font-semibold tracking-wide text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_0_22px_rgba(255,255,255,0.04)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.075] sm:w-auto md:text-base"
-                >
-                  Book Strategic Session
-                </StrategicSessionBookingLink>
-              </div>
-            </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="hero-diagnostic-input"
+                    className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50]"
+                  >
+                    Start Here: Tell us what kind of business you run and what
+                    you want to improve
+                  </label>
 
-            <div className="relative lg:col-span-5">
-              <div className="group relative min-h-[430px] overflow-hidden rounded-2xl border border-white/5 bg-white/[0.018] p-3 shadow-[0_35px_120px_-70px_rgba(0,0,0,1),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm sm:p-4 md:min-h-[450px]">
-                <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 opacity-60 transition-opacity duration-700 group-hover:opacity-100" />
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:28px_28px]" />
-                <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10 bg-cyan-400/[0.035] blur-2xl" />
-
-                <div className="relative z-10 flex h-full min-h-[404px] flex-col justify-between rounded-[1rem] border border-white/[0.06] bg-black/35 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl sm:p-4 md:min-h-[420px]">
-                  <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
-                    <div>
-                      <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan-400">
-                        Intelligent UI console pipeline
-                      </p>
-                      <p className="mt-1 text-sm font-semibold tracking-tight text-white">
-                        Diagnostic console ready
-                      </p>
-                    </div>
-                    <Sparkles className="h-5 w-5 shrink-0 animate-spin text-slate-500 [animation-duration:8s]" strokeWidth={1.25} />
+                  <div className="relative">
+                    <input
+                      id="hero-diagnostic-input"
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                      placeholder={displayedPlaceholder}
+                      className="w-full touch-manipulation rounded-xl border border-white/10 bg-[#000000]/40 py-4 pl-5 pr-14 text-sm font-light text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading || !inputValue.trim()}
+                      className="absolute right-3 top-1/2 flex min-h-11 min-w-11 -translate-y-1/2 touch-manipulation items-center justify-center rounded-lg bg-[#ff7f50]/10 p-2 text-[#ff7f50] transition-all hover:bg-[#ff7f50]/20 active:scale-95 disabled:cursor-not-allowed disabled:opacity-45"
+                      aria-label="Submit diagnostic prompt"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
                   </div>
+                </div>
 
-                  <div className="my-5 grid gap-2 text-center text-[0.68rem] text-slate-400 sm:grid-cols-3">
-                    <span className="rounded-full border border-cyan-400/15 bg-cyan-400/[0.055] px-3 py-2">
-                      Growth scan
-                    </span>
-                    <span className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-2">
-                      AI map
-                    </span>
-                    <span className="rounded-full border border-[#ff7f50]/20 bg-[#ff7f50]/[0.055] px-3 py-2">
-                      Next step
-                    </span>
-                  </div>
-
-                  <div className="relative z-10 w-full">
-                    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A]/60 p-5 shadow-2xl backdrop-blur-xl md:p-6">
-                      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent transition-all duration-500 group-hover:via-cyan-500/60" />
-                      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
-                      <div className="pointer-events-none absolute -bottom-20 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-[#ff7f50]/10 blur-3xl" />
-
-                      <div className="relative space-y-6">
-                        <div className="space-y-1">
-                          <p className="block font-mono text-[10px] font-semibold uppercase tracking-widest text-[#ff7f50] md:text-xs">
-                            Start Here: Tell us what kind of business you run
-                            and what you want to improve
-                          </p>
-                        </div>
-
-                        <div
-                          ref={diagnosticPanelRef}
-                          className={`relative flex flex-col items-stretch gap-3 transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:flex-row ${
-                            isFocused || isLandingHighlighted
-                              ? "drop-shadow-[0_0_34px_rgba(34,211,238,0.2)]"
-                              : ""
-                          }`}
-                        >
-                          <form onSubmit={handleSubmit} className="min-w-0 flex-1">
-                            <div className="relative flex-1">
-                              <input
-                                ref={inputRef}
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onFocus={() => setIsFocused(true)}
-                                onBlur={() => setIsFocused(false)}
-                                placeholder={displayedPlaceholder}
-                                className={`w-full min-w-0 touch-manipulation rounded-xl border bg-black/40 py-4 pl-5 pr-16 text-sm font-light leading-snug text-white shadow-inner outline-none transition-all duration-300 placeholder:text-slate-600 focus:outline-none md:text-base ${
-                                  isFocused
-                                    ? "border-cyan-500/50 ring-1 ring-cyan-500/30"
-                                    : "border-white/10 hover:border-cyan-500/25"
-                                }`}
-                              />
-                              <button
-                                type="submit"
-                                disabled={isLoading || !inputValue.trim()}
-                                className="absolute right-3 top-1/2 flex min-h-11 min-w-11 -translate-y-1/2 touch-manipulation items-center justify-center rounded-lg bg-[#ff7f50]/10 p-2.5 text-[#ff7f50] transition-all duration-200 hover:bg-[#ff7f50]/20 hover:text-[#ffa07a] active:scale-95 disabled:cursor-not-allowed disabled:opacity-45"
-                              >
-                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 md:h-5 md:w-5" />
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-
-                        <div className="space-y-3">
-                          <span className="block font-mono text-[10px] uppercase tracking-wider text-slate-500">
-                            Suggested Entry Parameter Shortcuts:
-                          </span>
-                          <div
-                            className="flex flex-wrap gap-2 md:gap-3"
-                            role="group"
-                            aria-label="Suggested prompts"
-                          >
-                            {suggestionChips.map(({ label, prompt }) => (
-                              <button
-                                key={prompt}
-                                type="button"
-                                disabled={isLoading}
-                                onClick={() => {
-                                  setInputValue(prompt)
-                                  inputRef.current?.focus()
-                                }}
-                                className="min-h-11 touch-manipulation rounded-full border border-white/5 bg-white/[0.02] px-4 py-2.5 text-xs font-medium text-slate-400 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-45"
-                              >
-                                {label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <div className="space-y-2">
+                  <span className="block font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                    Suggested Entry Parameter Shortcuts:
+                  </span>
+                  <div
+                    className="flex flex-wrap gap-2"
+                    role="group"
+                    aria-label="Suggested prompts"
+                  >
+                    {suggestionChips.map(({ label, prompt }) => (
+                      <button
+                        key={prompt}
+                        type="button"
+                        disabled={isLoading}
+                        onClick={() => {
+                          setInputValue(prompt)
+                          inputRef.current?.focus()
+                        }}
+                        className="min-h-11 touch-manipulation whitespace-nowrap rounded-full border border-white/5 bg-white/[0.02] px-3 py-2 text-[11px] font-medium text-slate-400 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 disabled:pointer-events-none disabled:opacity-45"
+                      >
+                        {label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-
-              <div className="relative mx-auto mt-4 w-full max-w-md lg:hidden">
-                <div className="pointer-events-none absolute -inset-3 rounded-[1.5rem] bg-cyan-400/[0.04] blur-xl" />
-                <ExecutiveIntelligencePanel compact />
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       ) : null}
